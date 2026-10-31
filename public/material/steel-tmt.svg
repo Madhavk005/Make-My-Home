@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" role="img">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2d3932"/>
+      <stop offset="1" stop-color="#17251d"/>
+    </linearGradient>
+    <pattern id="rule" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#f1eadc" stroke-opacity="0.055" stroke-width="1"/>
+    </pattern>
+    
+  <filter id="grain" x="-20%" y="-20%" width="140%" height="140%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="3" stitchTiles="stitch" result="n"/>
+    <feColorMatrix in="n" type="saturate" values="0" result="g"/>
+    <feComponentTransfer in="g" result="a"><feFuncA type="linear" slope="0.16"/></feComponentTransfer>
+    <feBlend in="SourceGraphic" in2="a" mode="multiply"/>
+  </filter>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg)"/>
+  <rect width="800" height="1000" fill="url(#rule)"/>
+  <g filter="url(#grain)">
+    
+  <g transform="rotate(-24 400 500)">
+    <g fill="#8f8a80">
+      <rect x="120" y="120" width="46" height="760" rx="8"/>
+      <rect x="212" y="120" width="46" height="760" rx="8"/>
+      <rect x="304" y="120" width="46" height="760" rx="8"/>
+      <rect x="396" y="120" width="46" height="760" rx="8"/>
+      <rect x="488" y="120" width="46" height="760" rx="8"/>
+      <rect x="580" y="120" width="46" height="760" rx="8"/>
+    </g>
+    <g stroke="#5d5952" stroke-width="3" opacity="0.8">
+      <path d="M120 150l46 14M212 150l46 14M304 150l46 14M396 150l46 14M488 150l46 14M580 150l46 14"/><path d="M120 180l46 14M212 180l46 14M304 180l46 14M396 180l46 14M488 180l46 14M580 180l46 14"/><path d="M120 210l46 14M212 210l46 14M304 210l46 14M396 210l46 14M488 210l46 14M580 210l46 14"/><path d="M120 240l46 14M212 240l46 14M304 240l46 14M396 240l46 14M488 240l46 14M580 240l46 14"/><path d="M120 270l46 14M212 270l46 14M304 270l46 14M396 270l46 14M488 270l46 14M580 270l46 14"/><path d="M120 300l46 14M212 300l46 14M304 300l46 14M396 300l46 14M488 300l46 14M580 300l46 14"/><path d="M120 330l46 14M212 330l46 14M304 330l46 14M396 330l46 14M488 330l46 14M580 330l46 14"/><path d="M120 360l46 14M212 360l46 14M304 360l46 14M396 360l46 14M488 360l46 14M580 360l46 14"/><path d="M120 390l46 14M212 390l46 14M304 390l46 14M396 390l46 14M488 390l46 14M580 390l46 14"/><path d="M120 420l46 14M212 420l46 14M304 420l46 14M396 420l46 14M488 420l46 14M580 420l46 14"/><path d="M120 450l46 14M212 450l46 14M304 450l46 14M396 450l46 14M488 450l46 14M580 450l46 14"/><path d="M120 480l46 14M212 480l46 14M304 480l46 14M396 480l46 14M488 480l46 14M580 480l46 14"/><path d="M120 510l46 14M212 510l46 14M304 510l46 14M396 510l46 14M488 510l46 14M580 510l46 14"/><path d="M120 540l46 14M212 540l46 14M304 540l46 14M396 540l46 14M488 540l46 14M580 540l46 14"/><path d="M120 570l46 14M212 570l46 14M304 570l46 14M396 570l46 14M488 570l46 14M580 570l46 14"/><path d="M120 600l46 14M212 600l46 14M304 600l46 14M396 600l46 14M488 600l46 14M580 600l46 14"/><path d="M120 630l46 14M212 630l46 14M304 630l46 14M396 630l46 14M488 630l46 14M580 630l46 14"/><path d="M120 660l46 14M212 660l46 14M304 660l46 14M396 660l46 14M488 660l46 14M580 660l46 14"/><path d="M120 690l46 14M212 690l46 14M304 690l46 14M396 690l46 14M488 690l46 14M580 690l46 14"/><path d="M120 720l46 14M212 720l46 14M304 720l46 14M396 720l46 14M488 720l46 14M580 720l46 14"/><path d="M120 750l46 14M212 750l46 14M304 750l46 14M396 750l46 14M488 750l46 14M580 750l46 14"/><path d="M120 780l46 14M212 780l46 14M304 780l46 14M396 780l46 14M488 780l46 14M580 780l46 14"/><path d="M120 810l46 14M212 810l46 14M304 810l46 14M396 810l46 14M488 810l46 14M580 810l46 14"/><path d="M120 840l46 14M212 840l46 14M304 840l46 14M396 840l46 14M488 840l46 14M580 840l46 14"/>
+    </g>
+    <g stroke="#c7a25e" stroke-width="2" opacity="0.55">
+      <path d="M120 120h46M212 120h46M304 120h46M396 120h46M488 120h46M580 120h46"/>
+    </g>
+  </g>
+  <path d="M0 900h800" stroke="#c7a25e" stroke-opacity="0.25"/>
+  </g>
+  <rect x="18" y="18" width="764" height="964" fill="none" stroke="#f1eadc" stroke-opacity="0.13"/>
+</svg>

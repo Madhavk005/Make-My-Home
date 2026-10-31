@@ -1,0 +1,6 @@
+productSku,variantLabel,variantSku,attributes,price,priceStatus,unit,availability,imageUrl
+SAMPLE-ELE-001,1.5 sq mm · Red,SAMPLE-ELE-001-15-RED,Size: 1.5 sq mm | Colour: Red,28,fixed,metre,available,
+SAMPLE-ELE-001,2.5 sq mm · Red,SAMPLE-ELE-001-25-RED,Size: 2.5 sq mm | Colour: Red,42,fixed,metre,available,
+SAMPLE-ELE-001,2.5 sq mm · Blue,SAMPLE-ELE-001-25-BLUE,Size: 2.5 sq mm | Colour: Blue,,on_request,metre,on_request,
+SAMPLE-TIL-001,600 x 600 mm · Matt,SAMPLE-TIL-001-600-MATT,Size: 600 x 600 mm | Finish: Matt,640,fixed,square metre,available,
+SAMPLE-TIL-001,800 x 800 mm · Glossy,SAMPLE-TIL-001-800-GLOSSY,Size: 800 x 800 mm | Finish: Glossy,780,fixed,square metre,available,
