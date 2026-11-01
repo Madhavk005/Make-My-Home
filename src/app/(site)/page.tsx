@@ -187,6 +187,20 @@ export default async function HomePage() {
                   <CategoryCard category={category} />
                 </div>
               ))}
+              <Link
+                href="/#hire-professional"
+                className="flex flex-col items-center justify-center rounded-xl border border-line bg-white p-4 text-center shadow-sm transition-colors hover:border-forest hover:bg-canvas"
+              >
+                <span className="grid h-12 w-12 place-items-center rounded-lg bg-forest/10 text-forest">
+                  <HardHat className="h-6 w-6" aria-hidden="true" />
+                </span>
+                <span className="mt-3 text-sm font-bold text-ink">
+                  {hi ? "कारीगर बुलाएँ" : "Hire a Professional"}
+                </span>
+                <span className="mt-1 text-xs text-ink-soft">
+                  {hi ? "मिस्त्री, इलेक्ट्रिशियन, प्लंबर और अधिक" : "Mason, electrician, plumber and more"}
+                </span>
+              </Link>
             </div>
           ) : (
             <CatalogueNotice />
