@@ -52,7 +52,7 @@ export async function CategoryCard({
       <div className="flex items-start justify-between gap-3 pt-3">
         <div className="min-w-0">
           <h3
-            className={`font-display font-medium leading-tight tracking-[-0.015em] text-ink transition-colors group-hover:text-clay ${
+            className={`font-display font-medium leading-tight tracking-[-0.015em] text-ink transition-colors group-hover:text-forest ${
               featured ? "text-2xl sm:text-3xl" : "text-lg sm:text-xl"
             }`}
           >

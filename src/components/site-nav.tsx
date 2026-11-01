@@ -17,12 +17,14 @@ import {
 import type { NavNode } from "@/lib/nav";
 import { ContactActions } from "./contact-actions";
 import { useLocale } from "./locale-provider";
+import { LanguageSwitch } from "./language-switch";
 
 type NavProps = {
   nodes: NavNode[];
   phone: string | null;
   whatsappNumber: string | null;
   businessName: string | null;
+  quickLinks?: Array<{ label: string; href: string }>;
 };
 
 function MegaMenu({ nodes, onNavigate }: { nodes: NavNode[]; onNavigate: () => void }) {
@@ -42,7 +44,7 @@ function MegaMenu({ nodes, onNavigate }: { nodes: NavNode[]; onNavigate: () => v
             <Link
               href={node.href}
               onClick={onNavigate}
-              className="mt-1 flex min-h-11 items-center justify-between gap-2 border-b border-line pb-2 font-display text-lg font-medium tracking-tight text-ink transition-colors hover:text-clay"
+              className="mt-1 flex min-h-11 items-center justify-between gap-2 border-b border-line pb-2 font-display text-lg font-medium tracking-tight text-ink transition-colors hover:text-forest"
             >
               <span>{node.name}</span>
               <ArrowRight className="h-4 w-4 shrink-0 text-ink-faint" aria-hidden="true" />
@@ -54,7 +56,7 @@ function MegaMenu({ nodes, onNavigate }: { nodes: NavNode[]; onNavigate: () => v
                     <Link
                       href={child.href}
                       onClick={onNavigate}
-                      className="flex min-h-10 items-center justify-between gap-2 py-1 text-sm text-ink-soft transition-colors hover:text-clay"
+                      className="flex min-h-10 items-center justify-between gap-2 py-1 text-sm text-ink-soft transition-colors hover:text-forest"
                     >
                       <span>{child.name}</span>
                       {child.productCount > 0 ? (
@@ -68,7 +70,7 @@ function MegaMenu({ nodes, onNavigate }: { nodes: NavNode[]; onNavigate: () => v
                     <Link
                       href={node.href}
                       onClick={onNavigate}
-                      className="flex min-h-10 items-center gap-1 text-sm font-bold text-clay"
+                      className="flex min-h-10 items-center gap-1 text-sm font-bold text-forest"
                     >
                       {t("viewAll")}
                       <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -86,7 +88,7 @@ function MegaMenu({ nodes, onNavigate }: { nodes: NavNode[]; onNavigate: () => v
           <Link
             href="/categories"
             onClick={onNavigate}
-            className="inline-flex min-h-11 items-center gap-1.5 text-sm font-bold text-forest hover:text-clay"
+            className="inline-flex min-h-11 items-center gap-1.5 text-sm font-bold text-forest hover:text-forest"
           >
             {t("homeAllCategories")}
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -94,7 +96,7 @@ function MegaMenu({ nodes, onNavigate }: { nodes: NavNode[]; onNavigate: () => v
           <Link
             href="/search"
             onClick={onNavigate}
-            className="inline-flex min-h-11 items-center gap-1.5 text-sm font-bold text-clay hover:text-clay-dark"
+            className="inline-flex min-h-11 items-center gap-1.5 text-sm font-bold text-forest hover:text-forest-dark"
           >
             <PackageSearch className="h-4 w-4" aria-hidden="true" />
             {t("browseAllProducts")}
@@ -228,7 +230,7 @@ function NavAccordion({
             <Link
               href={node.href}
               onClick={onNavigate}
-              className="flex min-h-11 items-center gap-1.5 border-b border-line/50 py-2 text-sm font-bold text-clay"
+              className="flex min-h-11 items-center gap-1.5 border-b border-line/50 py-2 text-sm font-bold text-forest"
             >
               <PackageSearch className="h-4 w-4" aria-hidden="true" />
               {t("seeProducts")} · {node.name}
@@ -243,7 +245,7 @@ function NavAccordion({
   );
 }
 
-export function MobileNav({ nodes, phone, whatsappNumber, businessName }: NavProps) {
+export function MobileNav({ nodes, phone, whatsappNumber, businessName, quickLinks }: NavProps) {
   const { t } = useLocale();
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -357,7 +359,7 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName }: NavPro
                   onClick={close}
                   className="flex min-h-12 items-center gap-3 py-3 text-lg font-semibold text-ink"
                 >
-                  <PackageSearch className="h-5 w-5 text-clay" aria-hidden="true" />
+                  <PackageSearch className="h-5 w-5 text-forest" aria-hidden="true" />
                   {t("allProducts")}
                 </Link>
                 <Link
@@ -365,7 +367,7 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName }: NavPro
                   onClick={close}
                   className="flex min-h-12 items-center gap-3 py-3 text-lg font-semibold text-ink"
                 >
-                  <Tags className="h-5 w-5 text-clay" aria-hidden="true" />
+                  <Tags className="h-5 w-5 text-forest" aria-hidden="true" />
                   {t("brands")}
                 </Link>
                 <Link
@@ -373,7 +375,7 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName }: NavPro
                   onClick={close}
                   className="flex min-h-12 items-center gap-3 py-3 text-lg font-semibold text-ink"
                 >
-                  <Home className="h-5 w-5 text-clay" aria-hidden="true" />
+                  <Home className="h-5 w-5 text-forest" aria-hidden="true" />
                   {t("navAbout")}
                 </Link>
                 <Link
@@ -381,10 +383,28 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName }: NavPro
                   onClick={close}
                   className="flex min-h-12 items-center gap-3 py-3 text-lg font-semibold text-ink"
                 >
-                  <Phone className="h-5 w-5 text-clay" aria-hidden="true" />
+                  <Phone className="h-5 w-5 text-forest" aria-hidden="true" />
                   {t("navContact")}
                 </Link>
               </div>
+
+              {quickLinks && quickLinks.length > 0 ? (
+                <>
+                  <p className="type-eyebrow no-rule mb-2 mt-2">{t("menu")}</p>
+                  <div className="grid gap-0.5 border-y border-line py-1">
+                    {quickLinks.map((link) => (
+                      <Link
+                        key={link.label}
+                        href={link.href}
+                        onClick={close}
+                        className="flex min-h-11 items-center gap-3 py-2 text-base font-semibold text-ink"
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              ) : null}
 
               <p className="type-eyebrow no-rule mb-2 mt-6">{t("categories")}</p>
               <ul>
@@ -404,6 +424,10 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName }: NavPro
             </div>
 
             <div className="border-t border-line bg-canvas p-4">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <p className="text-sm font-bold text-ink">{t("language")}</p>
+                <LanguageSwitch />
+              </div>
               <p className="mb-2 text-sm font-bold text-ink">{t("storeContact")}</p>
               <ContactActions
                 phone={phone}

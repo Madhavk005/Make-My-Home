@@ -4,7 +4,7 @@ export const LOCALE_COOKIE = "mmh-locale";
 export const DEFAULT_LOCALE: Locale = "hi";
 
 const hi = {
-  brandTagline: "निर्माण सामग्री",
+  brandTagline: "Build Better. Live Better.",
   skipToContent: "सीधे सामान पर जाएँ",
   home: "होम",
   back: "पीछे जाएँ",
@@ -29,7 +29,7 @@ const hi = {
   account: "खाता",
   search: "खोजें",
   searchLabel: "सामान खोजें",
-  searchPlaceholder: "सीमेंट, पाइप, तार या ब्रांड का नाम लिखें",
+  searchPlaceholder: "सीमेंट, पाइप, तार या ब्रांड खोजें...",
   searchButton: "खोजें",
   searchHint: "नाम, ब्रांड, कोड, श्रेणी या साइज़ से खोजें।",
   noContactYet: "संपर्क जानकारी दुकानदार जोड़ेगा।",
@@ -405,7 +405,7 @@ const hi = {
 export type MessageKey = keyof typeof hi;
 
 const en: Record<MessageKey, string> = {
-  brandTagline: "Building materials",
+  brandTagline: "Build Better. Live Better.",
   skipToContent: "Skip to products",
   home: "Home",
   back: "Go back",
@@ -430,7 +430,7 @@ const en: Record<MessageKey, string> = {
   account: "Account",
   search: "Search",
   searchLabel: "Search products",
-  searchPlaceholder: "Type cement, pipe, wire or a brand name",
+  searchPlaceholder: "Search cement, pipes, wires, stones or brands...",
   searchButton: "Search",
   searchHint: "Search by name, brand, code, category or size.",
   noContactYet: "The business will add contact details here.",

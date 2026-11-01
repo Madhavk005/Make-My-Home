@@ -34,7 +34,7 @@ export async function PriceTag({
             ? "flex flex-wrap items-baseline gap-x-2 font-display text-4xl font-medium tracking-[-0.03em] text-ink"
             : display.isNumeric
               ? "flex flex-wrap items-baseline gap-x-1.5 text-[1.05rem] font-bold tracking-[-0.02em] text-ink"
-              : "flex flex-wrap items-baseline gap-x-1.5 text-sm font-bold tracking-[-0.01em] text-clay"
+              : "flex flex-wrap items-baseline gap-x-1.5 text-sm font-bold tracking-[-0.01em] text-forest"
         }
       >
         <span>{display.primary}</span>

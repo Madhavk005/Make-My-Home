@@ -5,6 +5,7 @@ import { translate } from "@/lib/i18n";
 import { localizedSetting } from "@/lib/settings";
 import { ConnectionBanner } from "@/components/connection-banner";
 import { LocaleProvider } from "@/components/locale-provider";
+import { BackToTop } from "@/components/back-to-top";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 
@@ -46,6 +47,7 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
         {children}
       </main>
       <SiteFooter />
+      <BackToTop />
     </LocaleProvider>
   );
 }

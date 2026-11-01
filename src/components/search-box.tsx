@@ -428,7 +428,7 @@ export function SearchBox({
                   // Ignore storage failures.
                 }
               }}
-              className="flex min-h-11 w-full items-center justify-center border-t border-line bg-canvas px-4 text-xs font-semibold text-ink-soft transition-colors hover:text-clay"
+              className="flex min-h-11 w-full items-center justify-center border-t border-line bg-canvas px-4 text-xs font-semibold text-ink-soft transition-colors hover:text-forest"
             >
               {t("clearRecent")}
             </button>

@@ -59,12 +59,12 @@ export async function ProductCard({ product }: { product: ProductCardData }) {
       <div className="flex flex-1 flex-col pt-3">
         <div className="flex items-start justify-between gap-2">
           <h3 className="min-w-0 text-[0.95rem] font-semibold leading-snug tracking-[-0.01em] text-ink">
-            <Link href={href} className="line-clamp-2 transition-colors hover:text-clay">
+            <Link href={href} className="line-clamp-2 transition-colors hover:text-forest">
               {product.name}
             </Link>
           </h3>
           <ArrowUpRight
-            className="mt-0.5 h-4 w-4 shrink-0 text-ink-faint transition-colors group-hover:text-clay"
+            className="mt-0.5 h-4 w-4 shrink-0 text-ink-faint transition-colors group-hover:text-forest"
             aria-hidden="true"
           />
         </div>

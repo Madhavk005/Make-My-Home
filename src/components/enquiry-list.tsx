@@ -89,7 +89,7 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
           <button
             type="button"
             onClick={clear}
-            className="no-print inline-flex min-h-10 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.08em] text-ink-soft transition-colors hover:text-clay"
+            className="no-print inline-flex min-h-10 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.08em] text-ink-soft transition-colors hover:text-forest"
           >
             <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
             {t("clearList")}
@@ -134,14 +134,14 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
                         {item.brand ? (
-                          <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-clay">
+                          <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-forest">
                             {item.brand}
                           </p>
                         ) : null}
                         <h2 className="mt-0.5 text-[0.95rem] font-semibold leading-snug text-ink">
                           <Link
                             href={`/product/${encodeURIComponent(item.slug)}`}
-                            className="transition-colors hover:text-clay"
+                            className="transition-colors hover:text-forest"
                           >
                             {item.name}
                           </Link>
@@ -171,7 +171,7 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
                         type="button"
                         onClick={() => removeItem(item.key)}
                         aria-label={`${t("removeItem")} — ${item.name}`}
-                        className="no-print grid h-10 w-10 shrink-0 place-items-center text-ink-soft transition-colors hover:bg-sand hover:text-clay"
+                        className="no-print grid h-10 w-10 shrink-0 place-items-center text-ink-soft transition-colors hover:bg-sand hover:text-forest"
                       >
                         <X className="h-4 w-4" aria-hidden="true" />
                       </button>

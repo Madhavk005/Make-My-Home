@@ -51,7 +51,7 @@ export function ContactActions({
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className={`${base} bg-moss text-white hover:bg-moss/90`}
+          className={`${base} bg-moss text-black hover:bg-moss/90`}
         >
           <MessageCircle className="h-4 w-4" aria-hidden="true" />
           {t("whatsappAsk")}

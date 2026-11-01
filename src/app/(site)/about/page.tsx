@@ -153,7 +153,7 @@ export default async function AboutPage() {
               return (
                 <li key={value.title} className="border-t border-ink/20 pt-5">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-[11px] tracking-[0.12em] text-clay">
+                    <span className="font-mono text-[11px] tracking-[0.12em] text-forest">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <Icon className="h-5 w-5 text-ink-soft" aria-hidden="true" />

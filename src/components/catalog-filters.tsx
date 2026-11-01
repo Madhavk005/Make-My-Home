@@ -122,7 +122,7 @@ async function FilterGroups({
         <Link
           href={clearHref}
           scroll={false}
-          className="inline-flex min-h-10 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.1em] text-clay transition-colors hover:text-clay-dark"
+          className="inline-flex min-h-10 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.1em] text-forest transition-colors hover:text-forest-dark"
         >
           <X className="h-3.5 w-3.5" aria-hidden="true" />
           {translate(locale, "clearFilters")}
@@ -327,7 +327,7 @@ export async function FilterPanel(props: FilterPanelProps) {
             <SlidersHorizontal className="h-4 w-4 text-ink-soft" aria-hidden="true" />
             {translate(locale, "filters")}
             {count > 0 ? (
-              <span className="ml-auto font-sans text-[10px] font-bold uppercase tracking-[0.1em] text-clay">
+              <span className="ml-auto font-sans text-[10px] font-bold uppercase tracking-[0.1em] text-forest">
                 {count}
               </span>
             ) : null}
@@ -407,7 +407,7 @@ export async function ActiveFilterChips({
           <Link
             href={chip.href}
             scroll={false}
-            className="inline-flex min-h-9 items-center gap-1.5 border border-line bg-surface px-2.5 text-xs font-medium text-ink transition-colors hover:border-clay hover:text-clay"
+            className="inline-flex min-h-9 items-center gap-1.5 border border-line bg-surface px-2.5 text-xs font-medium text-ink transition-colors hover:border-clay hover:text-forest"
           >
             {chip.label}
             <X className="h-3.5 w-3.5 text-ink-faint" aria-hidden="true" />

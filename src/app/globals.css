@@ -6,36 +6,36 @@
      Warm ivory paper, deep forest ink, clay accent, brass detailing.
      ─────────────────────────────────────────────────────────────────────── */
 
-  --color-canvas: #f7f3ea;
-  --color-surface: #fcfaf5;
-  --color-sand: #efe7d9;
-  --color-sand-deep: #e2d6c2;
-  --color-ink: #1b2a22;
-  --color-ink-soft: #56645b;
-  --color-ink-faint: #8b958d;
-  --color-forest: #1e3a2f;
-  --color-forest-deep: #13251c;
-  --color-forest-soft: #e5ece5;
-  --color-clay: #b4552d;
-  --color-clay-dark: #8f3f1d;
-  --color-clay-soft: #f2e0d3;
-  --color-brass: #b08a4a;
-  --color-brass-soft: #f1e6d1;
-  --color-line: #ddd3c3;
-  --color-line-soft: #ece5d9;
-  --color-whatsapp: #2f6b4f;
-  --color-whatsapp-dark: #24553e;
-  --color-success: #2f6b4f;
-  --color-danger: #9b3a2a;
+  --color-canvas: #F5F7FA;
+  --color-surface: #FFFFFF;
+  --color-sand: #E8EEF5;
+  --color-sand-deep: #DCE6F2;
+  --color-ink: #0D2C54;
+  --color-ink-soft: #475569;
+  --color-ink-faint: #64748B;
+  --color-forest: #0D2C54;
+  --color-forest-deep: #071A33;
+  --color-forest-soft: #E6EDF7;
+  --color-clay: #F4B400;
+  --color-clay-dark: #D99A00;
+  --color-clay-soft: #FFF4D6;
+  --color-brass: #F4B400;
+  --color-brass-soft: #FFF8E1;
+  --color-line: #D7E0EA;
+  --color-line-soft: #EAF0F7;
+  --color-whatsapp: #28A745;
+  --color-whatsapp-dark: #1F8A38;
+  --color-success: #28A745;
+  --color-danger: #DC3545;
 
   /* Compatibility aliases for older utility usage. */
-  --color-paper: #f7f3ea;
-  --color-paper-deep: #efe7d9;
-  --color-accent: #b4552d;
-  --color-accent-dark: #8f3f1d;
-  --color-accent-soft: #f2e0d3;
-  --color-moss: #2f6b4f;
-  --color-moss-soft: #e5ece5;
+  --color-paper: #F5F7FA;
+  --color-paper-deep: #E8EEF5;
+  --color-accent: #F4B400;
+  --color-accent-dark: #D99A00;
+  --color-accent-soft: #FFF4D6;
+  --color-moss: #28A745;
+  --color-moss-soft: #E6EDF7;
 
   --font-sans: var(--font-manrope), var(--font-mukta), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-fraunces), var(--font-devanagari-display), Georgia, "Times New Roman", serif;
@@ -47,11 +47,11 @@
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
-  --radius-xl: 20px;
+  --radius-xl: 24px;
   --radius-2xl: 28px;
 
-  --shadow-card: 0 1px 2px rgb(27 42 34 / 0.04), 0 10px 30px -18px rgb(27 42 34 / 0.18);
-  --shadow-lift: 0 2px 4px rgb(27 42 34 / 0.05), 0 24px 50px -24px rgb(27 42 34 / 0.28);
+  --shadow-card: 0 4px 20px -8px rgb(13 44 84 / 0.12);
+  --shadow-lift: 0 8px 32px -12px rgb(13 44 84 / 0.22);
   --shadow-drawer: -24px 0 60px -20px rgb(19 37 28 / 0.28);
 }
 
@@ -235,7 +235,7 @@ img, svg { display: block; }
   align-items: center;
   justify-content: center;
   gap: 0.55rem;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   padding: 0.7rem 1.25rem;
   font-family: var(--font-sans);
   font-size: 0.9375rem;
@@ -324,7 +324,7 @@ img, svg { display: block; }
   display: block;
   width: 100%;
   min-height: 3rem;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   border: 1px solid var(--color-line);
   background: var(--color-surface);
   padding: 0.65rem 0.9rem;
@@ -376,7 +376,7 @@ img, svg { display: block; }
 .surface {
   background: var(--color-surface);
   border: 1px solid var(--color-line);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
 }
 
 .surface-flat {
@@ -393,7 +393,7 @@ img, svg { display: block; }
 .card {
   background: var(--color-surface);
   border: 1px solid var(--color-line);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 .card:hover {
@@ -478,17 +478,21 @@ img, svg { display: block; }
 
 .nav-link {
   display: inline-flex;
-  min-height: 2.75rem;
+  min-height: 2.5rem;
   align-items: center;
   gap: 0.35rem;
-  padding-inline: 0.7rem;
+  padding-inline: 0.85rem;
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--color-ink-soft);
-  border-radius: var(--radius-sm);
-  transition: color 150ms ease, background 150ms ease;
+  border-bottom: 2px solid transparent;
+  transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
 }
-.nav-link:hover, .nav-link[aria-current="page"] { color: var(--color-ink); background: rgb(239 231 217 / 0.7); }
+.nav-link:hover, .nav-link[aria-current="page"] {
+  color: var(--color-forest);
+  border-bottom-color: var(--color-brass);
+  background: rgb(244 180 0 / 0.08);
+}
 
 .mobile-bottom-nav {
   padding-bottom: env(safe-area-inset-bottom);

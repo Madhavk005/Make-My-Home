@@ -131,7 +131,7 @@ export default async function CategoriesPage() {
             >
               <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
                 <div className="flex max-w-2xl items-start gap-4">
-                  <span className="mt-1 font-mono text-xs tracking-[0.12em] text-clay">
+                  <span className="mt-1 font-mono text-xs tracking-[0.12em] text-forest">
                     {String(groupIndex + 1).padStart(2, "0")}
                   </span>
                   <div>
@@ -164,7 +164,7 @@ export default async function CategoriesPage() {
                           <li key={child._id}>
                             <Link
                               href={categoryHref(child.path)}
-                              className="inline-flex min-h-8 items-center text-[11px] font-medium text-ink-soft transition-colors hover:text-clay"
+                              className="inline-flex min-h-8 items-center text-[11px] font-medium text-ink-soft transition-colors hover:text-forest"
                             >
                               {child.name}
                             </Link>
@@ -174,7 +174,7 @@ export default async function CategoriesPage() {
                           <li>
                             <Link
                               href={categoryHref(category.path)}
-                              className="inline-flex min-h-8 items-center gap-1 text-[11px] font-bold text-clay"
+                              className="inline-flex min-h-8 items-center gap-1 text-[11px] font-bold text-forest"
                             >
                               +{category.children.length - 4}
                             </Link>
