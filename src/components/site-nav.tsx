@@ -197,7 +197,7 @@ function NavAccordion({
         <Link
           href={node.href}
           onClick={onNavigate}
-          className="flex min-h-12 items-center justify-between gap-2 border-b border-line/70 py-3 text-base font-semibold text-ink"
+          className="flex min-h-12 items-center justify-between gap-2 border-b border-line/70 py-3 text-sm font-semibold text-ink"
           style={{ paddingLeft: level > 0 ? `${level * 12}px` : undefined }}
         >
           <span>{node.name}</span>
@@ -213,7 +213,7 @@ function NavAccordion({
     <li>
       <details className="group border-b border-line/70">
         <summary
-          className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 py-3 text-base font-semibold text-ink [&::-webkit-details-marker]:hidden"
+          className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 py-3 text-sm font-semibold text-ink [&::-webkit-details-marker]:hidden"
           style={{ paddingLeft: level > 0 ? `${level * 12}px` : undefined }}
         >
           <span>{node.name}</span>
@@ -357,7 +357,7 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName, quickLin
                 <Link
                   href="/search"
                   onClick={close}
-                  className="flex min-h-12 items-center gap-3 py-3 text-lg font-semibold text-ink"
+                  className="flex min-h-12 items-center gap-3 py-3 text-sm font-semibold text-ink"
                 >
                   <PackageSearch className="h-5 w-5 text-forest" aria-hidden="true" />
                   {t("allProducts")}
@@ -365,7 +365,7 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName, quickLin
                 <Link
                   href="/brands"
                   onClick={close}
-                  className="flex min-h-12 items-center gap-3 py-3 text-lg font-semibold text-ink"
+                  className="flex min-h-12 items-center gap-3 py-3 text-sm font-semibold text-ink"
                 >
                   <Tags className="h-5 w-5 text-forest" aria-hidden="true" />
                   {t("brands")}
@@ -373,7 +373,7 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName, quickLin
                 <Link
                   href="/about"
                   onClick={close}
-                  className="flex min-h-12 items-center gap-3 py-3 text-lg font-semibold text-ink"
+                  className="flex min-h-12 items-center gap-3 py-3 text-sm font-semibold text-ink"
                 >
                   <Home className="h-5 w-5 text-forest" aria-hidden="true" />
                   {t("navAbout")}
@@ -381,7 +381,7 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName, quickLin
                 <Link
                   href="/contact"
                   onClick={close}
-                  className="flex min-h-12 items-center gap-3 py-3 text-lg font-semibold text-ink"
+                  className="flex min-h-12 items-center gap-3 py-3 text-sm font-semibold text-ink"
                 >
                   <Phone className="h-5 w-5 text-forest" aria-hidden="true" />
                   {t("navContact")}
@@ -397,7 +397,7 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName, quickLin
                         key={link.label}
                         href={link.href}
                         onClick={close}
-                        className="flex min-h-11 items-center gap-3 py-2 text-base font-semibold text-ink"
+                        className="flex min-h-11 items-center gap-3 py-2 text-sm font-semibold text-ink"
                       >
                         {link.label}
                       </Link>
