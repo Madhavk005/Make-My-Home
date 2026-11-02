@@ -32,6 +32,7 @@ import type {
   Specification,
   VariantAttribute,
 } from "./types";
+import { fuzzyIncludes } from "./search";
 
 export const demoSiteSettings: SiteSettings = {
   businessName: "Make My Home",
@@ -1227,7 +1228,7 @@ function filterDemoProducts(input: CatalogQueryInput, options: {
     if (categoryIds && (!product.category?._id || !categoryIds.has(product.category._id))) {
       return false;
     }
-    if (needle && !productHaystack(product).includes(needle)) return false;
+    if (needle && !fuzzyIncludes(productHaystack(product), needle)) return false;
     if (!options.ignoreBrand && input.brandSlugs?.length) {
       if (!product.brand || !input.brandSlugs.includes(product.brand.slug)) return false;
     }

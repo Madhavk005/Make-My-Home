@@ -25,6 +25,11 @@ export function buildEnquiryMessage(
     businessName?: string | null;
     priceNote?: string | null;
     locale?: Locale;
+    customerNote?: string | null;
+    reference?: string | null;
+    customerName?: string | null;
+    customerMobile?: string | null;
+    deliveryLocation?: string | null;
   } = {},
 ): string {
   const locale = options.locale ?? DEFAULT_LOCALE;
@@ -34,15 +39,32 @@ export function buildEnquiryMessage(
   );
 
   if (locale === "hi") {
-    return buildHindiMessage(items, businessName, options.priceNote ?? null, hasIndicativePrice);
+    return buildHindiMessage(
+      items,
+      businessName,
+      options.priceNote ?? null,
+      hasIndicativePrice,
+      options.customerNote ?? null,
+      options.reference ?? null,
+      options.customerName ?? null,
+      options.customerMobile ?? null,
+      options.deliveryLocation ?? null,
+    );
   }
 
   const lines: string[] = [
     `Hello ${businessName},`,
     "",
-    `I would like to enquire about the following ${items.length === 1 ? "item" : "items"}:`,
-    "",
   ];
+
+  if (options.reference) lines.push(`Enquiry reference: ${options.reference}`);
+  if (options.customerName) lines.push(`Customer: ${options.customerName}`);
+  if (options.customerMobile) lines.push(`Mobile: ${options.customerMobile}`);
+  if (options.deliveryLocation) lines.push(`Delivery location: ${options.deliveryLocation}`);
+  if (options.reference || options.customerName || options.customerMobile || options.deliveryLocation) lines.push("");
+
+  lines.push(`I would like to enquire about the following ${items.length === 1 ? "item" : "items"}:`);
+  lines.push("");
 
   items.forEach((item, index) => {
     const attributes = (item.attributes ?? [])
@@ -66,6 +88,7 @@ export function buildEnquiryMessage(
     }
 
     lines.push(`   Availability: ${AVAILABILITY_TEXT[item.availability]?.en ?? "Not confirmed"}`);
+    if (item.notes) lines.push(`   Notes: ${item.notes}`);
     lines.push("");
   });
 
@@ -74,6 +97,11 @@ export function buildEnquiryMessage(
       options.priceNote?.trim() ||
         "Prices shown are indicative and subject to confirmation.",
     );
+    lines.push("");
+  }
+
+  if (options.customerNote?.trim()) {
+    lines.push(`Customer note: ${options.customerNote.trim()}`);
     lines.push("");
   }
 
@@ -89,11 +117,22 @@ function buildHindiMessage(
   businessName: string,
   priceNote: string | null,
   hasIndicativePrice: boolean,
+  customerNote: string | null = null,
+  reference: string | null = null,
+  customerName: string | null = null,
+  customerMobile: string | null = null,
+  deliveryLocation: string | null = null,
 ): string {
   const lines: string[] = [
     translate("hi", "whatsappMessageIntro", { business: businessName }),
     "",
   ];
+
+  if (reference) lines.push(`पूछताछ संदर्भ: ${reference}`);
+  if (customerName) lines.push(`ग्राहक: ${customerName}`);
+  if (customerMobile) lines.push(`मोबाइल: ${customerMobile}`);
+  if (deliveryLocation) lines.push(`डिलीवरी स्थान: ${deliveryLocation}`);
+  if (reference || customerName || customerMobile || deliveryLocation) lines.push("");
 
   items.forEach((item, index) => {
     const attributes = (item.attributes ?? [])
@@ -121,6 +160,7 @@ function buildHindiMessage(
     lines.push(
       `   उपलब्धता: ${AVAILABILITY_TEXT[item.availability]?.hi ?? "पुष्टि नहीं हुई"}`,
     );
+    if (item.notes) lines.push(`   नोट: ${item.notes}`);
     lines.push("");
   });
 
@@ -128,6 +168,11 @@ function buildHindiMessage(
     lines.push(
       priceNote?.trim() || "ऊपर दी कीमत सिर्फ़ अनुमान है। पक्की कीमत दुकानदार बताएगा।",
     );
+    lines.push("");
+  }
+
+  if (customerNote?.trim()) {
+    lines.push(`ग्राहक नोट: ${customerNote.trim()}`);
     lines.push("");
   }
 

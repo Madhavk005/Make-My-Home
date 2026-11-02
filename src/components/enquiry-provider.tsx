@@ -23,6 +23,8 @@ type EnquiryContextValue = {
   addItem: (item: EnquiryItem) => void;
   removeItem: (key: string) => void;
   updateQuantity: (key: string, quantity: number) => void;
+  updateNotes: (key: string, notes: string) => void;
+  updateUnit: (key: string, unit: string) => void;
   clear: () => void;
 };
 
@@ -151,6 +153,22 @@ export function EnquiryProvider({ children }: { children: ReactNode }) {
     );
   }, []);
 
+  const updateNotes = useCallback((key: string, notes: string) => {
+    setItems((current) =>
+      current.map((item) =>
+        item.key === key ? { ...item, notes: notes.trim() || null } : item,
+      ),
+    );
+  }, []);
+
+  const updateUnit = useCallback((key: string, unit: string) => {
+    setItems((current) =>
+      current.map((item) =>
+        item.key === key ? { ...item, unit: unit.trim() || item.unit } : item,
+      ),
+    );
+  }, []);
+
   const clear = useCallback(() => setItems(() => []), []);
 
   const totalQuantity = useMemo(
@@ -166,9 +184,11 @@ export function EnquiryProvider({ children }: { children: ReactNode }) {
       addItem,
       removeItem,
       updateQuantity,
+      updateNotes,
+      updateUnit,
       clear,
     }),
-    [items, hydrated, totalQuantity, addItem, removeItem, updateQuantity, clear],
+    [items, hydrated, totalQuantity, addItem, removeItem, updateQuantity, updateNotes, updateUnit, clear],
   );
 
   return <EnquiryContext.Provider value={value}>{children}</EnquiryContext.Provider>;

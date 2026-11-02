@@ -1,4 +1,5 @@
 import "server-only";
+import { fuzzyIncludes } from "./search";
 import { cache } from "react";
 import {
   assembleFacets,
@@ -356,8 +357,8 @@ export async function getSearchSuggestions(query: string): Promise<SearchSuggest
   const categories = flattenCategoryTree(catalogue.tree)
     .filter(
       (category) =>
-        category.name.toLowerCase().includes(lower) ||
-        category.slug.toLowerCase().includes(lower),
+        fuzzyIncludes(category.name, needle) ||
+        fuzzyIncludes(category.slug, needle),
     )
     .sort((a, b) => {
       const aExact = a.name.toLowerCase().startsWith(lower) ? 0 : 1;
@@ -373,7 +374,7 @@ export async function getSearchSuggestions(query: string): Promise<SearchSuggest
     }));
 
   const brandMatches = brands
-    .filter((brand) => brand.name.toLowerCase().includes(lower))
+    .filter((brand) => fuzzyIncludes(brand.name, needle))
     .sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
     .slice(0, 3)
     .map((brand) => ({

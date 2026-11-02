@@ -18,6 +18,7 @@ import { attributeLabel, unitLabel } from "@/lib/i18n";
 import { materialArt } from "@/lib/material-art";
 import { buildEnquiryMessage, buildWhatsAppUrl } from "@/lib/whatsapp";
 import { useEnquiry } from "./enquiry-provider";
+import { saveTrackedEnquiry } from "@/lib/enquiry-tracking";
 import { ProductImage } from "./product-image";
 import { useLocale } from "./locale-provider";
 
@@ -30,7 +31,14 @@ type EnquiryListProps = {
 
 export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: EnquiryListProps) {
   const { locale, t } = useLocale();
-  const { items, hydrated, totalQuantity, updateQuantity, removeItem, clear } = useEnquiry();
+  const { items, hydrated, totalQuantity, updateQuantity, updateNotes, updateUnit, removeItem, clear } = useEnquiry();
+  const [customerNote, setCustomerNote] = useState("");
+  const [customerName, setCustomerName] = useState("");
+  const [customerMobile, setCustomerMobile] = useState("");
+  const [deliveryLocation, setDeliveryLocation] = useState("");
+  const [reference, setReference] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
 
   if (!hydrated) {
@@ -64,8 +72,54 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
     businessName,
     priceNote,
     locale,
+    customerNote,
+    reference,
+    customerName,
+    customerMobile,
+    deliveryLocation,
   });
   const whatsappUrl = buildWhatsAppUrl(whatsappNumber, message);
+
+  async function prepareEnquiry() {
+    if (!customerName.trim() || !customerMobile.trim()) {
+      setSubmitStatus("Please enter your name and mobile number.");
+      return;
+    }
+    setSubmitting(true);
+    setSubmitStatus(null);
+    try {
+      const response = await fetch("/api/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customerName: customerName.trim(),
+          customerMobile: customerMobile.trim(),
+          deliveryLocation: deliveryLocation.trim() || null,
+          customerNote: customerNote.trim() || null,
+          items,
+        }),
+      });
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to save enquiry");
+      }
+      const data = await response.json();
+      setReference(data.reference);
+
+      const messageWithReference = `${message}\n\nEnquiry Reference: ${data.reference}`;
+      const url = buildWhatsAppUrl(whatsappNumber, messageWithReference);
+      if (!url) throw new Error("Business WhatsApp number is not configured.");
+
+      setSubmitStatus(
+        `Enquiry ${data.reference} prepared. WhatsApp opened — please press Send to deliver it.`,
+      );
+      window.location.assign(url);
+    } catch (error) {
+      setSubmitStatus(error instanceof Error ? error.message : "Failed to save enquiry");
+    } finally {
+      setSubmitting(false);
+    }
+  }
   const telHref = phone ? `tel:${phone.replace(/[^\d+]/g, "")}` : null;
   const fixedTotal = items.reduce((total, item) => {
     if (item.priceStatus === "fixed" && typeof item.price === "number" && item.price > 0) {
@@ -93,6 +147,24 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
           >
             <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
             {t("clearList")}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              saveTrackedEnquiry({
+                items: items.map((item) => ({
+                  name: item.name,
+                  quantity: item.quantity,
+                  unit: item.unit,
+                  sku: item.sku,
+                })),
+                customerNote,
+              });
+              alert("Saved for follow-up");
+            }}
+            className="no-print inline-flex min-h-10 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.08em] text-ink-soft transition-colors hover:text-forest"
+          >
+            Save for follow-up
           </button>
         </div>
 
@@ -236,6 +308,29 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
                         </span>
                       </div>
 
+                      <div className="mt-2 flex w-full flex-col gap-1.5 sm:max-w-xs">
+                        <label className="text-[11px] font-semibold text-ink-soft">
+                          Unit
+                        </label>
+                        <input
+                          value={item.unit}
+                          onChange={(event) => updateUnit(item.key, event.target.value)}
+                          className="h-9 rounded-md border border-line bg-canvas px-2 text-sm text-ink focus:border-clay focus:outline-none"
+                        />
+                      </div>
+                      <div className="mt-2 w-full">
+                        <label className="text-[11px] font-semibold text-ink-soft">
+                          Notes
+                        </label>
+                        <textarea
+                          value={item.notes ?? ""}
+                          onChange={(event) => updateNotes(item.key, event.target.value)}
+                          rows={2}
+                          placeholder="Size, brand preference, delivery notes..."
+                          className="mt-1 w-full rounded-md border border-line bg-canvas px-2 py-1.5 text-sm text-ink focus:border-clay focus:outline-none"
+                        />
+                      </div>
+
                       {lineTotal !== null ? (
                         <p className="w-full text-right text-xs font-medium text-ink-soft sm:w-auto">
                           {t("estimatedTotal", { amount: formatINR(lineTotal) })}
@@ -311,6 +406,58 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
               </dd>
             </div>
           </dl>
+
+          <div className="mb-4">
+            <label className="text-[11px] font-bold uppercase tracking-[0.08em] text-ink-soft">
+              Customer note
+            </label>
+            <textarea
+              value={customerNote}
+              onChange={(event) => setCustomerNote(event.target.value)}
+              rows={3}
+              placeholder="Delivery address, urgency, preferred brand..."
+              className="mt-2 w-full rounded-md border border-line bg-canvas px-3 py-2 text-sm text-ink focus:border-clay focus:outline-none"
+            />
+          </div>
+
+          <div className="mb-4 space-y-2">
+            <input
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
+              placeholder="Your name"
+              className="min-h-10 w-full rounded-md border border-line bg-canvas px-3 text-sm text-ink focus:border-clay focus:outline-none"
+            />
+            <input
+              value={customerMobile}
+              onChange={(e) => setCustomerMobile(e.target.value)}
+              placeholder="Mobile number"
+              className="min-h-10 w-full rounded-md border border-line bg-canvas px-3 text-sm text-ink focus:border-clay focus:outline-none"
+            />
+            <input
+              value={deliveryLocation}
+              onChange={(e) => setDeliveryLocation(e.target.value)}
+              placeholder="Delivery location (optional)"
+              className="min-h-10 w-full rounded-md border border-line bg-canvas px-3 text-sm text-ink focus:border-clay focus:outline-none"
+            />
+            <textarea
+              value={customerNote}
+              onChange={(e) => setCustomerNote(e.target.value)}
+              rows={2}
+              placeholder="Customer note (optional)"
+              className="w-full rounded-md border border-line bg-canvas px-3 py-2 text-sm text-ink focus:border-clay focus:outline-none"
+            />
+            <button
+              type="button"
+              onClick={prepareEnquiry}
+              disabled={submitting || items.length === 0}
+              className="btn btn-whatsapp w-full"
+            >
+              {submitting ? "Saving enquiry..." : "Continue to WhatsApp"}
+            </button>
+            {submitStatus ? (
+              <p className="text-xs leading-relaxed text-ink-soft">{submitStatus}</p>
+            ) : null}
+          </div>
 
           {whatsappUrl ? (
             <a

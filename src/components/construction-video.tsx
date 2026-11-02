@@ -18,10 +18,13 @@ export function ConstructionVideo({ poster = "/images/hero-architecture.jpg", sr
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(media.matches);
+    const id = window.setTimeout(() => setReducedMotion(media.matches), 0);
     const handler = (event: MediaQueryListEvent) => setReducedMotion(event.matches);
     media.addEventListener("change", handler);
-    return () => media.removeEventListener("change", handler);
+    return () => {
+      window.clearTimeout(id);
+      media.removeEventListener("change", handler);
+    };
   }, []);
 
   useEffect(() => {

@@ -26,6 +26,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ProductCard } from "@/components/product-card";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductPurchasePanel } from "@/components/product-purchase-panel";
+import { RecentlyViewed } from "@/components/recently-viewed";
 import { RichText } from "@/components/rich-text";
 import type { Specification } from "@/lib/types";
 
@@ -136,8 +137,50 @@ export default async function ProductPage(props: PageParams) {
     : "/search";
   const backLabel = categoryCrumbs.at(-1)?.name ?? translate(locale, "allProducts");
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.shortDescription || product.name,
+    sku: product.sku,
+    brand: product.brand ? { "@type": "Brand", name: product.brand.name } : undefined,
+    image: galleryImages.map((image) => image.url).filter(Boolean),
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "INR",
+      price: typeof product.price === "number" ? product.price : undefined,
+      availability:
+        product.availability === "available"
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+      url: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/product/${product.slug}`,
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: crumbs.map((crumb, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: crumb.label,
+      item:
+        "href" in crumb && crumb.href
+          ? `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}${crumb.href}`
+          : undefined,
+    })),
+  };
+
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <div className="border-b border-line bg-sand/35">
         <div className="container">
           <Breadcrumbs items={crumbs} className="pt-2" />
@@ -402,6 +445,8 @@ export default async function ProductPage(props: PageParams) {
             </div>
           </section>
         ) : null}
+
+        <RecentlyViewed currentSlug={product.slug} />
 
         {related.length > 0 ? (
           <section aria-labelledby="related" className="mt-14 border-t border-line pt-10">

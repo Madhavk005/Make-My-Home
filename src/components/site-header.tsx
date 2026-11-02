@@ -9,6 +9,7 @@ import { translate } from "@/lib/i18n";
 import { localizedSetting } from "@/lib/settings";
 import { toNavNodes } from "@/lib/nav";
 import { AccountControls } from "./account-controls";
+import { CompareLink } from "./compare-link";
 import { EnquiryLink } from "./enquiry-link";
 import { LanguageSwitch } from "./language-switch";
 import { MobileBottomNav } from "./mobile-bottom-nav";
@@ -60,12 +61,12 @@ function BrandMark({
   );
 }
 
-function findCategoryHref(categories: any[], keywords: string[]): string {
+function findCategoryHref(categories: Array<{ slug?: string; name?: string; path?: string[] }>, keywords: string[]): string {
   const match = categories.find((category) => {
     const text = `${category.slug ?? ""} ${category.name ?? ""}`.toLowerCase();
     return keywords.some((keyword) => text.includes(keyword.toLowerCase()));
   });
-  return match ? categoryHref(match.path) : "/categories";
+  return match ? categoryHref(match.path ?? []) : "/categories";
 }
 
 export async function SiteHeader() {
@@ -138,6 +139,7 @@ export async function SiteHeader() {
                   </a>
                 ) : null}
               </div>
+              <CompareLink />
               <EnquiryLink />
               <AccountControls />
               <MobileNav

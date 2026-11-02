@@ -163,6 +163,7 @@ export type EnquiryItem = {
   unit: string;
   availability: Availability;
   quantity: number;
+  notes?: string | null;
   imageUrl?: string | null;
 };
 

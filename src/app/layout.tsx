@@ -8,6 +8,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
+import { Analytics } from "@/components/analytics";
 import { getLocale } from "@/lib/locale";
 
 const fraunces = Fraunces({
@@ -87,6 +88,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col">
         <Providers>{children}</Providers>
+        <Analytics />
       </body>
     </html>
   );

@@ -7,12 +7,14 @@ import {
   categoryIdsMatchingQuery,
   descendantIds,
   findCategoryByPath,
+  flattenCategoryTree,
 } from "@/lib/categories";
 import { hasActiveFilters, PAGE_SIZE, parseFilters } from "@/lib/filters";
 import { translate } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale";
 import type { CatalogQueryInput } from "@/lib/queries";
 import { isSanityConfigured } from "@/lib/sanity";
+import { suggestTerms } from "@/lib/search";
 import { CatalogueNotice } from "@/components/catalogue-notice";
 import { CatalogResults } from "@/components/catalog-results";
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -69,6 +71,24 @@ export default async function SearchPage(props: PageProps<"/search">) {
   ]);
   const totalPages = Math.max(1, Math.ceil(result.total / PAGE_SIZE));
 
+  let suggestedTerms: string[] = [];
+  if (filters.q && result.total === 0) {
+    const all = await getProductList({
+      sort: "recommended",
+      page: 1,
+      pageSize: 1000,
+    });
+    suggestedTerms = suggestTerms(
+      filters.q,
+      [
+        ...all.items.map((product) => product.name),
+        ...brands.map((brand) => brand.name),
+        ...flattenCategoryTree(tree).map((category) => category.name),
+      ],
+      5,
+    );
+  }
+
   const catalogueEmpty =
     isSanityConfigured && totalProducts === 0 && !filters.q && !hasActiveFilters(filters);
   const demo = !isSanityConfigured;
@@ -122,6 +142,21 @@ export default async function SearchPage(props: PageProps<"/search">) {
           <p className="mb-5 border-l-2 border-brass pl-3 text-[11px] leading-relaxed text-ink-soft">
             {translate(locale, "searchDemoNote")}
           </p>
+        ) : null}
+
+        {suggestedTerms.length > 0 ? (
+          <div className="mb-6 flex flex-wrap items-center gap-2">
+            <span className="text-sm text-ink-soft">Did you mean:</span>
+            {suggestedTerms.map((term) => (
+              <Link
+                key={term}
+                href={`/search?q=${encodeURIComponent(term)}`}
+                className="rounded-full border border-line px-3 py-1 text-sm text-ink transition-colors hover:border-accent hover:text-accent"
+              >
+                {term}
+              </Link>
+            ))}
+          </div>
         ) : null}
 
         {catalogueEmpty ? (

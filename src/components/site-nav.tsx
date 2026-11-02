@@ -6,12 +6,15 @@ import { createPortal } from "react-dom";
 import {
   ArrowLeft,
   ArrowRight,
+  Calculator,
   ChevronDown,
+  FileText,
   Home,
   Menu,
   PackageSearch,
   Phone,
   Tags,
+  Truck,
   X,
 } from "lucide-react";
 import type { NavNode } from "@/lib/nav";
@@ -165,6 +168,21 @@ export function DesktopNav({ nodes, phone, whatsappNumber, businessName }: NavPr
       <Link href="/contact" className="nav-link">
         <Phone className="h-4 w-4" aria-hidden="true" />
         {t("navContact")}
+      </Link>
+
+      <Link href="/calculator" className="nav-link">
+        <Calculator className="h-4 w-4" aria-hidden="true" />
+        Calculator
+      </Link>
+
+      <Link href="/delivery" className="nav-link">
+        <Truck className="h-4 w-4" aria-hidden="true" />
+        Delivery
+      </Link>
+
+      <Link href="/quote" className="nav-link">
+        <FileText className="h-4 w-4" aria-hidden="true" />
+        Quotation
       </Link>
 
       <div className="ml-auto hidden items-center gap-2 xl:flex">

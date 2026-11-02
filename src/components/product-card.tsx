@@ -9,6 +9,7 @@ import type { ProductCardData } from "@/lib/types";
 import { PriceTag } from "./price-tag";
 import { ProductImage } from "./product-image";
 import { QuickAdd } from "./quick-add";
+import { CompareToggle } from "./compare-toggle";
 
 export async function ProductCard({ product }: { product: ProductCardData }) {
   const locale = await getLocale();
@@ -129,6 +130,7 @@ export async function ProductCard({ product }: { product: ProductCardData }) {
                 className="shrink-0 !min-h-10 !rounded-xs !px-2.5 !text-xs"
               />
             ) : null}
+            <CompareToggle productId={product._id} />
           </div>
         </div>
       </div>

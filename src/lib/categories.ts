@@ -1,4 +1,5 @@
 import type { Category, CategoryNode } from "./types";
+import { fuzzyIncludes } from "./search";
 
 function compareCategories(a: Category, b: Category): number {
   const orderA = typeof a.order === "number" ? a.order : 100;
@@ -134,8 +135,8 @@ export function categoryIdsMatchingQuery(categories: Category[], query: string):
 
   const matches = categories.filter(
     (category) =>
-      category.name.toLowerCase().includes(needle) ||
-      category.slug.toLowerCase().includes(needle),
+      fuzzyIncludes(category.name, needle) ||
+      fuzzyIncludes(category.slug, needle),
   );
   if (matches.length === 0) return [];
 
