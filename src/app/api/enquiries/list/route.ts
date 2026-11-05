@@ -27,8 +27,8 @@ export async function GET(request: Request) {
       params.push(status);
     }
     const result = await client.query(
-      `SELECT e.id, e.reference, e.customer_name, e.customer_mobile, e.delivery_location,
-              e.status, e.customer_note, e.created_at, e.updated_at,
+      `SELECT e.id, e.reference, e.customer_name, e.customer_phone, e.customer_location,
+              e.status, e.customer_note, e.admin_notes, e.created_at, e.updated_at,
               COALESCE(json_agg(json_build_object(
                 'id', ei.id,
                 'productId', ei.product_id,

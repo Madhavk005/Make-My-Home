@@ -95,7 +95,7 @@
 ## Technical
 - [x] React/Next.js preserved
 - [x] Sanity CMS preserved
-- [x] Clerk authentication preserved
+- [x] Better Authentication preserved
 - [x] Vercel deployment compatible
 - [x] No secrets exposed in frontend
 - [x] Production build passes

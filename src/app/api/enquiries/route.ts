@@ -43,12 +43,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Spam detected." }, { status: 400 });
     }
 
-    const customer = body.customer;
+    const rawCustomer =
+      body?.customer && typeof body.customer === "object" ? body.customer : null;
     const items = body.items as EnquiryItemInput[];
 
-    const name = String(customer?.name ?? "").trim();
-    const phone = String(customer?.phone ?? "").replace(/\D/g, "");
-    const location = String(customer?.location ?? "").trim();
+    // Accept both the canonical `customer` object and the legacy flat fields so
+    // older clients cannot silently fail validation.
+    const name = String(rawCustomer?.name ?? body?.customerName ?? "").trim();
+    const phone = String(rawCustomer?.phone ?? body?.customerMobile ?? "")
+      .replace(/\D/g, "");
+    const location = String(rawCustomer?.location ?? body?.deliveryLocation ?? "").trim();
 
     if (name.length < 2 || name.length > 120) {
       return NextResponse.json(

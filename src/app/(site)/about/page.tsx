@@ -5,7 +5,7 @@ import { ArrowRight, Clock, MapPin, Phone, ShieldCheck, Sparkles, Users } from "
 import { getBrandsWithCounts, getCatalogue, getSiteSettings } from "@/lib/catalogue";
 import { translate } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale";
-import { localizedSetting } from "@/lib/settings";
+import { getSettingWhatsAppNumber, localizedSetting } from "@/lib/settings";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ContactActions } from "@/components/contact-actions";
 
@@ -46,10 +46,7 @@ export default async function AboutPage() {
 
   const businessName = settings?.businessName?.trim() || "Make My Home";
   const phone = settings?.phone?.trim() || null;
-  const whatsappNumber =
-    settings?.whatsappNumber?.trim() ||
-    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.trim() ||
-    null;
+  const whatsappNumber = getSettingWhatsAppNumber(settings);
   const brandCount = brands.filter((brand) => (brand.count ?? 0) > 0).length;
   const address = localizedSetting(settings, "address", locale);
   const openingHours = localizedSetting(settings, "openingHours", locale);

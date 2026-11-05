@@ -1,16 +1,9 @@
-import { PageHeader } from "@/components/admin/page-header";
+import { redirect } from "next/navigation";
 
+/**
+ * Kept as a redirect for old bookmarks. Catalogue and website content are
+ * managed in Sanity Studio, not in a separate custom admin screen.
+ */
 export default function AdminCmsPage() {
-  return (
-    <>
-      <PageHeader title="Website CMS" description="Manage website content in Sanity Studio." />
-      <div className="card">
-        <div className="card-body">
-          <a href="/studio" className="btn btn-primary">
-            Open Sanity Studio
-          </a>
-        </div>
-      </div>
-    </>
-  );
+  redirect("/studio");
 }

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { StatCard } from "@/components/admin/stat-card";
 import { PageHeader } from "@/components/admin/page-header";
 import { getAllBrands, getCatalogue } from "@/lib/catalogue";
@@ -12,7 +13,15 @@ export default async function AdminDashboard() {
 
   return (
     <>
-      <PageHeader title="Dashboard" description="Overview of catalogue and enquiries." />
+      <PageHeader
+        title="Dashboard"
+        description="Overview of catalogue and enquiries."
+        actions={
+          <Link href="/studio" className="btn btn-primary" target="_blank" rel="noopener noreferrer">
+            Open Sanity Studio
+          </Link>
+        }
+      />
       <div className="row row-cards">
         <div className="col-sm-6 col-lg-3">
           <StatCard label="Products" value={catalogue.totalProducts} />

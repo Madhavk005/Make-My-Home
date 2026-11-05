@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { StatusBadge } from "./admin/status-badge";
 
 type Item = {
@@ -15,8 +15,9 @@ type Enquiry = {
   id: string;
   reference: string;
   customer_name: string;
-  customer_mobile: string;
-  delivery_location?: string | null;
+  customer_phone: string;
+  customer_location?: string | null;
+  admin_notes?: string | null;
   status: string;
   customer_note?: string | null;
   created_at: string;
@@ -31,20 +32,20 @@ export function AdminEnquiries() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
-  async function load() {
+  const load = useCallback(async () => {
     setLoading(true);
     const response = await fetch(`/api/enquiries/list?status=${filter}`);
     const data = await response.json();
     setEnquiries(data.enquiries ?? []);
     setLoading(false);
-  }
+  }, [filter]);
 
   useEffect(() => {
     const id = window.setTimeout(() => {
       load();
     }, 0);
     return () => window.clearTimeout(id);
-  }, [filter]);
+  }, [load]);
 
   const filtered = enquiries.filter((enquiry) => {
     if (!search.trim()) return true;
@@ -52,7 +53,7 @@ export function AdminEnquiries() {
     return (
       enquiry.reference.toLowerCase().includes(needle) ||
       enquiry.customer_name.toLowerCase().includes(needle) ||
-      enquiry.customer_mobile.includes(needle) ||
+      enquiry.customer_phone.includes(needle) ||
       enquiry.items.some((item) => item.productName.toLowerCase().includes(needle))
     );
   });
@@ -106,7 +107,7 @@ export function AdminEnquiries() {
                   <td>
                     {enquiry.customer_name}
                     <br />
-                    <span className="text-secondary">{enquiry.customer_mobile}</span>
+                    <span className="text-secondary">{enquiry.customer_phone}</span>
                   </td>
                   <td>{enquiry.items.length}</td>
                   <td>

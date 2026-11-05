@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { ArrowUpRight, Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Clock, Mail, MessageCircle, Phone } from "lucide-react";
 import { getSiteSettings, getTopLevelCategories } from "@/lib/catalogue";
 import { categoryHref } from "@/lib/categories";
 import { getLocale } from "@/lib/locale";
-import { translate } from "@/lib/i18n";
-import { localizedSetting } from "@/lib/settings";
+import { getSettingWhatsAppNumber, localizedSetting } from "@/lib/settings";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { LanguageSwitch } from "./language-switch";
 import { ContactActions } from "./contact-actions";
 
@@ -19,10 +19,13 @@ export async function SiteFooter() {
   const businessName = settings?.businessName?.trim() || "Make My Home";
   const year = new Date().getFullYear();
   const phone = settings?.phone?.trim() || null;
-  const whatsappNumber =
-    settings?.whatsappNumber?.trim() ||
-    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.trim() ||
-    null;
+  const whatsappNumber = getSettingWhatsAppNumber(settings);
+  const whatsappHelpUrl = buildWhatsAppUrl(
+    whatsappNumber,
+    hi
+      ? `नमस्ते ${businessName}, मुझे सामग्री चुनने में मदद चाहिए।`
+      : `Hello ${businessName}, I need help choosing materials.`,
+  );
   const footerNote =
     localizedSetting(settings, "footerNote", locale) ||
     localizedSetting(settings, "tagline", locale);
@@ -50,8 +53,8 @@ export async function SiteFooter() {
   const supportLinks = [
     { label: hi ? "कस्टमर केयर" : "Customer Care", href: "/#customer-care" },
     ...(phone ? [{ label: hi ? "कॉल करें" : "Call Us", href: `tel:${phone.replace(/[^\d+]/g, "")}` }] : []),
-    ...(whatsappNumber
-      ? [{ label: hi ? "WhatsApp करें" : "WhatsApp Us", href: `https://wa.me/${whatsappNumber.replace(/\D/g, "")}` }]
+    ...(whatsappHelpUrl
+      ? [{ label: hi ? "WhatsApp करें" : "WhatsApp Us", href: whatsappHelpUrl }]
       : []),
     { label: hi ? "प्रोडक्ट पूछताछ" : "Product Enquiry", href: "/enquiry" },
     { label: hi ? "संपर्क" : "Contact Us", href: "/contact" },
@@ -86,11 +89,9 @@ export async function SiteFooter() {
                 {hi ? "कस्टमर केयर कॉल करें" : "Call Customer Care"}
               </a>
             ) : null}
-            {whatsappNumber ? (
+            {whatsappHelpUrl ? (
               <a
-                href={`https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(
-                  hi ? `नमस्ते ${businessName}, मुझे सामग्री चुनने में मदद चाहिए।` : `Hello ${businessName}, I need help choosing materials.`,
-                )}`}
+                href={whatsappHelpUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-success px-5 text-sm font-bold text-black transition-colors hover:bg-success/90"

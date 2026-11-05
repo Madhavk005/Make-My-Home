@@ -4,12 +4,22 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 
+/**
+ * Admin access is allowlist-only. An empty allowlist must never mean "allow
+ * everyone" — that turns any public sign-up into an admin account.
+ */
 const adminEmails = new Set(
   (process.env.ADMIN_EMAILS ?? "")
     .split(",")
     .map((email) => email.trim().toLowerCase())
     .filter(Boolean),
 );
+
+export function isAdminEmail(email: string | null | undefined): boolean {
+  if (!email) return false;
+  if (adminEmails.size === 0) return false;
+  return adminEmails.has(email.trim().toLowerCase());
+}
 
 export async function getAdminSession() {
   const session = await auth.api.getSession({
@@ -20,9 +30,7 @@ export async function getAdminSession() {
     return null;
   }
 
-  if (!adminEmails.has(session.user.email.toLowerCase())) {
-    // If no admin emails configured, allow any authenticated user (dev).
-    if (adminEmails.size === 0) return session;
+  if (!isAdminEmail(session.user.email)) {
     return null;
   }
 

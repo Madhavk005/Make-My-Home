@@ -7,9 +7,10 @@ import { authClient } from "@/lib/auth-client";
 
 type AuthFormProps = {
   mode: "sign-in" | "sign-up";
+  allowPublicSignUp: boolean;
 };
 
-export function AuthForm({ mode }: AuthFormProps) {
+export function AuthForm({ mode, allowPublicSignUp }: AuthFormProps) {
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -138,12 +139,16 @@ export function AuthForm({ mode }: AuthFormProps) {
 
       <p className="mt-6 text-center text-sm text-ink-soft">
         {isSignUp ? "Already have an account?" : "New to Make My Home?"}{" "}
-        <Link
-          href={isSignUp ? "/sign-in" : "/sign-up"}
-          className="font-semibold text-accent underline underline-offset-4"
-        >
-          {isSignUp ? "Sign in" : "Create account"}
-        </Link>
+        {isSignUp || allowPublicSignUp ? (
+          <Link
+            href={isSignUp ? "/sign-in" : "/sign-up"}
+            className="font-semibold text-accent underline underline-offset-4"
+          >
+            {isSignUp ? "Sign in" : "Create account"}
+          </Link>
+        ) : (
+          <span>Ask the shop to create an account for you.</span>
+        )}
       </p>
     </section>
   );

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowLeft, Trash2 } from "lucide-react";
-import { formatINR, priceDisplay } from "@/lib/format";
+import { priceDisplay } from "@/lib/format";
 import type { ProductDetail } from "@/lib/types";
 import { useCompare } from "./compare-provider";
 import { ProductImage } from "./product-image";

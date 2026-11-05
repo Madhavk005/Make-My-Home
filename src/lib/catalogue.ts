@@ -30,7 +30,7 @@ import {
   findCategoryByPath,
   flattenCategoryTree,
 } from "./categories";
-import { sanityFetch, isSanityConfigured } from "./sanity";
+import { sanityFetch, isDemoDataEnabled } from "./sanity";
 import {
   demoAllBrands,
   demoAllCategories,
@@ -61,7 +61,7 @@ const TAGS = {
 };
 
 export const getSiteSettings = cache(async (): Promise<SiteSettings | null> => {
-  if (!isSanityConfigured) return demoSiteSettings;
+  if (isDemoDataEnabled) return demoSiteSettings;
   return sanityFetch<SiteSettings | null>({
     query: siteSettingsQuery,
     tags: [TAGS.settings],
@@ -70,7 +70,7 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings | null> => {
 });
 
 export const getAllCategories = cache(async (): Promise<Category[]> => {
-  if (!isSanityConfigured) return demoAllCategories();
+  if (isDemoDataEnabled) return demoAllCategories();
   const categories = await sanityFetch<Category[]>({
     query: categoriesQuery,
     tags: [TAGS.categories],
@@ -80,7 +80,7 @@ export const getAllCategories = cache(async (): Promise<Category[]> => {
 });
 
 export const getAllBrands = cache(async (): Promise<Brand[]> => {
-  if (!isSanityConfigured) return demoAllBrands();
+  if (isDemoDataEnabled) return demoAllBrands();
   const brands = await sanityFetch<Brand[]>({
     query: brandsQuery,
     tags: [TAGS.brands],
@@ -90,7 +90,7 @@ export const getAllBrands = cache(async (): Promise<Brand[]> => {
 });
 
 export const getCatalogue = cache(async () => {
-  if (!isSanityConfigured) {
+  if (isDemoDataEnabled) {
     const categories = demoAllCategories();
     const tree = buildCategoryTree(categories);
     const counts = countProductsByCategory(
@@ -128,7 +128,7 @@ export const getCatalogue = cache(async () => {
 });
 
 export const getTopLevelCategories = cache(async (): Promise<CategoryNode[]> => {
-  if (!isSanityConfigured) {
+  if (isDemoDataEnabled) {
     const tree = buildCategoryTree(demoAllCategories());
     return tree.filter((node) => !node.parentId);
   }
@@ -137,7 +137,7 @@ export const getTopLevelCategories = cache(async (): Promise<CategoryNode[]> => 
 });
 
 export async function getCategoryPageData(slugPath: string[]) {
-  if (!isSanityConfigured) {
+  if (isDemoDataEnabled) {
     const categories = demoAllCategories();
     const tree = buildCategoryTree(categories);
     const counts = countProductsByCategory(
@@ -181,7 +181,7 @@ export async function getCategoryPageData(slugPath: string[]) {
 }
 
 export async function getProductList(input: CatalogQueryInput): Promise<ProductListResult> {
-  if (!isSanityConfigured) {
+  if (isDemoDataEnabled) {
     return demoProductList(input);
   }
 
@@ -200,7 +200,7 @@ export async function getFacets(
   input: CatalogQueryInput,
   options: { includeSpecs?: boolean } = {},
 ): Promise<Facets> {
-  if (!isSanityConfigured) {
+  if (isDemoDataEnabled) {
     return demoFacets(input);
   }
 
@@ -238,7 +238,7 @@ export async function getFacets(
 }
 
 export async function getFeaturedProducts() {
-  if (!isSanityConfigured) {
+  if (isDemoDataEnabled) {
     return demoProducts.filter((p) => p.featured ?? false);
   }
   const products = await sanityFetch<NonNullable<ProductListResult["items"]>>({
@@ -250,7 +250,7 @@ export async function getFeaturedProducts() {
 }
 
 export async function getHomeBrands() {
-  if (!isSanityConfigured) {
+  if (isDemoDataEnabled) {
     return demoAllBrands()
       .map((brand) => ({
         ...brand,
@@ -267,7 +267,7 @@ export async function getHomeBrands() {
 }
 
 export async function getBrandsWithCounts() {
-  if (!isSanityConfigured) {
+  if (isDemoDataEnabled) {
     return demoAllBrands().map((brand) => ({
       ...brand,
       count: demoProducts.filter((product) => product.brand?.slug === brand.slug).length,
@@ -282,7 +282,7 @@ export async function getBrandsWithCounts() {
 }
 
 export async function getProductBySlug(slug: string): Promise<ProductDetail | null> {
-  if (!isSanityConfigured) {
+  if (isDemoDataEnabled) {
     return demoProductBySlug(slug);
   }
   return sanityFetch<ProductDetail | null>({
@@ -300,7 +300,7 @@ export async function getRelatedProducts(
 ) {
   const ids = categoryIds?.length ? categoryIds : [categoryId];
 
-  if (!isSanityConfigured) {
+  if (isDemoDataEnabled) {
     const products = demoProductsByCategory(ids, slug);
     return products
       .sort((a, b) => {
@@ -325,7 +325,7 @@ export async function getRelatedProducts(
 }
 
 export async function getBrandBySlug(slug: string): Promise<Brand | null> {
-  if (!isSanityConfigured) {
+  if (isDemoDataEnabled) {
     return demoBrandBySlug(slug);
   }
   return sanityFetch<Brand | null>({

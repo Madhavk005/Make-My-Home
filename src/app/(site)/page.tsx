@@ -22,13 +22,13 @@ import {
 import { categoryHref } from "@/lib/categories";
 import { getLocale } from "@/lib/locale";
 import { translate } from "@/lib/i18n";
-import { localizedSetting } from "@/lib/settings";
-import { isSanityConfigured } from "@/lib/sanity";
-import type { CategoryNode, CategoryStage } from "@/lib/types";
+import { getSettingWhatsAppNumber } from "@/lib/settings";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
+import { isDemoDataEnabled } from "@/lib/sanity";
+import type { CategoryNode } from "@/lib/types";
 import { CatalogueNotice } from "@/components/catalogue-notice";
 import { CategoryCard } from "@/components/category-card";
 import { ConstructionVideo } from "@/components/construction-video";
-import { ContactActions } from "@/components/contact-actions";
 import { LanguageSwitch } from "@/components/language-switch";
 import { ProductCard } from "@/components/product-card";
 import { ProductEnquiryForm } from "@/components/product-enquiry-form";
@@ -70,16 +70,18 @@ export default async function HomePage() {
 
   const hi = locale === "hi";
   const t = (key: string) => translate(locale, key as never);
-  const { tree, totalProducts } = catalogue;
+  const { tree } = catalogue;
   const brands = allBrands.filter((brand) => (brand.count ?? 0) > 0);
   const businessName = settings?.businessName?.trim() || "Make My Home";
-  const hasCatalogue = tree.length > 0 || totalProducts > 0;
-  const demo = !isSanityConfigured;
+  const demo = isDemoDataEnabled;
   const phone = settings?.phone?.trim() || null;
-  const whatsappNumber =
-    settings?.whatsappNumber?.trim() ||
-    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.trim() ||
-    null;
+  const whatsappNumber = getSettingWhatsAppNumber(settings);
+  const customerCareWhatsAppUrl = buildWhatsAppUrl(
+    whatsappNumber,
+    hi
+      ? `नमस्ते ${businessName}, मुझे सामग्री चुनने में मदद चाहिए।`
+      : `Hello ${businessName}, I need help choosing materials.`,
+  );
 
   const allCategories = flattenCategories(tree);
   const constructionCats = allCategories.filter(isConstructionCategory).slice(0, 12);
@@ -324,9 +326,7 @@ export default async function HomePage() {
               const message = hi
                 ? `नमस्ते ${businessName}, मुझे ${service.hi} की सेवा चाहिए।`
                 : `Hello ${businessName}, I need a ${service.en}.`;
-              const url = whatsappNumber
-                ? `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`
-                : null;
+              const url = buildWhatsAppUrl(whatsappNumber, message);
               return (
                 <div key={service.en} className="rounded-xl border border-line bg-canvas p-4">
                   <span className="grid h-12 w-12 place-items-center rounded-lg bg-forest/10 text-forest">
@@ -437,11 +437,9 @@ export default async function HomePage() {
                   {hi ? "फोन नंबर अभी नहीं जोड़ा गया।" : "Phone number not configured yet."}
                 </span>
               )}
-              {whatsappNumber ? (
+              {customerCareWhatsAppUrl ? (
                 <a
-                  href={`https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(
-                    hi ? `नमस्ते ${businessName}, मुझे मदद चाहिए।` : `Hello ${businessName}, I need help.`,
-                  )}`}
+                  href={customerCareWhatsAppUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex min-h-12 items-center gap-2 rounded-lg bg-success px-5 text-sm font-bold text-black transition-colors hover:bg-success/90"

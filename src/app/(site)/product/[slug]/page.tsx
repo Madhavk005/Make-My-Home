@@ -20,7 +20,8 @@ import { formatINR } from "@/lib/format";
 import { translate, unitLabel } from "@/lib/i18n";
 import { imageUrl } from "@/lib/image";
 import { getLocale } from "@/lib/locale";
-import { localizedSetting } from "@/lib/settings";
+import { getSettingWhatsAppNumber, localizedSetting } from "@/lib/settings";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { materialArt } from "@/lib/material-art";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ProductCard } from "@/components/product-card";
@@ -113,12 +114,13 @@ export default async function ProductPage(props: PageParams) {
     product.price > 0 &&
     product.originalPrice > product.price;
 
-  const whatsappNumber =
-    settings?.whatsappNumber?.trim() ||
-    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.trim() ||
-    null;
+  const whatsappNumber = getSettingWhatsAppNumber(settings);
   const phone = settings?.phone?.trim() || null;
   const businessName = settings?.businessName?.trim() || "Make My Home";
+  const whatsappUrl = buildWhatsAppUrl(
+    whatsappNumber,
+    translate(locale, "whatsappMessageGeneric", { business: businessName }),
+  );
 
   const categoryPath = categoryCrumbs.at(-1)?.path ?? null;
   const categoryHref = categoryPath
@@ -408,9 +410,9 @@ export default async function ProductPage(props: PageParams) {
                   {phone}
                 </a>
               ) : null}
-              {whatsappNumber ? (
+              {whatsappUrl ? (
                 <a
-                  href={`https://wa.me/${whatsappNumber.replace(/\D/g, "")}`}
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="link-quiet"

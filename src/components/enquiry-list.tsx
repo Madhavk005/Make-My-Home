@@ -92,10 +92,13 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          customerName: customerName.trim(),
-          customerMobile: customerMobile.trim(),
-          deliveryLocation: deliveryLocation.trim() || null,
+          customer: {
+            name: customerName.trim(),
+            phone: customerMobile.trim(),
+            location: deliveryLocation.trim() || null,
+          },
           customerNote: customerNote.trim() || null,
+          language: locale,
           items,
         }),
       });
@@ -108,7 +111,12 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
 
       const messageWithReference = `${message}\n\nEnquiry Reference: ${data.reference}`;
       const url = buildWhatsAppUrl(whatsappNumber, messageWithReference);
-      if (!url) throw new Error("Business WhatsApp number is not configured.");
+      if (!url) {
+        setSubmitStatus(
+          `Enquiry ${data.reference} saved. WhatsApp is not configured yet — please contact the shop by phone.`,
+        );
+        return;
+      }
 
       setSubmitStatus(
         `Enquiry ${data.reference} prepared. WhatsApp opened — please press Send to deliver it.`,
@@ -309,20 +317,28 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
                       </div>
 
                       <div className="mt-2 flex w-full flex-col gap-1.5 sm:max-w-xs">
-                        <label className="text-[11px] font-semibold text-ink-soft">
-                          Unit
+                        <label
+                          htmlFor={`unit-${item.key}`}
+                          className="text-[11px] font-semibold text-ink-soft"
+                        >
+                          {t("unit")}
                         </label>
                         <input
+                          id={`unit-${item.key}`}
                           value={item.unit}
                           onChange={(event) => updateUnit(item.key, event.target.value)}
                           className="h-9 rounded-md border border-line bg-canvas px-2 text-sm text-ink focus:border-clay focus:outline-none"
                         />
                       </div>
                       <div className="mt-2 w-full">
-                        <label className="text-[11px] font-semibold text-ink-soft">
+                        <label
+                          htmlFor={`notes-${item.key}`}
+                          className="text-[11px] font-semibold text-ink-soft"
+                        >
                           Notes
                         </label>
                         <textarea
+                          id={`notes-${item.key}`}
                           value={item.notes ?? ""}
                           onChange={(event) => updateNotes(item.key, event.target.value)}
                           rows={2}
@@ -407,55 +423,81 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
             </div>
           </dl>
 
-          <div className="mb-4">
-            <label className="text-[11px] font-bold uppercase tracking-[0.08em] text-ink-soft">
-              Customer note
-            </label>
-            <textarea
-              value={customerNote}
-              onChange={(event) => setCustomerNote(event.target.value)}
-              rows={3}
-              placeholder="Delivery address, urgency, preferred brand..."
-              className="mt-2 w-full rounded-md border border-line bg-canvas px-3 py-2 text-sm text-ink focus:border-clay focus:outline-none"
-            />
-          </div>
-
-          <div className="mb-4 space-y-2">
-            <input
-              value={customerName}
-              onChange={(e) => setCustomerName(e.target.value)}
-              placeholder="Your name"
-              className="min-h-10 w-full rounded-md border border-line bg-canvas px-3 text-sm text-ink focus:border-clay focus:outline-none"
-            />
-            <input
-              value={customerMobile}
-              onChange={(e) => setCustomerMobile(e.target.value)}
-              placeholder="Mobile number"
-              className="min-h-10 w-full rounded-md border border-line bg-canvas px-3 text-sm text-ink focus:border-clay focus:outline-none"
-            />
-            <input
-              value={deliveryLocation}
-              onChange={(e) => setDeliveryLocation(e.target.value)}
-              placeholder="Delivery location (optional)"
-              className="min-h-10 w-full rounded-md border border-line bg-canvas px-3 text-sm text-ink focus:border-clay focus:outline-none"
-            />
-            <textarea
-              value={customerNote}
-              onChange={(e) => setCustomerNote(e.target.value)}
-              rows={2}
-              placeholder="Customer note (optional)"
-              className="w-full rounded-md border border-line bg-canvas px-3 py-2 text-sm text-ink focus:border-clay focus:outline-none"
-            />
+          <div className="mb-4 space-y-3">
+            <div>
+              <label
+                htmlFor="enquiry-name"
+                className="text-[11px] font-bold uppercase tracking-[0.08em] text-ink-soft"
+              >
+                {t("yourName")}
+              </label>
+              <input
+                id="enquiry-name"
+                value={customerName}
+                onChange={(e) => setCustomerName(e.target.value)}
+                autoComplete="name"
+                className="mt-1 min-h-10 w-full rounded-md border border-line bg-canvas px-3 text-sm text-ink focus:border-clay focus:outline-none"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="enquiry-mobile"
+                className="text-[11px] font-bold uppercase tracking-[0.08em] text-ink-soft"
+              >
+                {t("mobileNumber")}
+              </label>
+              <input
+                id="enquiry-mobile"
+                value={customerMobile}
+                onChange={(e) => setCustomerMobile(e.target.value)}
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                className="mt-1 min-h-10 w-full rounded-md border border-line bg-canvas px-3 text-sm text-ink focus:border-clay focus:outline-none"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="enquiry-location"
+                className="text-[11px] font-bold uppercase tracking-[0.08em] text-ink-soft"
+              >
+                {t("deliveryLocationOptional")}
+              </label>
+              <input
+                id="enquiry-location"
+                value={deliveryLocation}
+                onChange={(e) => setDeliveryLocation(e.target.value)}
+                autoComplete="address-level2"
+                className="mt-1 min-h-10 w-full rounded-md border border-line bg-canvas px-3 text-sm text-ink focus:border-clay focus:outline-none"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="enquiry-note"
+                className="text-[11px] font-bold uppercase tracking-[0.08em] text-ink-soft"
+              >
+                {t("customerNoteOptional")}
+              </label>
+              <textarea
+                id="enquiry-note"
+                value={customerNote}
+                onChange={(e) => setCustomerNote(e.target.value)}
+                rows={2}
+                className="mt-1 w-full rounded-md border border-line bg-canvas px-3 py-2 text-sm text-ink focus:border-clay focus:outline-none"
+              />
+            </div>
             <button
               type="button"
               onClick={prepareEnquiry}
               disabled={submitting || items.length === 0}
               className="btn btn-whatsapp w-full"
             >
-              {submitting ? "Saving enquiry..." : "Continue to WhatsApp"}
+              {submitting ? t("savingEnquiry") : t("continueToWhatsApp")}
             </button>
             {submitStatus ? (
-              <p className="text-xs leading-relaxed text-ink-soft">{submitStatus}</p>
+              <p role="status" className="text-xs leading-relaxed text-ink-soft">
+                {submitStatus}
+              </p>
             ) : null}
           </div>
 

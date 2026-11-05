@@ -7,6 +7,7 @@ import { brandMonogram } from "@/lib/format";
 import { productCountLabel, translate } from "@/lib/i18n";
 import { imageUrl } from "@/lib/image";
 import { getLocale } from "@/lib/locale";
+import { getSettingWhatsAppNumber } from "@/lib/settings";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { CatalogueNotice } from "@/components/catalogue-notice";
 import { ContactActions } from "@/components/contact-actions";
@@ -30,10 +31,7 @@ export default async function BrandsPage() {
   const withProducts = brands.filter((brand) => (brand.count ?? 0) > 0);
   const totalProducts = withProducts.reduce((total, brand) => total + (brand.count ?? 0), 0);
   const phone = settings?.phone?.trim() || null;
-  const whatsappNumber =
-    settings?.whatsappNumber?.trim() ||
-    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.trim() ||
-    null;
+  const whatsappNumber = getSettingWhatsAppNumber(settings);
   const businessName = settings?.businessName?.trim() || "Make My Home";
 
   return (

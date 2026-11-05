@@ -7,13 +7,19 @@ const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION?.trim() || "2025-0
 const readToken = process.env.SANITY_API_READ_TOKEN?.trim();
 
 export const isSanityConfigured = Boolean(projectId && dataset);
+export const isDemoDataEnabled =
+  !isSanityConfigured &&
+  process.env.ALLOW_DEMO_DATA === "true" &&
+  (process.env.NODE_ENV !== "production" || process.env.VERCEL_ENV === "preview");
 
 export const sanityClient: SanityClient | null = isSanityConfigured
   ? createClient({
       projectId: projectId as string,
       dataset,
       apiVersion,
-      useCdn: !readToken,
+      // Next.js caches these requests by tag. Disabling the Sanity CDN keeps
+      // webhook revalidation immediate instead of waiting for edge propagation.
+      useCdn: false,
       perspective: "published",
       token: readToken || undefined,
     })

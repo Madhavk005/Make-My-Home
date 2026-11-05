@@ -25,7 +25,7 @@ export function SignUpForm() {
       }
       router.push("/account");
       router.refresh();
-    } catch (e) {
+    } catch {
       setError("Sign up failed");
     } finally {
       setLoading(false);

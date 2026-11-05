@@ -2,29 +2,23 @@
 
 ## Current Status
 
-The storefront is fully built and runs in **demo mode** without any Sanity
-configuration. It reads from `src/lib/demo-data.ts` so every route, component,
-filter, search, variant picker, enquiry list and WhatsApp message can be
-reviewed before real content exists.
+The storefront is fully built and reads its catalogue and business copy from
+Sanity. The dataset currently contains no products and no Site settings
+document, so the website shows honest empty states until the business publishes
+real content. There is no fallback to demo products or an invented WhatsApp
+number.
 
-Demo catalogue:
-
-- 10 primary categories with nested subcategories and build stages.
-- 25 products across cement, aggregates, steel, stone, tiles, sanitaryware,
-  lighting, hardware, electrical and plumbing.
-- 16 brands.
-- Only the original ten sample products carry a sample price. Every added demo
-  product is “price on request” or “price not supplied”.
-- Product images are intentionally absent. The UI shows an abstract, labelled
-  material study instead of pretending a stock photograph is the product.
-- Demo contact details, address, opening hours, service area, tagline, price
-  note and announcement are placeholders. They must not be treated as real.
+Demo content still exists in `src/lib/demo-data.ts` for local design review. It
+is only enabled when `ALLOW_DEMO_DATA=true` and Sanity is not configured, and it
+is refused in production. It must never be used as the real catalogue.
 
 The interface is **Hindi-first** with an English switch in the header. UI labels
-are bilingual in `src/lib/i18n.ts`. Business-written copy comes from Sanity Site
-settings and can have optional English versions.
+are bilingual in `src/lib/i18n.ts`. Business-written copy comes from the single
+Sanity Site settings document and can have optional English versions.
 
 To launch with real data, the following inputs are required from the business.
+The complete Studio setup, CORS, token and webhook guide is in
+[SANITY_CMS.md](./SANITY_CMS.md).
 
 ---
 
@@ -40,11 +34,18 @@ Create `.env.local` (never commit this file):
 | `NEXT_PUBLIC_SANITY_DATASET` | Sanity dataset name | `production` | ✅ Yes |
 | `NEXT_PUBLIC_SANITY_API_VERSION` | Sanity API version | `2025-01-01` | ⚠️ Optional |
 | `SANITY_API_READ_TOKEN` | Read token (private dataset only) | — | ⚠️ Optional |
-| `SANITY_API_WRITE_TOKEN` | Write token (for CSV import only) | — | ⚠️ Optional |
-| `SANITY_REVALIDATE_SECRET` | Webhook secret for cache invalidation | — | ⚠️ Optional |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk publishable key | — | ⚠️ Optional |
-| `CLERK_SECRET_KEY` | Clerk secret key | — | ⚠️ Optional |
-| `NEXT_PUBLIC_WHATSAPP_NUMBER` | Fallback WhatsApp number | `919876543210` | ⚠️ Optional fallback |
+| `SANITY_API_WRITE_TOKEN` | Server-side Editor token for CSV imports only; not used by Studio or the live site | — | ⚠️ Only for imports |
+| `SANITY_REVALIDATE_SECRET` | Shared webhook secret for immediate cache invalidation | — | ⚠️ Recommended |
+| `DATABASE_URL` | Hosted PostgreSQL used by enquiries and Better Auth; Supabase transaction pooler on Vercel | — | ✅ Production |
+| `DATABASE_MIGRATION_URL` | Optional direct/session URL used only for migrations | — | ⚠️ Optional |
+| `BETTER_AUTH_URL` | Better Auth server base URL | Public HTTPS origin | ✅ Production |
+| `BETTER_AUTH_SECRET` | Unique server-side auth secret | Generate a new production secret | ✅ Production |
+| `ADMIN_EMAILS` | Comma-separated admin email allowlist | — | ✅ Production |
+| `ALLOW_PUBLIC_SIGNUP` | Public registration flag | `false` | ✅ Keep disabled |
+
+The WhatsApp number is **not** an environment variable. It is read only from
+Sanity Studio → Site settings. There is no fallback; if it is missing or
+invalid, WhatsApp buttons are hidden and the site shows an honest empty state.
 
 ### Studio Setup Steps
 
@@ -57,14 +58,25 @@ Create `.env.local` (never commit this file):
 6. Create categories → brands → products (in that order)
 7. Publish all documents
 
-### CORS Configuration (for Studio)
+### CORS and Webhook Configuration (for Studio)
 
-Add these to your Sanity project's CORS origins:
+In the Sanity dashboard, add these CORS origins:
 
 - `http://localhost:3000` (development)
-- Your production domain (for example `https://makemyhome.example.in`)
+- The exact production domain (for example, the real HTTPS origin)
 
-Allow credentials: Yes
+Enable **Allow credentials** on every origin. Wildcard origins are not
+acceptable for credentialed Studio login.
+
+Then create a POST webhook to `/api/revalidate` with the same value as
+`SANITY_REVALIDATE_SECRET`. The filter and payload details are in
+[SANITY_CMS.md](./SANITY_CMS.md).
+
+These are Sanity dashboard settings. Application code cannot create or change
+them; a project administrator must apply them manually.
+
+Studio access is controlled by Sanity project members and roles. The separate
+`ADMIN_EMAILS` allowlist only controls the custom `/admin` enquiry console.
 
 ---
 
@@ -73,17 +85,20 @@ Allow credentials: Yes
 The WhatsApp number **must** include country code. For India, format:
 `91XXXXXXXXXX` (11 digits total).
 
-| Field | Example | Where it appears |
-|-------|---------|------------------|
-| WhatsApp number | `919876543210` | Header utility bar, product pages, enquiry page, WhatsApp links |
-| Phone number | `919876543210` | Header, footer, contact section, call buttons |
-| Business name | "Make My Home" | Header, footer, page titles, enquiry messages |
-| Tagline | "निर्माण सामग्री का कैटलॉग" | Header subtitle, metadata |
-| Service area | "जयपुर और आसपास के इलाके" | Header utility bar, footer, contact |
-| Address | "मुख्य बाजार, निर्माण नगर, जयपुर, राजस्थान" | Footer, about, contact |
-| Opening hours | "सुबह 9:00 बजे से रात 8:00 बजे तक" | Footer, about, contact |
-| Email | `info@makemyhome.example.in` | Footer contact |
-| Price note | "दिखाई गई कीमतें indicative हैं। पक्की कीमत दुकानदार से पूछें।" | Product pages, enquiry, footer |
+| Field | Required input | Where it appears |
+|-------|----------------|------------------|
+| WhatsApp number | Real number with country code (11–15 digits, no leading `00`) | Header utility bar, product pages, enquiry and quote pages, WhatsApp links |
+| Phone number | Real business phone number | Header, footer, contact section, call buttons |
+| Business name | Registered trading name | Header, footer, page titles, enquiry messages |
+| Tagline | Approved Hindi tagline, plus optional English version | Header subtitle, metadata |
+| Service area | Areas the business actually serves; do not list unconfirmed coverage | Header utility bar, footer, contact |
+| Address | Full verified shop address | Footer, about, contact |
+| Opening hours | Verified opening hours | Footer, about, contact |
+| Email | Real monitored inbox | Footer contact |
+| Price note | Approved wording about price confirmation | Product pages, enquiry, footer |
+
+None of these values are hard-coded. They must be entered and published in
+Sanity Site settings.
 
 ### English versions (recommended)
 
@@ -229,17 +244,18 @@ values are not translated and must be checked exactly as supplied.
 
 ---
 
-## 7. Clerk Authentication (Optional)
+## 7. Better Auth
 
-Customer accounts are optional. Browsing and WhatsApp enquiries work without
-accounts.
+Better Auth protects administrator pages and enquiry management. Admin access is
+restricted to the addresses in `ADMIN_EMAILS`; an empty allowlist denies access.
+Public sign-up is disabled by default and must remain disabled in production.
+Customer sign-in is optional for browsing the catalogue.
 
-| Variable | Description | Required? |
-|----------|-------------|-----------|
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk publishable key | Only if customer accounts needed |
-| `CLERK_SECRET_KEY` | Clerk secret key | Only if customer accounts needed |
-
-If left blank, the site runs without authentication (current default).
+The production database, `BETTER_AUTH_URL`, and a unique
+`BETTER_AUTH_SECRET` must be configured in the hosting provider. The first administrator
+account must be provisioned through an approved secure process, then its email added to
+`ADMIN_EMAILS`. Never commit auth secrets or use the local development secret
+in production.
 
 ---
 

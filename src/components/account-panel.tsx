@@ -1,10 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
-export function AccountPanel() {
+export function AccountPanel({ allowPublicSignUp }: { allowPublicSignUp: boolean }) {
+  const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
+  const [signingOut, setSigningOut] = useState(false);
+  const [signOutError, setSignOutError] = useState("");
 
   if (isPending) {
     return <p className="text-sm text-ink-soft">Loading your account...</p>;
@@ -21,9 +26,11 @@ export function AccountPanel() {
           <Link href="/sign-in" className="btn-primary inline-flex min-h-12 items-center">
             Sign in
           </Link>
-          <Link href="/sign-up" className="btn-secondary inline-flex min-h-12 items-center">
-            Create account
-          </Link>
+          {allowPublicSignUp ? (
+            <Link href="/sign-up" className="btn-secondary inline-flex min-h-12 items-center">
+              Create account
+            </Link>
+          ) : null}
           <Link href="/enquiry" className="btn-secondary inline-flex min-h-12 items-center">
             View enquiry list
           </Link>
@@ -33,8 +40,20 @@ export function AccountPanel() {
   }
 
   async function handleSignOut() {
-    await authClient.signOut();
-    window.location.href = "/";
+    setSigningOut(true);
+    setSignOutError("");
+    try {
+      const result = await authClient.signOut();
+      if (result.error) {
+        setSignOutError(result.error.message || "Could not sign out. Please try again.");
+        return;
+      }
+      router.replace("/");
+    } catch {
+      setSignOutError("Could not sign out. Please try again.");
+    } finally {
+      setSigningOut(false);
+    }
   }
 
   return (
@@ -50,12 +69,16 @@ export function AccountPanel() {
           <dd className="font-semibold text-ink">{session.user.email}</dd>
         </div>
       </dl>
+      {signOutError ? (
+        <p role="alert" className="mt-4 text-sm text-red-700">{signOutError}</p>
+      ) : null}
       <button
         type="button"
         onClick={handleSignOut}
-        className="btn-secondary mt-6 inline-flex min-h-12 items-center"
+        disabled={signingOut}
+        className="btn-secondary mt-6 inline-flex min-h-12 items-center disabled:opacity-60"
       >
-        Sign out
+        {signingOut ? "Signing out…" : "Sign out"}
       </button>
     </section>
   );

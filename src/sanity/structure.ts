@@ -19,6 +19,8 @@ const STAGES = [
   { value: "other", title: "Other / unassigned" },
 ] as const;
 
+const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION?.trim() || "2025-01-01";
+
 const productHealth = (S: Parameters<StructureResolver>[0], title: string, filter: string) =>
   S.listItem()
     .title(title)
@@ -26,6 +28,7 @@ const productHealth = (S: Parameters<StructureResolver>[0], title: string, filte
       S.documentList()
         .title(title)
         .schemaType("product")
+        .apiVersion(apiVersion)
         .filter(filter)
         .defaultOrdering([{ field: "name", direction: "asc" }]),
     );
@@ -56,7 +59,7 @@ export const structure: StructureResolver = async (S, context) => {
   let brands: BrandRow[] = [];
 
   try {
-    const client = context.getClient({ apiVersion: "2025-01-01" });
+    const client = context.getClient({ apiVersion });
     [categories, brands] = await Promise.all([
       client.fetch<CategoryRow[]>(
         `*[_type == "category" && defined(slug.current)] | order(order asc, name asc){
@@ -88,6 +91,7 @@ export const structure: StructureResolver = async (S, context) => {
         S.documentList()
           .title(category.name)
           .schemaType("product")
+          .apiVersion(apiVersion)
           .filter('_type == "product" && category._ref in $categoryIds')
           .params({ categoryIds })
           .defaultOrdering([{ field: "name", direction: "asc" }]),
@@ -102,6 +106,7 @@ export const structure: StructureResolver = async (S, context) => {
         S.documentList()
           .title(brand.name)
           .schemaType("product")
+          .apiVersion(apiVersion)
           .filter('_type == "product" && brand._ref == $brandId')
           .params({ brandId: brand._id })
           .defaultOrdering([{ field: "name", direction: "asc" }]),
@@ -126,6 +131,7 @@ export const structure: StructureResolver = async (S, context) => {
                       S.documentList()
                         .title("Uncategorised products")
                         .schemaType("product")
+                        .apiVersion(apiVersion)
                         .filter('_type == "product" && !defined(category)')
                         .defaultOrdering([{ field: "name", direction: "asc" }]),
                     ),
@@ -152,6 +158,7 @@ export const structure: StructureResolver = async (S, context) => {
                       S.documentList()
                         .title("Products with no brand")
                         .schemaType("product")
+                        .apiVersion(apiVersion)
                         .filter('_type == "product" && !defined(brand)')
                         .defaultOrdering([{ field: "name", direction: "asc" }]),
                     ),
@@ -175,6 +182,7 @@ export const structure: StructureResolver = async (S, context) => {
                 S.documentList()
                   .title(stage.title)
                   .schemaType("category")
+                  .apiVersion(apiVersion)
                   .filter(
                     '_type == "category" && !defined(parent) && (stage == $stage || (!defined(stage) && $stage == "other"))',
                   )
@@ -201,6 +209,7 @@ export const structure: StructureResolver = async (S, context) => {
         .id("all-products")
         .child(
           S.documentTypeList("product")
+            .apiVersion(apiVersion)
             .title("All products")
             .defaultOrdering([{ field: "name", direction: "asc" }]),
         ),
@@ -213,6 +222,7 @@ export const structure: StructureResolver = async (S, context) => {
           S.documentList()
             .title("Recently updated products")
             .schemaType("product")
+            .apiVersion(apiVersion)
             .filter('_type == "product"')
             .defaultOrdering([{ field: "_updatedAt", direction: "desc" }]),
         ),
@@ -223,6 +233,7 @@ export const structure: StructureResolver = async (S, context) => {
           S.documentList()
             .title("Unpublished drafts")
             .schemaType("product")
+            .apiVersion(apiVersion)
             .filter('_type == "product" && _id in path("drafts.**")')
             .defaultOrdering([{ field: "_updatedAt", direction: "desc" }]),
         ),
@@ -233,6 +244,7 @@ export const structure: StructureResolver = async (S, context) => {
           S.documentList()
             .title("Prices & units")
             .schemaType("product")
+            .apiVersion(apiVersion)
             .filter(
               '_type == "product" && (defined(price) || priceStatus != "not_supplied" || defined(variants))',
             )

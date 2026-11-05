@@ -27,7 +27,7 @@
 1. [ ] Open homepage (`/`)
 2. [ ] See "सीमेंट" category tile among the large category cards
 3. [ ] Tap "सीमेंट" tile
-4. [ ] Arrive at `/category/nirman-samagri/cement` page
+4. [ ] Arrive at `/category/cement` page
 5. [ ] See cement products listed with prices and units (₹/बोरी)
 
 **What to observe:**

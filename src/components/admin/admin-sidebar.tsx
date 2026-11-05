@@ -5,9 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   IconLayoutDashboard,
-  IconPackage,
-  IconCategory,
-  IconTags,
   IconInbox,
   IconBrowser,
   IconSettings,
@@ -15,11 +12,8 @@ import {
 
 const navigation = [
   { label: "Dashboard", href: "/admin", icon: IconLayoutDashboard },
-  { label: "Products", href: "/admin/products", icon: IconPackage },
-  { label: "Categories", href: "/admin/categories", icon: IconCategory },
-  { label: "Brands", href: "/admin/brands", icon: IconTags },
   { label: "Enquiries", href: "/admin/enquiries", icon: IconInbox },
-  { label: "Website CMS", href: "/admin/cms", icon: IconBrowser },
+  { label: "Sanity Studio", href: "/studio", icon: IconBrowser, newTab: true },
   { label: "Settings", href: "/admin/settings", icon: IconSettings },
 ];
 
@@ -27,7 +21,6 @@ export function AdminSidebar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
-  // Need useState import
   return (
     <>
       <button
@@ -45,17 +38,34 @@ export function AdminSidebar() {
           </div>
           <div className="collapse navbar-collapse show">
             <ul className="navbar-nav pt-lg-3">
-              {navigation.map(({ label, href, icon: Icon }) => {
+              {navigation.map(({ label, href, icon: Icon, newTab }) => {
                 const active =
                   href === "/admin" ? pathname === href : pathname.startsWith(href);
+                const className = `nav-link${active ? " active" : ""}`;
+
                 return (
                   <li key={href} className={`nav-item ${active ? "active" : ""}`}>
-                    <Link href={href} className="nav-link" onClick={() => setOpen(false)}>
-                      <span className="nav-link-icon d-md-none d-lg-inline-block">
-                        <Icon size={20} stroke={1.8} />
-                      </span>
-                      <span className="nav-link-title">{label}</span>
-                    </Link>
+                    {newTab ? (
+                      <a
+                        href={href}
+                        className={className}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setOpen(false)}
+                      >
+                        <span className="nav-link-icon d-md-none d-lg-inline-block">
+                          <Icon size={20} stroke={1.8} />
+                        </span>
+                        <span className="nav-link-title">{label}</span>
+                      </a>
+                    ) : (
+                      <Link href={href} className={className} onClick={() => setOpen(false)}>
+                        <span className="nav-link-icon d-md-none d-lg-inline-block">
+                          <Icon size={20} stroke={1.8} />
+                        </span>
+                        <span className="nav-link-title">{label}</span>
+                      </Link>
+                    )}
                   </li>
                 );
               })}

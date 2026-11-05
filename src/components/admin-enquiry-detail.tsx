@@ -18,9 +18,10 @@ type Enquiry = {
   id: string;
   reference: string;
   customer_name: string;
-  customer_mobile: string;
+  customer_phone: string;
   customer_location?: string | null;
   customer_note?: string | null;
+  admin_notes?: string | null;
   status: string;
   created_at: string;
   items: Item[];
@@ -33,6 +34,7 @@ export function AdminEnquiryDetail({ id }: { id: string }) {
   const [status, setStatus] = useState("");
   const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetch(`/api/enquiries/${id}`)
@@ -41,22 +43,34 @@ export function AdminEnquiryDetail({ id }: { id: string }) {
         if (data) {
           setEnquiry(data);
           setStatus(data.status);
-          setNotes(data.customer_note ?? "");
+          setNotes(data.admin_notes ?? "");
         }
-      });
+      })
+      .catch(() => setError("Could not load this enquiry."));
   }, [id]);
 
   async function save() {
     setSaving(true);
-    await fetch(`/api/enquiries/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status, notes }),
-    });
-    setSaving(false);
-    const response = await fetch(`/api/enquiries/${id}`);
-    const data = await response.json();
-    setEnquiry(data);
+    setError("");
+    try {
+      const response = await fetch(`/api/enquiries/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status, notes }),
+      });
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to save changes.");
+      }
+      const refreshed = await fetch(`/api/enquiries/${id}`);
+      if (refreshed.ok) {
+        setEnquiry(await refreshed.json());
+      }
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Failed to save changes.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   if (!enquiry) return <p className="text-secondary">Loading...</p>;
@@ -75,9 +89,11 @@ export function AdminEnquiryDetail({ id }: { id: string }) {
           </div>
           <div className="mt-3">
             <p><strong>{enquiry.customer_name}</strong></p>
-            <p>{enquiry.customer_mobile}</p>
+            <p>{enquiry.customer_phone}</p>
             {enquiry.customer_location ? <p>{enquiry.customer_location}</p> : null}
-            {enquiry.customer_note ? <p className="mt-2">Note: {enquiry.customer_note}</p> : null}
+            {enquiry.customer_note ? (
+              <p className="mt-2"><strong>Customer note:</strong> {enquiry.customer_note}</p>
+            ) : null}
           </div>
         </div>
       </div>
@@ -100,20 +116,29 @@ export function AdminEnquiryDetail({ id }: { id: string }) {
       <div className="card">
         <div className="card-body">
           <h3 className="card-title">Follow-up</h3>
-          <select value={status} onChange={(e) => setStatus(e.target.value)} className="form-select mb-2">
+          <label htmlFor="enquiry-status" className="form-label">Status</label>
+          <select
+            id="enquiry-status"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="form-select mb-2"
+          >
             {STATUSES.map((value) => (
               <option key={value} value={value}>
                 {value}
               </option>
             ))}
           </select>
+          <label htmlFor="enquiry-notes" className="form-label">Internal notes</label>
           <textarea
+            id="enquiry-notes"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={3}
-            placeholder="Follow-up notes"
+            placeholder="Follow-up notes (not shown to the customer)"
             className="form-control mb-2"
           />
+          {error ? <p role="alert" className="text-danger mb-2">{error}</p> : null}
           <button type="button" onClick={save} disabled={saving} className="btn btn-primary">
             {saving ? "Saving..." : "Save"}
           </button>

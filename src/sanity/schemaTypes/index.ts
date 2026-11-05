@@ -791,8 +791,8 @@ export const siteSettings = defineType({
       description:
         "The real business number, including country code. Digits only is safest, e.g. 919876543210. A 10-digit local number will not work with WhatsApp links. Do not enter a placeholder.",
       validation: (Rule) =>
-        Rule.custom((value) => {
-          if (!value) return true;
+        Rule.required().custom((value) => {
+          if (!value) return "Enter the verified business WhatsApp number.";
           const digits = value.replace(/\D/g, "").replace(/^00/, "");
           return digits.length >= 11 && digits.length <= 15
             ? true
@@ -804,14 +804,14 @@ export const siteSettings = defineType({
       title: "Phone number",
       type: "string",
       group: "contact",
-      validation: (Rule) => Rule.max(40),
+      validation: (Rule) => Rule.required().max(40),
     }),
     defineField({
       name: "email",
       title: "Email",
       type: "string",
       group: "contact",
-      validation: (Rule) => Rule.email(),
+      validation: (Rule) => Rule.required().email(),
     }),
     defineField({
       name: "address",
@@ -819,7 +819,7 @@ export const siteSettings = defineType({
       type: "text",
       rows: 3,
       group: "contact",
-      validation: (Rule) => Rule.max(300),
+      validation: (Rule) => Rule.required().max(300),
     }),
     defineField({
       name: "addressEn",
@@ -836,7 +836,7 @@ export const siteSettings = defineType({
       type: "string",
       group: "contact",
       description: "For example: Jaipur and nearby areas. Only state areas the business serves.",
-      validation: (Rule) => Rule.max(160),
+      validation: (Rule) => Rule.required().max(160),
     }),
     defineField({
       name: "serviceAreaEn",
@@ -851,7 +851,7 @@ export const siteSettings = defineType({
       title: "Opening hours",
       type: "string",
       group: "contact",
-      validation: (Rule) => Rule.max(160),
+      validation: (Rule) => Rule.required().max(160),
     }),
     defineField({
       name: "openingHoursEn",

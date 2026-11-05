@@ -15,11 +15,17 @@
     "import:products": "tsx scripts/import-products.ts",
     "seed:demo": "tsx scripts/seed-demo.ts",
     "backup:db": "bash scripts/backup-db.sh",
-    "security:check": "npm audit --audit-level=high"
+    "db:migrate": "tsx scripts/migrate.ts",
+    "env:check": "tsx scripts/check-env.ts",
+    "security:check": "npm audit --audit-level=high",
+    "postinstall": "prisma generate",
+    "db:generate": "prisma generate"
   },
   "dependencies": {
     "@better-auth/infra": "^0.4.26",
     "@portabletext/react": "^8.0.1",
+    "@prisma/adapter-pg": "^7.10.1",
+    "@prisma/client": "^7.10.1",
     "@sanity/client": "^8.14.1",
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^6.21.0",
@@ -46,6 +52,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.3",
+    "prisma": "^7.10.1",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
     "typescript": "^5"

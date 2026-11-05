@@ -71,28 +71,49 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   if (body.status && !allowed.includes(body.status)) {
     return NextResponse.json({ error: "Invalid status" }, { status: 400 });
   }
+  if (body.notes !== undefined && typeof body.notes !== "string") {
+    return NextResponse.json({ error: "Invalid notes" }, { status: 400 });
+  }
+
+  const notes = typeof body.notes === "string" ? body.notes.slice(0, 5000) : null;
 
   const client = await pool.connect();
   try {
+    await client.query("BEGIN");
+
     const result = await client.query(
       `UPDATE enquiries
        SET status = COALESCE($1, status),
-           customer_note = COALESCE($2, customer_note),
+           admin_notes = COALESCE($2, admin_notes),
            updated_at = NOW()
        WHERE id = $3
-       RETURNING id, status, customer_note`,
-      [body.status ?? null, body.notes ?? null, id],
+       RETURNING id, status, customer_note, admin_notes`,
+      [body.status ?? null, notes, id],
     );
+
+    if (result.rowCount === 0) {
+      await client.query("ROLLBACK");
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
 
     await client.query(
       `INSERT INTO audit_logs (actor_email, action, entity_type, entity_id, details)
        VALUES ($1, $2, $3, $4, $5)`,
-      [session.user.email ?? null, "update_enquiry", "enquiry", id, JSON.stringify(body)],
+      [
+        session.user.email ?? null,
+        "update_enquiry",
+        "enquiry",
+        id,
+        JSON.stringify({ status: body.status ?? null, notes }),
+      ],
     );
-    if (result.rowCount === 0) {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
-    }
+
+    await client.query("COMMIT");
     return NextResponse.json(result.rows[0]);
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Enquiry update failed:", error);
+    return NextResponse.json({ error: "Failed to update enquiry." }, { status: 500 });
   } finally {
     client.release();
   }

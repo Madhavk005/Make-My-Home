@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Calculator } from "lucide-react";
 
 type Tab = "cement" | "tiles" | "pipe" | "aggregate";
 

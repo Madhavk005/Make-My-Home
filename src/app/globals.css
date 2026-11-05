@@ -3,39 +3,39 @@
 @theme {
   /* ───────────────────────────────────────────────────────────────────────
      Make My Home — "Material House" design tokens
-     Warm ivory paper, deep forest ink, clay accent, brass detailing.
+     Warm natural palette defaults with switchable alternatives below.
      ─────────────────────────────────────────────────────────────────────── */
 
-  --color-canvas: #F5F7FA;
-  --color-surface: #FFFFFF;
-  --color-sand: #E8EEF5;
-  --color-sand-deep: #DCE6F2;
-  --color-ink: #0D2C54;
-  --color-ink-soft: #475569;
-  --color-ink-faint: #64748B;
-  --color-forest: #0D2C54;
-  --color-forest-deep: #071A33;
-  --color-forest-soft: #E6EDF7;
-  --color-clay: #F4B400;
-  --color-clay-dark: #D99A00;
-  --color-clay-soft: #FFF4D6;
-  --color-brass: #F4B400;
-  --color-brass-soft: #FFF8E1;
-  --color-line: #D7E0EA;
-  --color-line-soft: #EAF0F7;
+  --color-canvas: #F7F4ED;
+  --color-surface: #FFFEFB;
+  --color-sand: #E8DFD0;
+  --color-sand-deep: #D8CDBB;
+  --color-ink: #24342D;
+  --color-ink-soft: #526259;
+  --color-ink-faint: #6B786F;
+  --color-forest: #29483D;
+  --color-forest-deep: #1C342B;
+  --color-forest-soft: #E4EBE5;
+  --color-clay: #A94F39;
+  --color-clay-dark: #843A2B;
+  --color-clay-soft: #F5E6DF;
+  --color-brass: #C87554;
+  --color-brass-soft: #F8EEE9;
+  --color-line: #D8D0C2;
+  --color-line-soft: #E9E3D9;
   --color-whatsapp: #28A745;
   --color-whatsapp-dark: #1F8A38;
   --color-success: #28A745;
   --color-danger: #DC3545;
 
   /* Compatibility aliases for older utility usage. */
-  --color-paper: #F5F7FA;
-  --color-paper-deep: #E8EEF5;
-  --color-accent: #F4B400;
-  --color-accent-dark: #D99A00;
-  --color-accent-soft: #FFF4D6;
+  --color-paper: #F7F4ED;
+  --color-paper-deep: #E8DFD0;
+  --color-accent: #A94F39;
+  --color-accent-dark: #843A2B;
+  --color-accent-soft: #F5E6DF;
   --color-moss: #28A745;
-  --color-moss-soft: #E6EDF7;
+  --color-moss-soft: #E6F1E9;
 
   --font-sans: var(--font-manrope), var(--font-mukta), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-fraunces), var(--font-devanagari-display), Georgia, "Times New Roman", serif;
@@ -50,9 +50,65 @@
   --radius-xl: 24px;
   --radius-2xl: 28px;
 
-  --shadow-card: 0 4px 20px -8px rgb(13 44 84 / 0.12);
-  --shadow-lift: 0 8px 32px -12px rgb(13 44 84 / 0.22);
-  --shadow-drawer: -24px 0 60px -20px rgb(19 37 28 / 0.28);
+  --shadow-card: 0 4px 20px -8px rgb(36 52 45 / 0.12);
+  --shadow-lift: 0 8px 32px -12px rgb(36 52 45 / 0.22);
+  --shadow-drawer: -24px 0 60px -20px rgb(36 52 45 / 0.28);
+}
+
+:root[data-palette="refined-modern"] {
+  --color-canvas: #F7F5F0;
+  --color-surface: #FFFFFF;
+  --color-sand: #E3E9ED;
+  --color-sand-deep: #D5E0E6;
+  --color-ink: #18344A;
+  --color-ink-soft: #526575;
+  --color-ink-faint: #718392;
+  --color-forest: #15324A;
+  --color-forest-deep: #0E263B;
+  --color-forest-soft: #E2E9EE;
+  --color-clay: #92702F;
+  --color-clay-dark: #705524;
+  --color-clay-soft: #F3EAD7;
+  --color-brass: #C6A15B;
+  --color-brass-soft: #F8F2E4;
+  --color-line: #D6DEE3;
+  --color-line-soft: #E8EDF0;
+  --color-paper: #F7F5F0;
+  --color-paper-deep: #E3E9ED;
+  --color-accent: #92702F;
+  --color-accent-dark: #705524;
+  --color-accent-soft: #F3EAD7;
+  --shadow-card: 0 4px 20px -8px rgb(24 52 74 / 0.12);
+  --shadow-lift: 0 8px 32px -12px rgb(24 52 74 / 0.22);
+  --shadow-drawer: -24px 0 60px -20px rgb(24 52 74 / 0.28);
+}
+
+:root[data-palette="earthy-contemporary"] {
+  --color-canvas: #F2EBDD;
+  --color-surface: #FBF8F2;
+  --color-sand: #E9E2D6;
+  --color-sand-deep: #D9D0C1;
+  --color-ink: #32332F;
+  --color-ink-soft: #5C6058;
+  --color-ink-faint: #777C73;
+  --color-forest: #586A52;
+  --color-forest-deep: #3E4D39;
+  --color-forest-soft: #E4E9DF;
+  --color-clay: #9A4B38;
+  --color-clay-dark: #793A2D;
+  --color-clay-soft: #F1E2DA;
+  --color-brass: #B9644E;
+  --color-brass-soft: #F7EBE5;
+  --color-line: #D8D0C3;
+  --color-line-soft: #E8E1D5;
+  --color-paper: #F2EBDD;
+  --color-paper-deep: #E9E2D6;
+  --color-accent: #9A4B38;
+  --color-accent-dark: #793A2D;
+  --color-accent-soft: #F1E2DA;
+  --shadow-card: 0 4px 20px -8px rgb(50 51 47 / 0.12);
+  --shadow-lift: 0 8px 32px -12px rgb(50 51 47 / 0.22);
+  --shadow-drawer: -24px 0 60px -20px rgb(50 51 47 / 0.28);
 }
 
 :root {

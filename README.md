@@ -27,9 +27,9 @@ editorial serif headlines and large, rural-friendly controls.
   recently updated products, unpublished drafts and catalogue-health lists.
 - A CSV bulk import that validates rows, detects duplicates, avoids silent
   overwrites and writes a machine-readable report.
-- Optional customer accounts through Clerk. Browsing and WhatsApp enquiries
-  never require an account, and Clerk is completely separate from Sanity
-  editor authentication.
+- Optional customer accounts through Better Auth. Admin access is restricted to
+  the `ADMIN_EMAILS` allowlist; browsing and WhatsApp enquiries never require
+  an account.
 - A Hindi-first bilingual interface with an English switch. Business-written
   settings can have optional English versions; Hindi is always the fallback.
 - Honest missing-data handling: explicit price statuses, labelled material
@@ -42,8 +42,9 @@ editorial serif headlines and large, rural-friendly controls.
 ## Not included
 
 Online checkout or payments, WhatsApp Business API automation, live inventory,
-credit ledgers, loyalty programmes, ERP integration and a custom React admin.
-Sanity Studio is the admin.
+credit ledgers, loyalty programmes, ERP integration and a separate product
+admin. Sanity Studio is the catalogue and website CMS; the small `/admin`
+console is limited to enquiry follow-up and admin access.
 
 ## Tech stack
 
@@ -53,7 +54,8 @@ Sanity Studio is the admin.
 | Styling | Tailwind CSS v4 |
 | CMS | Sanity 6 with `next-sanity` and `@sanity/client` |
 | CSV | `csv-parse` |
-| Accounts | Clerk 7 (optional) |
+| Accounts | Better Auth 1.7 |
+| Database | PostgreSQL |
 | Scripts | `tsx` |
 
 Node.js 20.9 or newer is required; Node 22 LTS is recommended.
@@ -63,16 +65,18 @@ Node.js 20.9 or newer is required; Node 22 LTS is recommended.
 ```bash
 npm install
 cp .env.example .env.local
-# Fill in the Sanity values in .env.local
+# Set DATABASE_URL, BETTER_AUTH_SECRET and ADMIN_EMAILS.
+# Set NEXT_PUBLIC_SANITY_PROJECT_ID and NEXT_PUBLIC_SANITY_DATASET for real content.
+# Set ALLOW_DEMO_DATA=true only when reviewing the local demo catalogue.
+npm run db:migrate
+npm run env:check
 npm run dev
 ```
 
-Open <http://localhost:3000>. With no Sanity configuration the storefront runs
-on the labelled demo catalogue in `src/lib/demo-data.ts` instead of crashing.
-The demo has 10 primary categories, 25 products and 16 brands. Only the original
-ten sample products carry a sample price; the rest are explicitly “price on
-request” or “price not supplied”. Demo product cards, search, category pages and
-the home page are labelled as demo content.
+Open <http://localhost:3000>. Without Sanity configuration the storefront
+shows a setup state and no fabricated catalogue. To review the labelled demo
+catalogue locally, explicitly set ALLOW_DEMO_DATA=true. Demo data is disabled
+for production builds and is not a substitute for approved business content.
 
 The Studio is at <http://localhost:3000/studio> once a real Sanity project ID is
 set. Demo mode is for design review and QA only — replace it with real content
@@ -91,35 +95,57 @@ npm run start
 
 ## Environment variables
 
-Copy `.env.example` to `.env.local`. Never commit `.env.local` or a write token.
+Copy `.env.example` to `.env.local`. Keep secrets and write tokens out of source
+control.
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | Production | Canonical site origin used in metadata. |
-| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Yes | Sanity project ID. |
-| `NEXT_PUBLIC_SANITY_DATASET` | Yes | Dataset name, normally `production`. |
-| `NEXT_PUBLIC_SANITY_API_VERSION` | No | API date, defaults to `2025-01-01`. |
-| `SANITY_API_READ_TOKEN` | Only for private datasets | Server-side read token. Never prefix with `NEXT_PUBLIC_`. |
-| `SANITY_API_WRITE_TOKEN` | Import/seed only | Editor token used by the scripts. Keep server-side. |
-| `SANITY_REVALIDATE_SECRET` | Webhook only | Shared secret for `/api/revalidate`. |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Optional | Enables customer accounts. |
-| `CLERK_SECRET_KEY` | Optional | Required alongside the publishable key. |
-| `NEXT_PUBLIC_WHATSAPP_NUMBER` | Optional fallback | Only used when Site settings has no number. Digits with country code. |
+| `NEXT_PUBLIC_SITE_URL` | Production | Public HTTPS origin for metadata, robots and sitemap URLs. |
+| `DATABASE_URL` | Yes | PostgreSQL connection for Better Auth and enquiries; use Supabase transaction pooler on Vercel. |
+| `DIRECT_URL` | Optional | Session/direct connection for Prisma CLI schema commands and as the migration runner fallback. |
+| `DATABASE_MIGRATION_URL` | Optional | Overrides `DIRECT_URL` for the custom SQL migration runner. |
+| `PG_POOL_MAX` | Optional | Connection pool size; defaults to 1 on Vercel and 10 elsewhere. |
+| `BETTER_AUTH_SECRET` | Production | Secret used to sign Better Auth sessions. |
+| `BETTER_AUTH_URL` | Optional | Server-side auth URL; defaults to `NEXT_PUBLIC_SITE_URL`. |
+| `NEXT_PUBLIC_BETTER_AUTH_URL` | Optional | Set only when the browser auth API uses a different origin. |
+| `BETTER_AUTH_API_KEY` | Optional | Better Auth infrastructure plugin key. |
+| `ADMIN_EMAILS` | Admin use | Comma-separated admin email allowlist; empty means no admin access. |
+| `ALLOW_PUBLIC_SIGNUP` | Optional | Defaults to `false`; keep false in production. |
+| `ALLOW_DEMO_DATA` | Local demo only | Defaults to `false`; production builds never serve demo content. |
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Real catalogue | Sanity project ID; without it the app shows setup state unless local demo mode is explicitly enabled. |
+| `NEXT_PUBLIC_SANITY_DATASET` | Sanity | Dataset name, normally `production`. |
+| `NEXT_PUBLIC_SANITY_API_VERSION` | Optional | API date, defaults to `2025-01-01`. |
+| `SANITY_API_READ_TOKEN` | Private datasets only | Server-side read token. Never prefix it with `NEXT_PUBLIC_`. |
+| `SANITY_API_WRITE_TOKEN` | Import scripts only | Server-side Editor token for `import:products --commit` and `seed:demo --commit`. The running website and Studio do not need it. |
+| `SANITY_REVALIDATE_SECRET` | Webhook | Shared secret for `/api/revalidate`; required for instant publishing updates. |
+| `NEXT_PUBLIC_GA_ID` | Optional | Google Analytics measurement ID. |
 
-The WhatsApp number belongs in **Sanity Studio → Site settings**. The
-environment variable is a fallback for deployments that cannot edit settings,
-not a place for an invented number.
+The WhatsApp number is **not** an environment variable. It comes from Sanity
+Studio → Site settings, so there is one source of truth for the website. See
+[SANITY_CMS.md](./SANITY_CMS.md) for CORS, tokens and webhook setup.
 
 ## Sanity setup
 
 1. Create a project and dataset at <https://sanity.io/manage>.
 2. Put the project ID and dataset in `.env.local`.
-3. Add the site origin (for example `http://localhost:3000` and the production
-   domain) to the project's CORS origins. Allow credentials for Studio login.
-4. Create an Editor token and set `SANITY_API_WRITE_TOKEN` for imports.
+3. Add the exact local and production origins to the project's CORS origins.
+   The embedded Studio needs credentials enabled for its sign-in session. After
+   setting the project ID in `.env.local`, you can use the Sanity CLI:
+
+   ```bash
+   npx sanity cors add http://localhost:3000 --credentials
+   npx sanity cors add https://your-domain.example --credentials
+   ```
+
+   Replace the example production origin with the value of `NEXT_PUBLIC_SITE_URL`.
+   Do not use a wildcard for an origin that allows credentials.
+4. No write token is needed for Studio or the storefront. Only the CSV import
+   and optional demo seed need `SANITY_API_WRITE_TOKEN`.
 5. Run `npm run dev` and open `/studio`.
 6. Create **Site settings** first, including the real business name, WhatsApp
    number and storefront copy.
+7. Configure the revalidation webhook so published edits appear immediately.
+   Full instructions are in [SANITY_CMS.md](./SANITY_CMS.md).
 
 ### Content model
 
@@ -175,10 +201,16 @@ Use these before launch to catch incomplete records.
 | `/brands` | Brand index with product counts. |
 | `/brands/[slug]` | Products for one brand. |
 | `/enquiry` | Review the local enquiry list, print an estimate and send on WhatsApp. |
+| `/quote` | Prepare a bulk quotation request in WhatsApp. |
+| `/delivery` | Delivery guidance; coverage is confirmed individually, not from a pincode list. |
+| `/calculator` | Material quantity estimator. |
+| `/compare` | Side-by-side product comparison. |
+| `/enquiry-tracker` | Browser-local follow-up list for saved enquiries. |
 | `/about` | Shop story, values and visit details. |
 | `/contact` | Contact actions, address, hours, service area and directions. |
-| `/account`, `/sign-in`, `/sign-up` | Optional Clerk customer account pages. |
-| `/studio` | Embedded Sanity Studio. |
+| `/account`, `/sign-in`, `/sign-up` | Better Auth account pages; public sign-up is disabled by default. |
+| `/admin` | Enquiry follow-up console; requires an allowlisted admin account. |
+| `/studio` | Embedded Sanity Studio for products, categories, brands and Site Settings. |
 | `/api/revalidate` | Sanity webhook target. |
 
 Missing categories, products and brands return a real `404` response. The
@@ -235,8 +267,11 @@ URL parameters are stable and shareable, for example:
 ## WhatsApp enquiries
 
 The enquiry list is stored in `localStorage` under
-`make-my-home-enquiry-v1`. It survives page reloads in the same browser and is
-never sent to a server.
+`make-my-home-enquiry-v1` while the customer is browsing. When they submit the
+enquiry, customer details and line items are saved to the PostgreSQL
+`enquiries` and `enquiry_items` tables before WhatsApp opens. The WhatsApp
+message is still the customer's manual confirmation step: they must press Send
+inside WhatsApp.
 
 Each line item records the selected variant, quantity, SKU, unit, price status
 and availability. The WhatsApp message is generated from that saved data and
@@ -345,9 +380,11 @@ and are never imported automatically.
 
 ## Built-in demo mode
 
-When `NEXT_PUBLIC_SANITY_PROJECT_ID` or `NEXT_PUBLIC_SANITY_DATASET` is missing,
-the storefront reads from `src/lib/demo-data.ts`. This is a complete, clearly
-labelled demo, not a silent fallback that pretends to be real:
+Demo mode is an explicit local design-review aid. It is only used when Sanity is
+not configured **and** `ALLOW_DEMO_DATA=true`, and it is refused in production.
+With a configured Sanity project, the storefront always reads Sanity and shows
+honest empty states when content has not been published. The demo is clearly
+labelled, never a silent fallback that pretends to be real:
 
 - 10 primary categories with nested subcategories and build stages.
 - 25 products across cement, aggregates, steel, stone, tiles, sanitaryware,
@@ -380,22 +417,23 @@ It requires `NEXT_PUBLIC_SANITY_PROJECT_ID` and, for `--commit`,
 `SANITY_API_WRITE_TOKEN`. Remove demo content before launch from Studio →
 Catalogue health → Sample / demo content.
 
-## Optional Clerk accounts
+## Better Auth and admin access
 
-Customer accounts are optional. Leave both Clerk keys blank and the storefront
-runs without sign-in; `/account`, `/sign-in` and `/sign-up` explain that
-accounts are not enabled. Browsing and WhatsApp enquiries always work.
+Better Auth stores users and sessions in PostgreSQL. Set `DATABASE_URL` and
+`BETTER_AUTH_SECRET`, then apply the SQL migrations before using account or
+enquiry features:
 
-To enable Clerk:
+```bash
+npm run db:migrate
+```
 
-1. Create a Clerk application.
-2. Set `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY`.
-3. Add the local and production origins in Clerk.
-4. Restart the dev server or redeploy.
+Admin routes require a signed-in Better Auth user whose email is listed in
+`ADMIN_EMAILS`. An empty allowlist denies admin access. Public registration is
+disabled by default; set `ALLOW_PUBLIC_SIGNUP=true` only when you intend to
+accept public account creation. The setting controls both the sign-up page and
+the Better Auth API.
 
-Clerk authenticates customers only. Sanity editors sign in through Sanity's own
-authentication at `/studio`; the two systems are independent. The proxy excludes
-`/studio` and `/api` from Clerk so Studio and webhooks are unaffected.
+Sanity editors authenticate separately through Sanity Studio at `/studio`.
 
 ## Revalidation webhook
 
@@ -425,6 +463,8 @@ Without a configured secret it returns `503`; with a wrong secret it returns
 | `npm run typegen` | Regenerate Next.js route types only. |
 | `npm run import:products` | Validate or import products/variants from CSV. |
 | `npm run seed:demo` | Preview or create the optional demo catalogue. |
+| `npm run db:migrate` | Apply PostgreSQL migrations in filename order. |
+| `npm run db:generate` | Generate the Prisma Client from `prisma/schema.prisma`. |
 
 ## Project structure
 
@@ -445,13 +485,13 @@ src/lib/demo-data.ts          Labelled demo catalogue used without Sanity
 src/lib/settings.ts           Hindi/English Site settings resolver
 src/sanity/schemaTypes/       Content schemas and validation
 src/sanity/structure.ts       Studio navigation and catalogue health
-src/proxy.ts                  Optional Clerk middleware
+src/proxy.ts                  Request proxy with API and Studio exclusions
 ```
 
 ## Deployment checklist
 
 1. Set all required environment variables in the hosting provider.
-2. Add the production origin to Sanity CORS and Clerk allowed origins.
+2. Add the production origin to Sanity CORS with credentials enabled for Studio.
 3. Publish Site settings with the real business name, WhatsApp number, address,
    hours and service area. Add English versions for every business-written
    field so the English switch does not fall back to Hindi.
@@ -469,7 +509,7 @@ src/proxy.ts                  Optional Clerk middleware
     missing route (`404`). Check both Hindi and English.
 11. Test the WhatsApp message on a real phone, including a variant and
     quantity.
-12. Confirm browsing and enquiries work with Clerk keys absent.
+12. Confirm browsing and enquiries work with `ALLOW_PUBLIC_SIGNUP=false`.
 
 ## Pre-launch usability test
 
@@ -501,12 +541,14 @@ review it before launch, especially:
 
 **The storefront says the catalogue is not configured.** Set
 `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET`, then restart
-the server. Without them the site deliberately runs the labelled demo
-catalogue; it does not crash.
+the server. The site shows an honest setup state rather than crashing.
 
-**The site is showing demo products or a demo WhatsApp number.** That is the
-built-in demo mode. Configure Sanity, publish real Site settings and products,
-and remove demo content before launch.
+**The site is showing demo products.** Demo mode was explicitly enabled for
+local review. Remove `ALLOW_DEMO_DATA=true` and configure Sanity. Demo content is
+never used when Sanity is configured, and it is refused in production.
+
+**WhatsApp buttons are missing.** Publish the Site settings document with a real
+number including country code. There is no environment-variable fallback.
 
 **Typed route errors such as `Property 'slug' does not exist on type 'unknown'`.**
 Run `npm run typegen` or use `npm run typecheck`, which does it automatically.

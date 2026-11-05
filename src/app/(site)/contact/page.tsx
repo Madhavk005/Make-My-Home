@@ -13,7 +13,8 @@ import {
 import { getSiteSettings } from "@/lib/catalogue";
 import { translate } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale";
-import { localizedSetting } from "@/lib/settings";
+import { getSettingWhatsAppNumber, localizedSetting } from "@/lib/settings";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ContactActions } from "@/components/contact-actions";
 
@@ -34,10 +35,11 @@ export default async function ContactPage() {
 
   const businessName = settings?.businessName?.trim() || "Make My Home";
   const phone = settings?.phone?.trim() || null;
-  const whatsappNumber =
-    settings?.whatsappNumber?.trim() ||
-    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.trim() ||
-    null;
+  const whatsappNumber = getSettingWhatsAppNumber(settings);
+  const whatsappUrl = buildWhatsAppUrl(
+    whatsappNumber,
+    translate(locale, "whatsappMessageGeneric", { business: businessName }),
+  );
   const address = localizedSetting(settings, "address", locale);
   const openingHours = localizedSetting(settings, "openingHours", locale);
   const serviceArea = localizedSetting(settings, "serviceArea", locale);
@@ -117,9 +119,9 @@ export default async function ContactPage() {
               <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">
                 {translate(locale, "contactWhatsappBody")}
               </p>
-              {whatsappNumber ? (
+              {whatsappUrl ? (
                 <a
-                  href={`https://wa.me/${whatsappNumber.replace(/\D/g, "")}`}
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="link-arrow mt-4"

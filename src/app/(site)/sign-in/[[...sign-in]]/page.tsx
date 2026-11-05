@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function SignInPage() {
   return (
     <div className="flex justify-center px-4 py-12">
-      <AuthForm mode="sign-in" />
+      <AuthForm mode="sign-in" allowPublicSignUp={process.env.ALLOW_PUBLIC_SIGNUP === "true"} />
     </div>
   );
 }

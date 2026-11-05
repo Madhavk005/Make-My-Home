@@ -10,7 +10,7 @@ import { productCountLabel, subCategoryCountLabel, translate } from "@/lib/i18n"
 import { getLocale } from "@/lib/locale";
 import { materialArt } from "@/lib/material-art";
 import type { CatalogQueryInput } from "@/lib/queries";
-import { isSanityConfigured } from "@/lib/sanity";
+import { isDemoDataEnabled } from "@/lib/sanity";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { CatalogResults } from "@/components/catalog-results";
 import { CategoryCard } from "@/components/category-card";
@@ -77,7 +77,7 @@ export default async function CategoryPage(props: PageProps<"/category/[...slug]
   const parent = breadcrumb.length > 1 ? breadcrumb[breadcrumb.length - 2] : null;
   const backHref = parent ? categoryHref(parent.path) : "/categories";
   const backLabel = parent ? parent.name : translate(locale, "categories");
-  const demo = !isSanityConfigured;
+  const demo = isDemoDataEnabled;
   const businessName = settings?.businessName?.trim() || "Make My Home";
   const art = materialArt(category.slug, category.name);
 

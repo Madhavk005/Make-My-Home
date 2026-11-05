@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MessageCircle, Send } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { useLocale } from "./locale-provider";
 
@@ -14,7 +14,7 @@ type Props = {
 };
 
 export function ProductEnquiryForm({ whatsappNumber, businessName, categories }: Props) {
-  const { locale, t } = useLocale();
+  const { locale } = useLocale();
   const hi = locale === "hi";
   const [productName, setProductName] = useState("");
   const [categoryId, setCategoryId] = useState("");

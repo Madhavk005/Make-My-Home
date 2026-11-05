@@ -6,7 +6,7 @@ import { categoryHref } from "@/lib/categories";
 import { imageUrl } from "@/lib/image";
 import { getLocale } from "@/lib/locale";
 import { translate } from "@/lib/i18n";
-import { localizedSetting } from "@/lib/settings";
+import { getSettingWhatsAppNumber } from "@/lib/settings";
 import { toNavNodes } from "@/lib/nav";
 import { AccountControls } from "./account-controls";
 import { CompareLink } from "./compare-link";
@@ -79,10 +79,7 @@ export async function SiteHeader() {
   const hi = locale === "hi";
   const businessName = settings?.businessName?.trim() || "Make My Home";
   const phone = settings?.phone?.trim() || null;
-  const whatsappNumber =
-    settings?.whatsappNumber?.trim() ||
-    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.trim() ||
-    null;
+  const whatsappNumber = getSettingWhatsAppNumber(settings);
   const filteredCategories = categories.filter((category) => {
     const slug = category.slug?.toLowerCase() ?? "";
     const name = category.name?.toLowerCase() ?? "";

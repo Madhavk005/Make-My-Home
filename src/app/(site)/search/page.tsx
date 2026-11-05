@@ -13,7 +13,7 @@ import { hasActiveFilters, PAGE_SIZE, parseFilters } from "@/lib/filters";
 import { translate } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale";
 import type { CatalogQueryInput } from "@/lib/queries";
-import { isSanityConfigured } from "@/lib/sanity";
+import { isDemoDataEnabled, isSanityConfigured } from "@/lib/sanity";
 import { suggestTerms } from "@/lib/search";
 import { CatalogueNotice } from "@/components/catalogue-notice";
 import { CatalogResults } from "@/components/catalog-results";
@@ -90,8 +90,8 @@ export default async function SearchPage(props: PageProps<"/search">) {
   }
 
   const catalogueEmpty =
-    isSanityConfigured && totalProducts === 0 && !filters.q && !hasActiveFilters(filters);
-  const demo = !isSanityConfigured;
+    !isDemoDataEnabled && totalProducts === 0 && !filters.q && !hasActiveFilters(filters);
+  const demo = isDemoDataEnabled;
   const quickCategories = tree.slice(0, 6);
 
   const pageTitle = filters.q
@@ -160,7 +160,7 @@ export default async function SearchPage(props: PageProps<"/search">) {
         ) : null}
 
         {catalogueEmpty ? (
-          <CatalogueNotice empty className="mt-2" />
+          <CatalogueNotice empty={isSanityConfigured} className="mt-2" />
         ) : (
           <CatalogResults
             basePath="/search"

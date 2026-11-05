@@ -10,6 +10,7 @@ import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Analytics } from "@/components/analytics";
 import { getLocale } from "@/lib/locale";
+import { getSiteOrigin } from "@/lib/site-origin";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -44,7 +45,7 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() || "http://localhost:3000";
+const siteUrl = getSiteOrigin();
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

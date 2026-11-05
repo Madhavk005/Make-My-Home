@@ -31,7 +31,7 @@ export default async function AccountPage() {
         <UserRound className="h-6 w-6" aria-hidden="true" />
       </div>
 
-      <AccountPanel />
+      <AccountPanel allowPublicSignUp={process.env.ALLOW_PUBLIC_SIGNUP === "true"} />
     </div>
   );
 }

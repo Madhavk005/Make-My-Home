@@ -4,7 +4,7 @@ import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { getSiteSettings } from "@/lib/catalogue";
 import { translate } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale";
-import { localizedSetting } from "@/lib/settings";
+import { getSettingWhatsAppNumber, localizedSetting } from "@/lib/settings";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { EnquiryList } from "@/components/enquiry-list";
 
@@ -22,10 +22,7 @@ export default async function EnquiryPage() {
     getSiteSettings().catch(() => null),
     getLocale(),
   ]);
-  const whatsappNumber =
-    settings?.whatsappNumber?.trim() ||
-    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.trim() ||
-    null;
+  const whatsappNumber = getSettingWhatsAppNumber(settings);
   const phone = settings?.phone?.trim() || null;
   const businessName = settings?.businessName?.trim() || "Make My Home";
   const priceNote = localizedSetting(settings, "priceNote", locale);
