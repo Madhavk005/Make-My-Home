@@ -8,6 +8,7 @@ import { LocaleProvider } from "@/components/locale-provider";
 import { BackToTop } from "@/components/back-to-top";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { PaletteProvider } from "@/components/palette-switcher";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [settings, locale] = await Promise.all([
@@ -35,19 +36,21 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
 
   return (
     <LocaleProvider initialLocale={locale}>
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-sm focus:bg-ink focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-paper"
-      >
-        {translate(locale, "skipToContent")}
-      </a>
-      <SiteHeader />
-      <ConnectionBanner />
-      <main id="main" className="flex flex-1 flex-col">
-        {children}
-      </main>
-      <SiteFooter />
-      <BackToTop />
+      <PaletteProvider>
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-sm focus:bg-ink focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-paper"
+        >
+          {translate(locale, "skipToContent")}
+        </a>
+        <SiteHeader />
+        <ConnectionBanner />
+        <main id="main" className="flex flex-1 flex-col">
+          {children}
+        </main>
+        <SiteFooter />
+        <BackToTop />
+      </PaletteProvider>
     </LocaleProvider>
   );
 }

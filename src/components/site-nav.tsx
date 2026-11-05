@@ -21,6 +21,7 @@ import type { NavNode } from "@/lib/nav";
 import { ContactActions } from "./contact-actions";
 import { useLocale } from "./locale-provider";
 import { LanguageSwitch } from "./language-switch";
+import { PaletteOptions } from "./palette-switcher";
 
 type NavProps = {
   nodes: NavNode[];
@@ -264,7 +265,7 @@ function NavAccordion({
 }
 
 export function MobileNav({ nodes, phone, whatsappNumber, businessName, quickLinks }: NavProps) {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -423,6 +424,13 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName, quickLin
                   </div>
                 </>
               ) : null}
+
+              <div className="mb-5 mt-5 border-b border-line pb-4">
+                <p className="type-eyebrow no-rule mb-2">
+                  {locale === "hi" ? "रंग योजना" : "Color palette"}
+                </p>
+                <PaletteOptions />
+              </div>
 
               <p className="type-eyebrow no-rule mb-2 mt-6">{t("categories")}</p>
               <ul>

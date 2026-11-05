@@ -6,18 +6,18 @@
      Warm natural palette defaults with switchable alternatives below.
      ─────────────────────────────────────────────────────────────────────── */
 
-  --color-canvas: #F7F4ED;
+  --color-canvas: #F4F0E7;
   --color-surface: #FFFEFB;
   --color-sand: #E8DFD0;
   --color-sand-deep: #D8CDBB;
   --color-ink: #24342D;
   --color-ink-soft: #526259;
-  --color-ink-faint: #6B786F;
+  --color-ink-faint: #58665D;
   --color-forest: #29483D;
   --color-forest-deep: #1C342B;
   --color-forest-soft: #E4EBE5;
-  --color-clay: #A94F39;
-  --color-clay-dark: #843A2B;
+  --color-clay: #A44732;
+  --color-clay-dark: #803A2B;
   --color-clay-soft: #F5E6DF;
   --color-brass: #C87554;
   --color-brass-soft: #F8EEE9;
@@ -29,10 +29,10 @@
   --color-danger: #DC3545;
 
   /* Compatibility aliases for older utility usage. */
-  --color-paper: #F7F4ED;
+  --color-paper: #F4F0E7;
   --color-paper-deep: #E8DFD0;
-  --color-accent: #A94F39;
-  --color-accent-dark: #843A2B;
+  --color-accent: #A44732;
+  --color-accent-dark: #803A2B;
   --color-accent-soft: #F5E6DF;
   --color-moss: #28A745;
   --color-moss-soft: #E6F1E9;
@@ -56,27 +56,27 @@
 }
 
 :root[data-palette="refined-modern"] {
-  --color-canvas: #F7F5F0;
+  --color-canvas: #EFF3F6;
   --color-surface: #FFFFFF;
   --color-sand: #E3E9ED;
   --color-sand-deep: #D5E0E6;
   --color-ink: #18344A;
   --color-ink-soft: #526575;
-  --color-ink-faint: #718392;
+  --color-ink-faint: #5B6B78;
   --color-forest: #15324A;
   --color-forest-deep: #0E263B;
   --color-forest-soft: #E2E9EE;
-  --color-clay: #92702F;
-  --color-clay-dark: #705524;
+  --color-clay: #805D1D;
+  --color-clay-dark: #674914;
   --color-clay-soft: #F3EAD7;
   --color-brass: #C6A15B;
   --color-brass-soft: #F8F2E4;
   --color-line: #D6DEE3;
   --color-line-soft: #E8EDF0;
-  --color-paper: #F7F5F0;
+  --color-paper: #EFF3F6;
   --color-paper-deep: #E3E9ED;
-  --color-accent: #92702F;
-  --color-accent-dark: #705524;
+  --color-accent: #805D1D;
+  --color-accent-dark: #674914;
   --color-accent-soft: #F3EAD7;
   --shadow-card: 0 4px 20px -8px rgb(24 52 74 / 0.12);
   --shadow-lift: 0 8px 32px -12px rgb(24 52 74 / 0.22);
@@ -84,31 +84,35 @@
 }
 
 :root[data-palette="earthy-contemporary"] {
-  --color-canvas: #F2EBDD;
+  --color-canvas: #EEE6D8;
   --color-surface: #FBF8F2;
   --color-sand: #E9E2D6;
   --color-sand-deep: #D9D0C1;
   --color-ink: #32332F;
   --color-ink-soft: #5C6058;
-  --color-ink-faint: #777C73;
+  --color-ink-faint: #62675F;
   --color-forest: #586A52;
   --color-forest-deep: #3E4D39;
   --color-forest-soft: #E4E9DF;
-  --color-clay: #9A4B38;
-  --color-clay-dark: #793A2D;
+  --color-clay: #94442F;
+  --color-clay-dark: #733525;
   --color-clay-soft: #F1E2DA;
   --color-brass: #B9644E;
   --color-brass-soft: #F7EBE5;
   --color-line: #D8D0C3;
   --color-line-soft: #E8E1D5;
-  --color-paper: #F2EBDD;
+  --color-paper: #EEE6D8;
   --color-paper-deep: #E9E2D6;
-  --color-accent: #9A4B38;
-  --color-accent-dark: #793A2D;
+  --color-accent: #94442F;
+  --color-accent-dark: #733525;
   --color-accent-soft: #F1E2DA;
   --shadow-card: 0 4px 20px -8px rgb(50 51 47 / 0.12);
   --shadow-lift: 0 8px 32px -12px rgb(50 51 47 / 0.22);
   --shadow-drawer: -24px 0 60px -20px rgb(50 51 47 / 0.28);
+}
+
+:root[data-palette] .bg-white {
+  background-color: var(--color-surface);
 }
 
 :root {

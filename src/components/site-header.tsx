@@ -14,6 +14,7 @@ import { EnquiryLink } from "./enquiry-link";
 import { LanguageSwitch } from "./language-switch";
 import { MobileBottomNav } from "./mobile-bottom-nav";
 import { MobileNav } from "./site-nav";
+import { PaletteSwitcher } from "./palette-switcher";
 
 function BrandMark({
   name,
@@ -117,7 +118,7 @@ export async function SiteHeader() {
 
   return (
     <>
-      <header className="no-print sticky top-0 z-40 border-b-2 border-brass bg-white/95 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-white/90">
+      <header className="no-print sticky top-0 z-40 border-b-2 border-brass bg-surface/95 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-surface/90">
         {/* Main row */}
         <div className="border-b border-line/70">
           <div className="container flex min-h-12 items-center gap-3 py-1.5 sm:gap-4">
@@ -126,6 +127,7 @@ export async function SiteHeader() {
             <div className="ml-auto flex items-center gap-2 sm:gap-3">
               <div className="hidden items-center gap-2 lg:flex">
                 <LanguageSwitch />
+                <PaletteSwitcher />
                 {phone ? (
                   <a
                     href={`tel:${phone.replace(/[^\d+]/g, "")}`}

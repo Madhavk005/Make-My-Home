@@ -69,7 +69,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f7f3ea",
+  themeColor: "#F4F0E7",
   width: "device-width",
   initialScale: 1,
   minimumScale: 1,
@@ -85,6 +85,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang={locale === "hi" ? "hi-IN" : "en-IN"}
+      data-palette="warm-natural"
       className={`${fraunces.variable} ${manrope.variable} ${mukta.variable} ${notoSerifDevanagari.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
