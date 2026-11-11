@@ -32,7 +32,7 @@ export async function CatalogueNotice({
       aria-labelledby="catalogue-notice-title"
     >
       <div className="flex items-start gap-4">
-        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-line bg-paper-deep text-accent">
+        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-line bg-paper-deep text-link">
           <Icon className="h-6 w-6" aria-hidden="true" />
         </span>
         <div className="min-w-0">
@@ -71,7 +71,7 @@ export async function CatalogueNotice({
                 <li>{translate(locale, "setupStep2")}</li>
                 <li>
                   {translate(locale, "setupStep3")}{" "}
-                  <Link href="/studio" className="font-semibold text-accent underline">
+                  <Link href="/studio" className="font-semibold text-link underline">
                     /studio
                   </Link>
                 </li>

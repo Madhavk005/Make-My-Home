@@ -68,7 +68,7 @@ export function RecentlyViewed({ currentSlug }: { currentSlug?: string }) {
                   compact
                 />
               </div>
-              <p className="mt-2 text-sm font-semibold text-ink group-hover:text-forest">
+              <p className="mt-2 text-sm font-semibold text-ink group-hover:text-primary-deep">
                 {product.name}
               </p>
             </Link>

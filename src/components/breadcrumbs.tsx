@@ -17,7 +17,7 @@ export async function Breadcrumbs({ items, className = "" }: { items: Crumb[]; c
         <li>
           <Link
             href="/"
-            className="inline-flex min-h-8 items-center transition-colors hover:text-forest"
+            className="inline-flex min-h-8 items-center transition-colors hover:text-primary-deep"
           >
             {translate(locale, "breadcrumbHome")}
           </Link>
@@ -30,7 +30,7 @@ export async function Breadcrumbs({ items, className = "" }: { items: Crumb[]; c
               {item.href && !isLast ? (
                 <Link
                   href={item.href}
-                  className="inline-flex min-h-8 items-center transition-colors hover:text-forest"
+                  className="inline-flex min-h-8 items-center transition-colors hover:text-primary-deep"
                 >
                   {item.label}
                 </Link>

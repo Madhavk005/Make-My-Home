@@ -43,7 +43,7 @@ export function ConstructionVideo({ poster = "/images/hero-architecture.jpg", sr
   const showVideo = Boolean(videoSrc) && !reducedMotion && inView;
 
   return (
-    <div ref={containerRef} className="relative overflow-hidden rounded-2xl border border-line bg-forest-deep">
+    <div ref={containerRef} className="relative overflow-hidden rounded-2xl border border-line bg-charcoal">
       {showVideo ? (
         <video
           className="h-full w-full object-cover"
@@ -66,7 +66,7 @@ export function ConstructionVideo({ poster = "/images/hero-architecture.jpg", sr
           loading="lazy"
         />
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/70 via-forest-deep/20 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-primary-deep/70 via-primary-deep/20 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 p-6 text-white sm:p-8">
         <h3 className="text-xl font-bold sm:text-2xl">{title}</h3>
         <p className="mt-2 max-w-xl text-sm text-white/80">{description}</p>

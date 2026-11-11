@@ -36,7 +36,7 @@ export function SignUpForm() {
     <div className="flex justify-center px-4 py-12">
       <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
         <h1 className="text-xl font-bold tracking-tight text-ink">Create an account</h1>
-        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+        {error ? <p className="text-sm text-danger">{error}</p> : null}
         <div>
           <label className="block text-sm font-medium text-ink">Name</label>
           <input
@@ -76,7 +76,7 @@ export function SignUpForm() {
         </button>
         <p className="text-center text-sm text-ink-soft">
           Already have an account?{" "}
-          <Link href="/sign-in" className="text-accent hover:underline">
+          <Link href="/sign-in" className="text-link hover:underline">
             Sign in
           </Link>
         </p>

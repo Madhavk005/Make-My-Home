@@ -1,22 +1,77 @@
 import type { Category, CategoryNode } from "./types";
 import { fuzzyIncludes } from "./search";
+import {
+  categoryLevelFromDepth,
+  compareCategoryRecords,
+} from "./category-validation";
 
 function compareCategories(a: Category, b: Category): number {
-  const orderA = typeof a.order === "number" ? a.order : 100;
-  const orderB = typeof b.order === "number" ? b.order : 100;
-  if (orderA !== orderB) return orderA - orderB;
-  return a.name.localeCompare(b.name);
+  return compareCategoryRecords(a, b);
 }
 
-export function buildCategoryTree(categories: Category[]): CategoryNode[] {
-  const nodes = new Map<string, CategoryNode>();
+/** Missing/undefined `isActive` is treated as active for legacy content. */
+export function isCategoryActive(category: Pick<Category, "isActive">): boolean {
+  return category.isActive !== false;
+}
+
+/**
+ * Ids that are safe to show publicly: the category itself and every ancestor
+ * must be active. Inactive parents hide their whole branch.
+ */
+function publiclyVisibleCategoryIds(categories: Category[]): Set<string> {
+  const byId = new Map(categories.map((category) => [category._id, category]));
+  const visible = new Set<string>();
 
   for (const category of categories) {
+    const seen = new Set<string>();
+    let current: Category | undefined = category;
+    let branchVisible = true;
+
+    while (current) {
+      if (seen.has(current._id)) {
+        branchVisible = false;
+        break;
+      }
+      seen.add(current._id);
+      if (!isCategoryActive(current)) {
+        branchVisible = false;
+        break;
+      }
+      current = current.parentId ? byId.get(current.parentId) : undefined;
+    }
+
+    if (branchVisible) visible.add(category._id);
+  }
+
+  return visible;
+}
+
+export type BuildCategoryTreeOptions = {
+  /** Admin screens need inactive branches; public pages must not. */
+  includeInactive?: boolean;
+};
+
+export function buildCategoryTree(
+  categories: Category[],
+  options: BuildCategoryTreeOptions = {},
+): CategoryNode[] {
+  const includeInactive = options.includeInactive ?? false;
+  const source = includeInactive
+    ? categories
+    : (() => {
+        const visible = publiclyVisibleCategoryIds(categories);
+        return categories.filter((category) => visible.has(category._id));
+      })();
+
+  const nodes = new Map<string, CategoryNode>();
+
+  for (const category of source) {
     nodes.set(category._id, {
       ...category,
       children: [],
       path: [],
       depth: 0,
+      level: categoryLevelFromDepth(0) ?? "primary",
       productCount: 0,
     });
   }
@@ -40,6 +95,10 @@ export function buildCategoryTree(categories: Category[]): CategoryNode[] {
 
     node.path = [...parentPath, node.slug];
     node.depth = depth;
+    // The parent chain is the source of truth; the stored field is only a
+    // convenience copy. Legacy data that is deeper than three levels is kept
+    // visible but treated as tertiary for display purposes.
+    node.level = categoryLevelFromDepth(depth) ?? "tertiary";
     node.children.sort(compareCategories);
 
     for (const child of node.children) {
@@ -110,12 +169,49 @@ export function categoryBreadcrumb(
     current = current.parentId ? byId.get(current.parentId) : undefined;
   }
 
-  const tree = buildCategoryTree(categories);
+  // Breadcrumbs always include the full chain, even for a category that was
+  // deactivated after a product was filed under it.
+  const tree = buildCategoryTree(categories, { includeInactive: true });
   const nodes = new Map(flattenCategoryTree(tree).map((node) => [node._id, node]));
 
   return chain
     .map((category) => nodes.get(category._id))
     .filter((node): node is CategoryNode => Boolean(node));
+}
+
+/** Canonical slug path for a category (root → category), or [] if missing. */
+export function categoryPathFor(categories: Category[], categoryId: string): string[] {
+  return categoryBreadcrumb(categories, categoryId).map((node) => node.slug);
+}
+
+/**
+ * Global slug lookup. Slugs are unique across the entire catalogue, so a bare
+ * slug can always be resolved without guessing the parent chain.
+ */
+export function findCategoryBySlug<T extends Category>(
+  categories: T[],
+  slug: string,
+): T | null {
+  const needle = slug.trim().toLowerCase();
+  if (!needle) return null;
+  return (
+    categories.find((category) => category.slug.trim().toLowerCase() === needle) ?? null
+  );
+}
+
+/** Descendants grouped by level, useful for navigation and filters. */
+export function categoriesByLevel(nodes: CategoryNode[]): {
+  primary: CategoryNode[];
+  secondary: CategoryNode[];
+  tertiary: CategoryNode[];
+} {
+  const groups = {
+    primary: [] as CategoryNode[],
+    secondary: [] as CategoryNode[],
+    tertiary: [] as CategoryNode[],
+  };
+  for (const node of flattenCategoryTree(nodes)) groups[node.level].push(node);
+  return groups;
 }
 
 export function directChildren(categories: Category[], parentId: string | null): Category[] {

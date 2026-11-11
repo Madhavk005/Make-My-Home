@@ -134,7 +134,7 @@ export function QuotationRequest({
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-accent"
+            className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary"
           />
         </div>
         <div>
@@ -147,7 +147,7 @@ export function QuotationRequest({
             onChange={(e) => setPhoneNumber(e.target.value)}
             type="tel"
             required
-            className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-accent"
+            className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary"
           />
         </div>
         <div>
@@ -159,7 +159,7 @@ export function QuotationRequest({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
-            className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-accent"
+            className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary"
           />
         </div>
         <div>
@@ -170,7 +170,7 @@ export function QuotationRequest({
             id="quote-project"
             value={project}
             onChange={(e) => setProject(e.target.value)}
-            className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-accent"
+            className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary"
           />
         </div>
         <div>
@@ -182,7 +182,7 @@ export function QuotationRequest({
             value={details}
             onChange={(e) => setDetails(e.target.value)}
             rows={4}
-            className="w-full rounded-lg border border-line px-3 py-2 text-base text-ink outline-none focus:border-accent"
+            className="w-full rounded-lg border border-line px-3 py-2 text-base text-ink outline-none focus:border-primary"
           />
         </div>
         {items.length > 0 ? (

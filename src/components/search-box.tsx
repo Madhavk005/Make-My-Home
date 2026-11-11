@@ -296,7 +296,7 @@ export function SearchBox({
           placeholder={t("searchPlaceholder")}
           autoComplete="off"
           enterKeyHint="search"
-          className={`w-full border border-line bg-surface text-ink placeholder:text-ink-faint focus:border-clay focus:outline-none focus:ring-2 focus:ring-clay/15 ${
+          className={`w-full border border-line bg-surface text-ink placeholder:text-ink-faint focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary ${
             isPage
               ? "min-h-14 rounded-sm pl-13 pr-28 text-base sm:pr-36"
               : "min-h-12 rounded-sm pl-11 pr-24 text-sm sm:text-base"
@@ -320,7 +320,7 @@ export function SearchBox({
         ) : null}
         <button
           type="submit"
-          className={`absolute right-1.5 top-1/2 -translate-y-1/2 rounded-xs bg-forest px-3 font-bold text-surface transition-colors hover:bg-forest-deep sm:px-4 ${
+          className={`absolute right-1.5 top-1/2 -translate-y-1/2 rounded-xs bg-primary px-3 font-bold text-surface transition-colors hover:bg-primary-deep sm:px-4 ${
             isPage ? "min-h-11 text-sm" : "min-h-9 text-xs"
           }`}
         >
@@ -334,7 +334,7 @@ export function SearchBox({
 
       {hasPanel ? (
         <div
-          className={`absolute inset-x-0 top-[calc(100%+0.5rem)] z-50 overflow-hidden rounded-sm border border-line bg-surface shadow-[0_24px_60px_-20px_rgb(19_37_28_/_0.28)] ${
+          className={`absolute inset-x-0 top-[calc(100%+0.5rem)] z-50 overflow-hidden rounded-sm border border-line bg-surface shadow-[0_24px_60px_-20px_rgb(32_36_44_/_0.28)] ${
             isPage ? "" : "min-w-[min(32rem,88vw)]"
           }`}
         >
@@ -412,7 +412,7 @@ export function SearchBox({
             <button
               type="button"
               onClick={submit}
-              className="flex min-h-12 w-full items-center justify-between gap-2 border-t border-line bg-canvas px-4 text-sm font-bold text-forest transition-colors hover:bg-sand"
+              className="flex min-h-12 w-full items-center justify-between gap-2 border-t border-line bg-canvas px-4 text-sm font-bold text-primary-deep transition-colors hover:bg-sand"
             >
               <span className="truncate">{t("searchAllFor", { query })}</span>
               <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" />
@@ -428,7 +428,7 @@ export function SearchBox({
                   // Ignore storage failures.
                 }
               }}
-              className="flex min-h-11 w-full items-center justify-center border-t border-line bg-canvas px-4 text-xs font-semibold text-ink-soft transition-colors hover:text-forest"
+              className="flex min-h-11 w-full items-center justify-center border-t border-line bg-canvas px-4 text-xs font-semibold text-ink-soft transition-colors hover:text-primary-deep"
             >
               {t("clearRecent")}
             </button>

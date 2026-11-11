@@ -151,7 +151,7 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
           <button
             type="button"
             onClick={clear}
-            className="no-print inline-flex min-h-10 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.08em] text-ink-soft transition-colors hover:text-forest"
+            className="no-print inline-flex min-h-10 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.08em] text-ink-soft transition-colors hover:text-primary-deep"
           >
             <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
             {t("clearList")}
@@ -170,7 +170,7 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
               });
               alert("Saved for follow-up");
             }}
-            className="no-print inline-flex min-h-10 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.08em] text-ink-soft transition-colors hover:text-forest"
+            className="no-print inline-flex min-h-10 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.08em] text-ink-soft transition-colors hover:text-primary-deep"
           >
             Save for follow-up
           </button>
@@ -214,14 +214,14 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
                         {item.brand ? (
-                          <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-forest">
+                          <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-primary-deep">
                             {item.brand}
                           </p>
                         ) : null}
                         <h2 className="mt-0.5 text-[0.95rem] font-semibold leading-snug text-ink">
                           <Link
                             href={`/product/${encodeURIComponent(item.slug)}`}
-                            className="transition-colors hover:text-forest"
+                            className="transition-colors hover:text-primary-deep"
                           >
                             {item.name}
                           </Link>
@@ -251,7 +251,7 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
                         type="button"
                         onClick={() => removeItem(item.key)}
                         aria-label={`${t("removeItem")} — ${item.name}`}
-                        className="no-print grid h-10 w-10 shrink-0 place-items-center text-ink-soft transition-colors hover:bg-sand hover:text-forest"
+                        className="no-print grid h-10 w-10 shrink-0 place-items-center text-ink-soft transition-colors hover:bg-sand hover:text-primary-deep"
                       >
                         <X className="h-4 w-4" aria-hidden="true" />
                       </button>
@@ -301,7 +301,7 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
                             const value = Number(event.target.value);
                             if (Number.isFinite(value)) updateQuantity(item.key, value);
                           }}
-                          className="h-10 w-14 border border-line bg-canvas text-center text-sm font-semibold text-ink focus:border-clay focus:outline-none"
+                          className="h-10 w-14 border border-line bg-canvas text-center text-sm font-semibold text-ink focus:border-primary focus:outline-none"
                         />
                         <button
                           type="button"
@@ -327,7 +327,7 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
                           id={`unit-${item.key}`}
                           value={item.unit}
                           onChange={(event) => updateUnit(item.key, event.target.value)}
-                          className="h-9 rounded-md border border-line bg-canvas px-2 text-sm text-ink focus:border-clay focus:outline-none"
+                          className="h-9 rounded-md border border-line bg-canvas px-2 text-sm text-ink focus:border-primary focus:outline-none"
                         />
                       </div>
                       <div className="mt-2 w-full">
@@ -343,7 +343,7 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
                           onChange={(event) => updateNotes(item.key, event.target.value)}
                           rows={2}
                           placeholder="Size, brand preference, delivery notes..."
-                          className="mt-1 w-full rounded-md border border-line bg-canvas px-2 py-1.5 text-sm text-ink focus:border-clay focus:outline-none"
+                          className="mt-1 w-full rounded-md border border-line bg-canvas px-2 py-1.5 text-sm text-ink focus:border-primary focus:outline-none"
                         />
                       </div>
 
@@ -390,8 +390,8 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
       </div>
 
       <aside className="border border-line bg-surface lg:sticky lg:top-28">
-        <div className="border-b border-line bg-forest px-5 py-5 text-surface">
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-brass">
+        <div className="border-b border-line bg-primary px-5 py-5 text-surface">
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-surface">
             {t("enquiryKicker")}
           </p>
           <h2 className="mt-2 font-display text-2xl font-medium tracking-tight">
@@ -436,7 +436,7 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
                 autoComplete="name"
-                className="mt-1 min-h-10 w-full rounded-md border border-line bg-canvas px-3 text-sm text-ink focus:border-clay focus:outline-none"
+                className="mt-1 min-h-10 w-full rounded-md border border-line bg-canvas px-3 text-sm text-ink focus:border-primary focus:outline-none"
               />
             </div>
             <div>
@@ -453,7 +453,7 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
                 type="tel"
                 inputMode="tel"
                 autoComplete="tel"
-                className="mt-1 min-h-10 w-full rounded-md border border-line bg-canvas px-3 text-sm text-ink focus:border-clay focus:outline-none"
+                className="mt-1 min-h-10 w-full rounded-md border border-line bg-canvas px-3 text-sm text-ink focus:border-primary focus:outline-none"
               />
             </div>
             <div>
@@ -468,7 +468,7 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
                 value={deliveryLocation}
                 onChange={(e) => setDeliveryLocation(e.target.value)}
                 autoComplete="address-level2"
-                className="mt-1 min-h-10 w-full rounded-md border border-line bg-canvas px-3 text-sm text-ink focus:border-clay focus:outline-none"
+                className="mt-1 min-h-10 w-full rounded-md border border-line bg-canvas px-3 text-sm text-ink focus:border-primary focus:outline-none"
               />
             </div>
             <div>
@@ -483,7 +483,7 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
                 value={customerNote}
                 onChange={(e) => setCustomerNote(e.target.value)}
                 rows={2}
-                className="mt-1 w-full rounded-md border border-line bg-canvas px-3 py-2 text-sm text-ink focus:border-clay focus:outline-none"
+                className="mt-1 w-full rounded-md border border-line bg-canvas px-3 py-2 text-sm text-ink focus:border-primary focus:outline-none"
               />
             </div>
             <button

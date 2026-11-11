@@ -28,8 +28,8 @@ export function LanguageSwitch({
         className={`min-h-8 rounded-full px-2.5 text-[10px] font-bold transition-colors sm:min-h-7 sm:px-3 ${
           locale === "hi"
             ? dark
-              ? "bg-surface text-forest"
-              : "bg-forest text-surface"
+              ? "bg-surface text-primary-deep"
+              : "bg-primary text-white"
             : dark
               ? "text-surface/70 hover:text-surface"
               : "text-ink-soft hover:text-ink"
@@ -45,8 +45,8 @@ export function LanguageSwitch({
         className={`min-h-8 rounded-full px-2.5 text-[10px] font-bold transition-colors sm:min-h-7 sm:px-3 ${
           locale === "en"
             ? dark
-              ? "bg-surface text-forest"
-              : "bg-forest text-surface"
+              ? "bg-surface text-primary-deep"
+              : "bg-primary text-white"
             : dark
               ? "text-surface/70 hover:text-surface"
               : "text-ink-soft hover:text-ink"

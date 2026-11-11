@@ -57,9 +57,15 @@ export const categoriesQuery = `*[_type == "category" && defined(slug.current)] 
   description,
   "image": image{..., alt},
   "parentId": parent._ref,
+  level,
+  isActive,
   order,
+  seoTitle,
+  seoDescription,
   stage,
-  specificationTemplate
+  specificationTemplate,
+  "createdAt": _createdAt,
+  "updatedAt": _updatedAt
 }`;
 
 export const brandsQuery = `*[_type == "brand" && defined(slug.current)] | order(order asc, name asc){
@@ -73,6 +79,7 @@ export const brandsQuery = `*[_type == "brand" && defined(slug.current)] | order
 }`;
 
 export const productCategoryRefsQuery = `*[_type == "product" && defined(category)]{
+  _id,
   "categoryId": category._ref
 }`;
 

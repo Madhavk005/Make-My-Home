@@ -51,7 +51,7 @@ export async function Pagination({
   const button =
     "inline-flex min-h-11 items-center gap-1 border px-3 text-xs font-bold uppercase tracking-[0.06em] transition-colors";
   const enabled =
-    "border-line bg-surface text-ink hover:border-forest hover:bg-forest hover:text-surface";
+    "border-line bg-surface text-ink hover:border-primary hover:bg-primary-deep hover:text-white";
   const disabled = "border-line/60 text-ink-faint/60";
 
   return (
@@ -84,8 +84,8 @@ export async function Pagination({
             aria-label={translate(locale, "pageNumber", { page: item })}
             className={`grid h-11 min-w-11 place-items-center border px-2 font-mono text-sm font-semibold transition-colors ${
               item === page
-                ? "border-forest bg-forest text-surface"
-                : "border-line bg-surface text-ink hover:border-forest"
+                ? "border-primary bg-primary text-white"
+                : "border-line bg-surface text-ink hover:border-primary"
             }`}
           >
             {item}

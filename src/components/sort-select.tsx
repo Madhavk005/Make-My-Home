@@ -35,7 +35,7 @@ export function SortSelect({
             });
           });
         }}
-        className="h-10 border border-line bg-surface pl-2.5 pr-8 text-xs font-semibold text-ink focus:border-clay focus:outline-none disabled:opacity-60"
+        className="h-10 border border-line bg-surface pl-2.5 pr-8 text-xs font-semibold text-ink focus:border-primary focus:outline-none disabled:opacity-60"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>

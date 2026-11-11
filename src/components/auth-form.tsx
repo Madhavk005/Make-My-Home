@@ -77,7 +77,7 @@ export function AuthForm({ mode, allowPublicSignUp }: AuthFormProps) {
               required
               value={name}
               onChange={(event) => setName(event.target.value)}
-              className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-accent"
+              className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary"
             />
           </div>
         )}
@@ -94,7 +94,7 @@ export function AuthForm({ mode, allowPublicSignUp }: AuthFormProps) {
             required
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-accent"
+            className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary"
           />
         </div>
 
@@ -111,7 +111,7 @@ export function AuthForm({ mode, allowPublicSignUp }: AuthFormProps) {
             required
             value={password}
             onChange={(event) => setPassword(event.target.value)}
-            className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-accent"
+            className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary"
           />
           {isSignUp && (
             <p className="mt-1 text-xs text-ink-soft">Use at least 8 characters.</p>
@@ -119,7 +119,7 @@ export function AuthForm({ mode, allowPublicSignUp }: AuthFormProps) {
         </div>
 
         {error && (
-          <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
+          <p role="alert" className="rounded-lg bg-danger-soft p-3 text-sm text-danger">
             {error}
           </p>
         )}
@@ -142,7 +142,7 @@ export function AuthForm({ mode, allowPublicSignUp }: AuthFormProps) {
         {isSignUp || allowPublicSignUp ? (
           <Link
             href={isSignUp ? "/sign-in" : "/sign-up"}
-            className="font-semibold text-accent underline underline-offset-4"
+            className="font-semibold text-link underline underline-offset-4"
           >
             {isSignUp ? "Sign in" : "Create account"}
           </Link>

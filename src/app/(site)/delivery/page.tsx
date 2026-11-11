@@ -45,7 +45,7 @@ export default async function DeliveryPage() {
 
         <div className="mt-6 border-t border-line pt-5">
           <p className="flex items-start gap-2 text-sm leading-relaxed text-ink">
-            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-forest" aria-hidden="true" />
+            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary-deep" aria-hidden="true" />
             <span>
               <strong>{hi ? "सेवा क्षेत्र: " : "Service area: "}</strong>
               {serviceArea ||
@@ -75,7 +75,7 @@ export default async function DeliveryPage() {
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-forest hover:underline"
+            className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary-deep hover:underline"
           >
             <MessageCircle className="h-4 w-4" aria-hidden="true" />
             {hi ? "पिनकोड के साथ WhatsApp करें" : "Send pincode on WhatsApp"}
@@ -84,7 +84,7 @@ export default async function DeliveryPage() {
 
         <Link
           href="/quote"
-          className="mt-6 flex w-fit items-center gap-2 border-t border-line pt-5 text-sm font-semibold text-forest hover:underline"
+          className="mt-6 flex w-fit items-center gap-2 border-t border-line pt-5 text-sm font-semibold text-primary-deep hover:underline"
         >
           {hi ? "कोटेशन का अनुरोध करें" : "Request a quotation"}
           <ArrowRight className="h-4 w-4" aria-hidden="true" />

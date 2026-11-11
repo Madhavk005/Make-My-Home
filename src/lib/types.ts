@@ -17,6 +17,13 @@ export type Availability =
   | "unavailable"
   | "not_confirmed";
 
+/**
+ * The catalogue uses exactly three category levels. The stored `level` field is
+ * validated against the parent chain; the parent chain remains the source of
+ * truth when reading legacy data.
+ */
+export type CategoryLevel = "primary" | "secondary" | "tertiary";
+
 export type SortKey =
   | "recommended"
   | "name-asc"
@@ -61,16 +68,24 @@ export type Category = {
   description?: string | null;
   image?: SanityImage | null;
   parentId?: string | null;
+  level?: CategoryLevel | null;
   order?: number | null;
+  isActive?: boolean | null;
+  seoTitle?: string | null;
+  seoDescription?: string | null;
   stage?: CategoryStage | null;
   specificationTemplate?: string[] | null;
+  createdAt?: string | null;
+  updatedAt?: string | null;
 };
 
 export type CategoryNode = Category & {
   children: CategoryNode[];
   path: string[];
   depth: number;
+  level: CategoryLevel;
   productCount: number;
+  directProductCount?: number;
 };
 
 export type Specification = {

@@ -81,7 +81,7 @@ export default async function AboutPage() {
                 sizes="(max-width: 1024px) 100vw, 42vw"
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/55 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-primary-deep/55 to-transparent" />
               <p className="absolute bottom-4 left-4 font-mono text-[10px] uppercase tracking-[0.16em] text-surface/85">
                 {businessName} / Material House
               </p>
@@ -108,7 +108,7 @@ export default async function AboutPage() {
       <section className="section-sm border-y border-line bg-surface/70">
         <div className="container">
           <div className="grid gap-6 sm:grid-cols-3">
-            <div className="border-l-2 border-clay pl-4">
+            <div className="border-l-2 border-primary pl-4">
               <p className="font-display text-4xl leading-none text-ink">
                 {catalogue.totalProducts.toLocaleString("en-IN")}
               </p>
@@ -116,7 +116,7 @@ export default async function AboutPage() {
                 {translate(locale, "homeStatsProducts")}
               </p>
             </div>
-            <div className="border-l-2 border-brass pl-4">
+            <div className="border-l-2 border-primary pl-4">
               <p className="font-display text-4xl leading-none text-ink">
                 {catalogue.tree.length.toLocaleString("en-IN")}
               </p>
@@ -124,7 +124,7 @@ export default async function AboutPage() {
                 {translate(locale, "homeStatsCategories")}
               </p>
             </div>
-            <div className="border-l-2 border-forest pl-4">
+            <div className="border-l-2 border-primary pl-4">
               <p className="font-display text-4xl leading-none text-ink">
                 {brandCount.toLocaleString("en-IN")}
               </p>
@@ -150,7 +150,7 @@ export default async function AboutPage() {
               return (
                 <li key={value.title} className="border-t border-ink/20 pt-5">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-[11px] tracking-[0.12em] text-forest">
+                    <span className="font-mono text-[11px] tracking-[0.12em] text-primary-deep">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <Icon className="h-5 w-5 text-ink-soft" aria-hidden="true" />
@@ -170,7 +170,7 @@ export default async function AboutPage() {
 
       <section className="section-sm border-t border-line">
         <div className="container">
-          <div className="grid overflow-hidden border border-forest-deep/15 bg-forest text-surface lg:grid-cols-[1fr_0.9fr]">
+          <div className="grid overflow-hidden border border-line bg-charcoal text-white lg:grid-cols-[1fr_0.9fr]">
             <div className="relative min-h-[18rem] lg:min-h-[26rem]">
               <Image
                 src="/images/interior-finish.jpg"
@@ -179,10 +179,10 @@ export default async function AboutPage() {
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/60 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-charcoal/70 to-transparent" />
             </div>
             <div className="flex flex-col justify-center p-6 sm:p-10">
-              <p className="type-eyebrow text-brass">{translate(locale, "aboutVisitTitle")}</p>
+              <p className="type-eyebrow text-surface">{translate(locale, "aboutVisitTitle")}</p>
               <h2 className="type-h2 mt-3 text-balance text-surface">
                 {translate(locale, "contactTitle")}
               </h2>
@@ -193,22 +193,22 @@ export default async function AboutPage() {
               <div className="mt-6 space-y-3 border-t border-surface/15 pt-5 text-sm text-surface/80">
                 {address ? (
                   <p className="flex items-start gap-2.5">
-                    <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brass" aria-hidden="true" />
+                    <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-surface" aria-hidden="true" />
                     <span className="whitespace-pre-line leading-relaxed">{address}</span>
                   </p>
                 ) : null}
                 {openingHours ? (
                   <p className="flex items-start gap-2.5">
-                    <Clock className="mt-0.5 h-4 w-4 shrink-0 text-brass" aria-hidden="true" />
+                    <Clock className="mt-0.5 h-4 w-4 shrink-0 text-surface" aria-hidden="true" />
                     <span>{openingHours}</span>
                   </p>
                 ) : null}
                 {phone ? (
                   <a
                     href={`tel:${phone.replace(/[^\d+]/g, "")}`}
-                    className="inline-flex min-h-10 items-center gap-2.5 font-semibold text-surface transition-colors hover:text-brass"
+                    className="inline-flex min-h-10 items-center gap-2.5 font-semibold text-surface transition-colors hover:text-accent-soft"
                   >
-                    <Phone className="h-4 w-4 text-brass" aria-hidden="true" />
+                    <Phone className="h-4 w-4 text-surface" aria-hidden="true" />
                     {phone}
                   </a>
                 ) : null}
@@ -237,7 +237,7 @@ export default async function AboutPage() {
 
       <div className="container pb-10">
         <p className="flex items-center justify-center gap-2 border-t border-line pt-5 text-center text-[11px] text-ink-faint">
-          <Sparkles className="h-3.5 w-3.5 text-brass" aria-hidden="true" />
+          <Sparkles className="h-3.5 w-3.5 text-primary-deep" aria-hidden="true" />
           {translate(locale, "footerBuiltNote")}
         </p>
       </div>

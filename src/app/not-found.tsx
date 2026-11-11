@@ -14,7 +14,7 @@ export default async function RootNotFound() {
   return (
     <main className="container section text-center">
       <div className="mx-auto rounded-xl border border-line bg-white shadow-sm p-8 sm:p-10">
-        <span className="mx-auto grid h-16 w-16 place-items-center rounded-full border border-line bg-paper-deep text-accent">
+        <span className="mx-auto grid h-16 w-16 place-items-center rounded-full border border-line bg-paper-deep text-link">
           <Compass className="h-8 w-8" aria-hidden="true" />
         </span>
         <p className="mt-6 text-sm font-semibold text-ink-soft">

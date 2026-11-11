@@ -49,19 +49,19 @@ export function MobileBottomNav() {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={`relative flex min-h-[3.65rem] flex-col items-center justify-center gap-1 px-1 pb-1 pt-2 text-[10px] font-bold tracking-wide transition-colors ${
-                  active ? "text-forest" : "text-ink-soft"
+                  active ? "text-primary-deep" : "text-ink-soft"
                 }`}
               >
                 <span
                   aria-hidden="true"
                   className={`absolute inset-x-5 top-0 h-0.5 transition-colors ${
-                    active ? "bg-clay" : "bg-transparent"
+                    active ? "bg-accent" : "bg-transparent"
                   }`}
                 />
                 <span className="relative">
                   <Icon className="h-5 w-5" aria-hidden="true" strokeWidth={active ? 2.2 : 1.7} />
                   {showCount ? (
-                    <span className="absolute -right-2.5 -top-2 inline-flex min-w-4 items-center justify-center rounded-full bg-clay px-1 py-0.5 text-[9px] font-bold leading-none text-white">
+                    <span className="absolute -right-2.5 -top-2 inline-flex min-w-4 items-center justify-center rounded-full bg-accent px-1 py-0.5 text-[9px] font-bold leading-none text-charcoal">
                       {totalQuantity > 99 ? "99+" : totalQuantity}
                     </span>
                   ) : null}

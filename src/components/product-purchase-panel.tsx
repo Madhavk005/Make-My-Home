@@ -164,7 +164,7 @@ export function ProductPurchasePanel({
                     onClick={() => setSelected(index)}
                     className={`flex min-h-14 w-full items-start justify-between gap-3 border p-3 text-left transition-colors ${
                       isSelected
-                        ? "border-clay bg-clay-soft/40"
+                        ? "border-primary bg-primary-soft/60"
                         : "border-line bg-surface hover:border-ink/35"
                     }`}
                   >
@@ -172,10 +172,10 @@ export function ProductPurchasePanel({
                       <span
                         aria-hidden="true"
                         className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full border ${
-                          isSelected ? "border-clay" : "border-line"
+                          isSelected ? "border-primary" : "border-line"
                         }`}
                       >
-                        {isSelected ? <span className="h-2.5 w-2.5 rounded-full bg-clay" /> : null}
+                        {isSelected ? <span className="h-2.5 w-2.5 rounded-full bg-accent" /> : null}
                       </span>
                       <span className="min-w-0">
                         <span className="block text-[0.95rem] font-semibold leading-snug text-ink">
@@ -237,7 +237,7 @@ export function ProductPurchasePanel({
             step={1}
             value={quantity}
             onChange={(event) => setQuantity(clampQuantity(Number(event.target.value)))}
-            className="h-12 w-20 border border-line bg-canvas text-center text-base font-semibold text-ink focus:border-clay focus:outline-none"
+            className="h-12 w-20 border border-line bg-canvas text-center text-base font-semibold text-ink focus:border-primary focus:outline-none"
           />
           <button
             type="button"
@@ -264,7 +264,7 @@ export function ProductPurchasePanel({
             if (timer.current) clearTimeout(timer.current);
             timer.current = setTimeout(() => setAdded(false), 2000);
           }}
-          className={`btn flex-1 ${added ? "btn-primary" : "btn-clay"}`}
+          className={`btn flex-1 ${added ? "btn-primary" : "btn-accent"}`}
         >
           {added ? (
             <Check className="h-5 w-5" aria-hidden="true" />

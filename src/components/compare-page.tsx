@@ -67,7 +67,7 @@ export function ComparePage() {
         <button
           type="button"
           onClick={clear}
-          className="inline-flex min-h-10 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.08em] text-ink-soft transition-colors hover:text-forest"
+          className="inline-flex min-h-10 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.08em] text-ink-soft transition-colors hover:text-primary-deep"
         >
           <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
           Clear comparison
@@ -99,7 +99,7 @@ export function ComparePage() {
                     <button
                       type="button"
                       onClick={() => remove(product._id)}
-                      className="text-xs text-ink-soft hover:text-forest"
+                      className="text-xs text-ink-soft hover:text-primary-deep"
                     >
                       Remove
                     </button>

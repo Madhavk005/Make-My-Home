@@ -8,11 +8,13 @@ import {
   IconInbox,
   IconBrowser,
   IconSettings,
+  IconFolders,
 } from "@tabler/icons-react";
 
 const navigation = [
   { label: "Dashboard", href: "/admin", icon: IconLayoutDashboard },
   { label: "Enquiries", href: "/admin/enquiries", icon: IconInbox },
+  { label: "Categories", href: "/admin/categories", icon: IconFolders },
   { label: "Sanity Studio", href: "/studio", icon: IconBrowser, newTab: true },
   { label: "Settings", href: "/admin/settings", icon: IconSettings },
 ];

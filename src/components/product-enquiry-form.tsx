@@ -83,7 +83,7 @@ export function ProductEnquiryForm({ whatsappNumber, businessName, categories }:
   }
 
   const inputClass =
-    "w-full rounded-lg border border-line bg-white px-3 py-2.5 text-sm text-ink outline-none focus:border-forest focus:ring-2 focus:ring-forest/15";
+    "w-full rounded-lg border border-line bg-white px-3 py-2.5 text-sm text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary/15";
 
   return (
     <form onSubmit={submit} className="grid gap-4 rounded-2xl border border-line bg-white p-5 shadow-sm sm:p-6">
@@ -185,7 +185,7 @@ export function ProductEnquiryForm({ whatsappNumber, businessName, categories }:
       </div>
 
       {status === "error" && error ? (
-        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
+        <p className="rounded-lg bg-danger-soft px-3 py-2 text-sm text-danger">{error}</p>
       ) : null}
       {status === "opened" ? (
         <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">
@@ -198,7 +198,7 @@ export function ProductEnquiryForm({ whatsappNumber, businessName, categories }:
       <button
         type="submit"
         disabled={status === "opening"}
-        className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-forest px-5 text-sm font-bold text-white transition-colors hover:bg-forest-deep disabled:opacity-60"
+        className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-primary px-5 text-sm font-bold text-white transition-colors hover:bg-primary-deep disabled:opacity-60"
       >
         <MessageCircle className="h-4 w-4" aria-hidden="true" />
         {status === "opening"

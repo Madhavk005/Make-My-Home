@@ -41,12 +41,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }),
   ]);
 
-  const categoryEntries: MetadataRoute.Sitemap = flattenCategoryTree(catalogue.tree)
-    .filter((category) => category.productCount > 0)
-    .map((category) => ({
+  const categoryEntries: MetadataRoute.Sitemap = flattenCategoryTree(catalogue.tree).map(
+    (category) => ({
       url: absoluteUrl(categoryHref(category.path)),
       changeFrequency: "weekly",
-    }));
+      priority: category.level === "primary" ? 0.7 : category.level === "secondary" ? 0.6 : 0.5,
+      ...(category.updatedAt ? { lastModified: new Date(category.updatedAt) } : {}),
+    }),
+  );
 
   const brandEntries: MetadataRoute.Sitemap = brands
     .filter((brand) => (brand.count ?? 0) > 0)

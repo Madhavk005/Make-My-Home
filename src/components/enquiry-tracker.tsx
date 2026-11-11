@@ -60,7 +60,7 @@ export function EnquiryTracker() {
                   removeTrackedEnquiry(entry.id);
                   refresh();
                 }}
-                className="text-xs text-ink-soft hover:text-forest"
+                className="text-xs text-ink-soft hover:text-primary-deep"
               >
                 Remove
               </button>

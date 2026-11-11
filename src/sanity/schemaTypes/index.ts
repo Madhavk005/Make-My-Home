@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { CategoryHierarchyInput } from "../components/category-hierarchy-input";
 
 const API_VERSION = "2025-01-01";
 
@@ -17,37 +18,176 @@ async function uniqueSlug(
   return count === 0 || "This slug is already used by another item. Slugs must be unique.";
 }
 
-async function validParent(
-  parent: { _ref?: string } | undefined,
-  context: { document?: { _id?: string }; getClient: (options: { apiVersion: string }) => { fetch: <T>(query: string, params: Record<string, unknown>) => Promise<T> } },
-) {
-  const ref = parent?._ref;
-  if (!ref) return true;
+type AdminClient = {
+  fetch: <T>(query: string, params: Record<string, unknown>) => Promise<T>;
+};
 
-  const selfId = context.document?._id?.replace(/^drafts\./, "");
-  if (selfId && ref === selfId) return "A category cannot be its own parent.";
+type ParentChain = {
+  /** Number of ancestors between the selected parent and the root. */
+  depth: number;
+  isActive: boolean;
+  name?: string;
+  error?: string;
+};
 
-  const client = context.getClient({ apiVersion: API_VERSION });
+/**
+ * Walks from a candidate parent to its root. The parent chain, not the stored
+ * `level`, decides whether a parent is legal.
+ */
+async function inspectParentChain(
+  client: AdminClient,
+  parentRef: string,
+  selfId: string,
+): Promise<ParentChain> {
   const seen = new Set<string>();
-  let current: string | undefined = ref;
+  let current: string | undefined = parentRef;
+  let depth = 0;
+  let isActive = true;
+  let name: string | undefined;
 
-  for (let depth = 0; depth < 30 && current; depth += 1) {
-    if (selfId && current === selfId) {
-      return "This parent would create a circular category hierarchy.";
-    }
+  while (current) {
     if (seen.has(current)) {
-      return "A circular hierarchy was found in the selected parent chain.";
+      return { depth, isActive, name, error: "A circular hierarchy was found in the selected parent chain." };
+    }
+    if (selfId && current === selfId) {
+      return { depth, isActive, name, error: "This parent would create a circular category hierarchy." };
     }
     seen.add(current);
 
-    const parentDoc: { parent?: { _ref?: string } } | null = await client.fetch(
-      `*[_id in [$id, "drafts." + $id]][0]{parent}`,
-      { id: current },
-    );
-    current = parentDoc?.parent?._ref;
+    const doc: { parent?: { _ref?: string }; isActive?: boolean; name?: string } | null =
+      await client.fetch(`*[_id in [$id, "drafts." + $id]][0]{parent, isActive, name}`, {
+        id: current,
+      });
+
+    if (!doc) {
+      return { depth, isActive, name, error: "The selected parent category no longer exists." };
+    }
+    if (depth === 0) name = doc.name;
+    if (doc.isActive === false) isActive = false;
+
+    if (!doc.parent?._ref) return { depth, isActive, name };
+    current = doc.parent._ref;
+    depth += 1;
+
+    if (depth > 3) {
+      return {
+        depth,
+        isActive,
+        name,
+        error: "The selected parent is nested too deeply. Categories can only have three levels.",
+      };
+    }
   }
 
-  if (current) return "Category nesting is too deep. Keep the hierarchy to 30 levels or fewer.";
+  return { depth, isActive, name };
+}
+
+async function validParent(
+  parent: { _ref?: string } | undefined,
+  context: {
+    document?: { _id?: string; level?: string };
+    getClient: (options: { apiVersion: string }) => AdminClient;
+  },
+) {
+  const ref = parent?._ref;
+  const selfId = context.document?._id?.replace(/^drafts\./, "") ?? "";
+  const level = context.document?.level;
+
+  if (!ref) {
+    if (level === "secondary") return "Secondary categories must have a primary parent.";
+    if (level === "tertiary") return "Tertiary categories must have a secondary parent.";
+    return true;
+  }
+
+  if (level === "primary") return "Primary categories cannot have a parent.";
+
+  const client = context.getClient({ apiVersion: API_VERSION });
+  const chain = await inspectParentChain(client, ref, selfId);
+  if (chain.error) return chain.error;
+
+  if (chain.depth >= 2) {
+    return "Categories can only have three levels. Choose a primary or secondary parent.";
+  }
+
+  const expectedLevel = chain.depth === 0 ? "secondary" : "tertiary";
+  if (level && level !== expectedLevel) {
+    return `A ${level} category cannot sit under this parent. Choose a ${
+      expectedLevel === "secondary" ? "primary" : "secondary"
+    } parent instead.`;
+  }
+
+  return true;
+}
+
+async function validLevel(
+  level: string | undefined,
+  context: {
+    document?: { _id?: string; parent?: { _ref?: string } };
+    getClient: (options: { apiVersion: string }) => AdminClient;
+  },
+) {
+  if (!level) return "Choose primary, secondary or tertiary.";
+  if (!["primary", "secondary", "tertiary"].includes(level)) return "Invalid category level.";
+
+  const parentRef = context.document?.parent?._ref;
+  const selfId = context.document?._id?.replace(/^drafts\./, "") ?? "";
+
+  if (!parentRef) {
+    if (level === "primary") return true;
+    return "A category without a parent must be primary.";
+  }
+
+  const client = context.getClient({ apiVersion: API_VERSION });
+  const chain = await inspectParentChain(client, parentRef, selfId);
+  if (chain.error) return chain.error;
+  if (chain.depth >= 2) return "Categories can only have three levels.";
+
+  const expectedLevel = chain.depth === 0 ? "secondary" : "tertiary";
+  return level === expectedLevel || `This category must be ${expectedLevel} for its parent.`;
+}
+
+async function validProductCategory(
+  value: { _ref?: string } | undefined,
+  context: {
+    getClient: (options: { apiVersion: string }) => AdminClient;
+  },
+) {
+  if (!value?._ref) return "Choose a tertiary category.";
+  const client = context.getClient({ apiVersion: API_VERSION });
+
+  const seen = new Set<string>();
+  let current: string | undefined = value._ref;
+  let depth = 0;
+  let inactive: string | null = null;
+
+  while (current) {
+    if (seen.has(current)) return "The selected category has a circular hierarchy.";
+    seen.add(current);
+
+    const doc: {
+      parent?: { _ref?: string };
+      isActive?: boolean;
+      name?: string;
+    } | null = await client.fetch(
+      `*[_id in [$id, "drafts." + $id]][0]{parent, isActive, name}`,
+      { id: current },
+    );
+
+    if (!doc) return "The selected category no longer exists.";
+    if (doc.isActive === false && !inactive) inactive = doc.name ?? "category";
+    if (!doc.parent?._ref) break;
+    current = doc.parent._ref;
+    depth += 1;
+    if (depth > 3) return "The selected category is nested too deeply.";
+  }
+
+  if (depth !== 2) {
+    return "Products must be assigned to a tertiary category (primary → secondary → tertiary).";
+  }
+  if (inactive) {
+    return `“${inactive}” or one of its parent categories is inactive. Reactivate it in Categories first.`;
+  }
+
   return true;
 }
 
@@ -79,15 +219,42 @@ export const category = defineType({
       title: "Parent category",
       type: "reference",
       to: [{ type: "category" }],
-      description: "Leave empty for a top-level section. Circular hierarchies are blocked.",
+      description:
+        "Primary categories have no parent. Secondary categories sit under a primary; tertiary categories sit under a secondary. Four levels are blocked.",
       validation: (Rule) => Rule.custom(validParent),
     }),
     defineField({
-      name: "stage",
-      title: "Build stage",
+      name: "level",
+      title: "Level",
       type: "string",
       description:
-        "Where this top-level category belongs on the homepage. Sub-categories inherit their top-level section automatically.",
+        "Derived from the parent chain on save: primary (no parent), secondary (under a primary) or tertiary (under a secondary). Products can only be assigned to tertiary categories.",
+      options: {
+        list: [
+          { title: "Primary", value: "primary" },
+          { title: "Secondary", value: "secondary" },
+          { title: "Tertiary", value: "tertiary" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "primary",
+      validation: (Rule) => Rule.required().custom(validLevel),
+    }),
+    defineField({
+      name: "isActive",
+      title: "Active on the website",
+      type: "boolean",
+      description:
+        "Inactive categories and their children disappear from navigation, category pages and search.",
+      initialValue: true,
+    }),
+    defineField({
+      name: "stage",
+      title: "Build stage (legacy)",
+      type: "string",
+      description:
+        "Legacy homepage grouping. Navigation now follows the three-level category tree, so this is optional and no longer required.",
+      hidden: true,
       options: {
         list: [
           { title: "Foundation & structure", value: "structure" },
@@ -139,6 +306,22 @@ export const category = defineType({
       initialValue: 100,
       validation: (Rule) => Rule.integer().min(0).max(9999),
     }),
+    defineField({
+      name: "seoTitle",
+      title: "SEO title",
+      type: "string",
+      description: "Optional. Shown in search results and the browser tab. Falls back to the category name.",
+      validation: (Rule) => Rule.max(60),
+    }),
+    defineField({
+      name: "seoDescription",
+      title: "SEO description",
+      type: "text",
+      rows: 2,
+      description:
+        "Optional. The meta description for this category page. Falls back to the category description.",
+      validation: (Rule) => Rule.max(160),
+    }),
   ],
   orderings: [
     {
@@ -159,22 +342,23 @@ export const category = defineType({
     select: {
       title: "name",
       subtitle: "slug.current",
-      stage: "stage",
+      level: "level",
       media: "image",
       parent: "parent.name",
+      active: "isActive",
     },
-    prepare: ({ title, subtitle, stage, media, parent }) => {
-      const stageLabel =
-        stage === "structure"
-          ? "Foundation & structure"
-          : stage === "finishing"
-            ? "Finishing"
-            : stage === "services"
-              ? "Electrical & plumbing"
-              : "Other";
+    prepare: ({ title, subtitle, level, media, parent, active }) => {
+      const levelLabel =
+        level === "primary"
+          ? "Primary"
+          : level === "secondary"
+            ? "Secondary"
+            : level === "tertiary"
+              ? "Tertiary"
+              : "Unlevelled";
       return {
-        title,
-        subtitle: [parent ? `in ${parent}` : null, stageLabel, subtitle]
+        title: `${active === false ? "○ " : ""}${title}`,
+        subtitle: [levelLabel, parent ? `in ${parent}` : null, subtitle]
           .filter(Boolean)
           .join(" · "),
         media,
@@ -526,7 +710,12 @@ export const product = defineType({
       type: "reference",
       to: [{ type: "category" }],
       group: "overview",
-      validation: (Rule) => Rule.required(),
+      description:
+        "Choose the primary, secondary and tertiary category. The product is stored against the tertiary category.",
+      components: {
+        input: CategoryHierarchyInput,
+      },
+      validation: (Rule) => Rule.required().custom(validProductCategory),
     }),
     defineField({
       name: "brand",

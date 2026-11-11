@@ -15,58 +15,65 @@ prefer Hindi. The design therefore assumes:
 - A journey of **श्रेणी चुनें → सामान चुनें → मात्रा भरें → WhatsApp / Call करें**.
 - No account, no online payment and no checkout.
 
-## Design concept: “Material House”
+## Design concept: “Make My Home” red-first marketplace
 
-The storefront is presented as a warm, contemporary Indian building-materials
-showroom rather than a generic ecommerce grid. The visual language combines:
+The storefront uses an original red-first identity (inspired by MakeMyTrip’s blue-and-orange discipline — strong primary, white card-based layouts, clear conversion hierarchy — but not MakeMyTrip’s colours, logo or travel-specific interface):
 
-- **Editorial calm** — generous ivory space, serif display type and quiet rules.
-- **Material honesty** — earthy colour, visible structure and labelled material
-  studies instead of glossy stock photography.
-- **Shop practicality** — large taps, clear Hindi labels and contact actions that
-  never disappear behind a menu.
+- **Confident red identity** — #D92332 brand red for header, navigation, primary CTAs, links and active states; deep red for hover/press.
+- **White card-based layouts** on a light grey page background (#F6F7F9), charcoal (#20242C) headings and dark panels, plenty of white space.
+- **Orange (#F5A623)** reserved strictly for offers/discount highlights, always with charcoal text.
+- **Conversion-focused** — prominent search, red CTAs, trust badges, clear enquiry journey.
 
-The name “Material House” is used as a small editorial motif in the hero and
-image captions. It is not a replacement business name.
+The former “Material House” warm-parchment identity and the interim blue identity have been retired; all components use the tokens below.
 
 ## Visual language
 
-The palette is warm, practical and high-contrast rather than promotional.
+The palette is bold, clean and conversion-focused rather than warm and editorial.
 
 | Token | Value | Use |
 | --- | --- | --- |
-| `canvas` | `#f7f3ea` | Page background |
-| `surface` | `#fcfaf5` | Cards, panels, inputs |
-| `sand` | `#efe7d9` | Section bands, image placeholders |
-| `sand-deep` | `#e2d6c2` | Stronger sand fills |
-| `ink` | `#1b2a22` | Primary text, primary buttons |
-| `ink-soft` | `#56645b` | Secondary text |
-| `ink-faint` | `#8b958d` | Metadata and helper text |
-| `forest` | `#1e3a2f` | Header bar, dark panels, primary actions |
-| `forest-deep` | `#13251c` | Footer and deepest contrast |
-| `clay` | `#b4552d` | Accent, links, selected states |
-| `clay-dark` | `#8f3f1d` | Accent hover |
-| `brass` | `#b08a4a` | Fine rules, eyebrows, quiet detail |
-| `line` | `#ddd3c3` | Borders and dividers |
-| `whatsapp` | `#2f6b4f` | WhatsApp actions and confirmed states |
+| `canvas` | `#F6F7F9` | Page background |
+| `surface` | `#FFFFFF` | Cards, panels, inputs |
+| `sand` | `#FFF0F1` | Highlighted section bands |
+| `sand-deep` | `#FFE0E3` | Stronger light-red fills |
+| `ink` | `#20242C` | Primary text, headings (dark charcoal) |
+| `ink-soft` | `#68717D` | Secondary text (AA-safe) |
+| `primary` | `#D92332` | Brand red: header, nav, primary CTAs, links, active states |
+| `primary-deep` | `#A91524` | Button hover/active, strong promotional sections |
+| `primary-dark` | `#861522` | Pressed/deepest promotional states |
+| `primary-soft` | `#FFF0F1` | Light red fills |
+| `accent` | `#F5A623` | Orange: offers, discount badges (charcoal text only) |
+| `accent-dark` | `#B45309` | Orange for small text on light |
+| `accent-soft` | `#FEF3DC` | Orange tint fills |
+| `line` | `#E7E9ED` | Borders and dividers |
+| `charcoal` | `#20242C` | Footer, hero, premium panels |
+| `success` | `#16A36A` | Success / verified indicators (icons, large text) |
+| `success-text` | `#0F7B4C` | Green text at AA on white |
+| `warning` | `#F5A623` | Warnings (paired with `warning-soft`/`warning-text`) |
+| `danger` | `#C62828` | Errors |
 
-Compatibility aliases (`paper`, `accent`, `moss`) remain for older utilities,
-but new work should use the Material House names.
+Compatibility aliases (`paper`, `paper-deep`, `moss`) remain for older utilities;
+new work uses the names in the table above.
 
 ## Typography
 
 | Role | Family | Notes |
 | --- | --- | --- |
-| Display | Fraunces + Noto Serif Devanagari | Headlines and editorial numerals |
-| Body | Manrope + Mukta | English and Devanagari body copy |
+| Display / UI | Inter (+ Mukta for Devanagari) | Headings, buttons, UI — Inter 700/800 |
+| Body | Inter | Latin body copy |
 | Metadata | Geist Mono | SKUs, material-study captions and small labels |
 
-- Display type is tight, medium-weight and slightly editorial; it is never used
-  for long paragraphs.
+- Inter is the primary face throughout; Hindi uses Mukta. The serif display face (Fraunces) has been retired.
+- Main page headings are 30–40px bold, section headings 24–28px, card headings 16–20px, body 14–16px, supporting labels 12–14px, buttons 14–16px semibold.
+- Corner radius is 12–16px across cards, buttons, inputs and panels.
+- Muted/secondary text uses `#68717D`, which measures 4.6:1 on the page background and 4.9:1 on white (AA).
+
 - Hindi line height is kept generous because Devanagari needs more vertical
   room than Latin text.
 - Numbers, units and SKUs use the monospace face so quantities and codes are
   easy to scan.
+- Headings use Inter 700/800 with tight leading; they are never set in the
+  monospace face.
 
 ## Layout and touch targets
 
@@ -193,7 +200,7 @@ The storefront has explicit states for:
 ## Accessibility
 
 - Semantic headings, lists, fieldsets/legends and breadcrumb navigation.
-- Visible `:focus-visible` outline using the clay accent.
+- Visible `:focus-visible` outline using the primary red (`--color-link`), 2px with 3px offset.
 - Variant selection uses a radio group with `aria-checked`.
 - Mobile navigation uses dialog semantics, Escape to close, focus trapping and
   focus restoration.

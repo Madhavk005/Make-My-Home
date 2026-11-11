@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { getBrandsWithCounts, getCatalogue, getSiteSettings } from "@/lib/catalogue";
-import { categoryHref } from "@/lib/categories";
+import { categoryHref, flattenCategoryTree } from "@/lib/categories";
 import { getLocale } from "@/lib/locale";
 import { productCountLabel, translate } from "@/lib/i18n";
-import type { CategoryStage } from "@/lib/types";
+import { getSiteOrigin } from "@/lib/site-origin";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { CategoryCard } from "@/components/category-card";
 import { SearchBox } from "@/components/search-box";
@@ -19,22 +19,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const STAGES: Array<{
-  key: Exclude<CategoryStage, "other">;
-  title: "stageStructure" | "stageFinishing" | "stageServices";
-  body: "stageStructureDesc" | "stageFinishingDesc" | "stageServicesDesc";
-}> = [
-  { key: "structure", title: "stageStructure", body: "stageStructureDesc" },
-  { key: "finishing", title: "stageFinishing", body: "stageFinishingDesc" },
-  { key: "services", title: "stageServices", body: "stageServicesDesc" },
-];
-
-function fallbackStage(index: number): CategoryStage {
-  if (index < 4) return "structure";
-  if (index < 9) return "finishing";
-  return "services";
-}
-
 export default async function CategoriesPage() {
   const [settings, catalogue, brands, locale] = await Promise.all([
     getSiteSettings().catch(() => null),
@@ -44,20 +28,33 @@ export default async function CategoriesPage() {
   ]);
 
   const { tree, totalProducts } = catalogue;
+  const allCategories = flattenCategoryTree(tree);
   const businessName = settings?.businessName?.trim() || "Make My Home";
-  const groups = STAGES.map((stage) => ({
-    ...stage,
-    categories: tree.filter(
-      (category, index) => (category.stage ?? fallbackStage(index)) === stage.key,
-    ),
-  })).filter((group) => group.categories.length > 0);
-  const other = tree.filter((category, index) => {
-    const stage = category.stage ?? fallbackStage(index);
-    return stage === "other";
-  });
+  const origin = getSiteOrigin();
+
+  const categoryJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: translate(locale, "categoriesTitle"),
+    description: translate(locale, "categoriesIntro"),
+    url: new URL("/categories", origin).toString(),
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: tree.map((category, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: category.name,
+        url: new URL(categoryHref(category.path), origin).toString(),
+      })),
+    },
+  };
 
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(categoryJsonLd) }}
+      />
       <section className="border-b border-line bg-sand/40">
         <div className="container">
           <Breadcrumbs
@@ -90,7 +87,9 @@ export default async function CategoriesPage() {
                   </p>
                 </div>
                 <div className="px-3">
-                  <p className="font-display text-2xl leading-none text-ink">{tree.length}</p>
+                  <p className="font-display text-2xl leading-none text-ink">
+                    {allCategories.length}
+                  </p>
                   <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.1em] text-ink-soft">
                     {translate(locale, "homeStatsCategories")}
                   </p>
@@ -123,94 +122,87 @@ export default async function CategoriesPage() {
         </div>
       ) : (
         <div className="container section">
-          {groups.map((group, groupIndex) => (
-            <section
-              key={group.key}
-              aria-labelledby={`stage-${group.key}`}
-              className={groupIndex > 0 ? "mt-14 border-t border-line pt-10 sm:mt-20" : ""}
-            >
-              <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
-                <div className="flex max-w-2xl items-start gap-4">
-                  <span className="mt-1 font-mono text-xs tracking-[0.12em] text-forest">
-                    {String(groupIndex + 1).padStart(2, "0")}
-                  </span>
-                  <div>
-                    <h2
-                      id={`stage-${group.key}`}
-                      className="font-display text-2xl font-medium tracking-tight text-ink sm:text-3xl"
-                    >
-                      {translate(locale, group.title)}
-                    </h2>
-                    <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">
-                      {translate(locale, group.body)}
+          {tree.map((primary, primaryIndex) => {
+            const secondaries = primary.children;
+            return (
+              <section
+                key={primary._id}
+                aria-labelledby={`primary-${primary._id}`}
+                className={primaryIndex > 0 ? "mt-14 border-t border-line pt-10 sm:mt-20" : ""}
+              >
+                <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
+                  <div className="flex max-w-2xl items-start gap-4">
+                    <span className="mt-1 font-mono text-xs tracking-[0.12em] text-primary-deep">
+                      {String(primaryIndex + 1).padStart(2, "0")}
+                    </span>
+                    <div>
+                      <h2
+                        id={`primary-${primary._id}`}
+                        className="font-display text-2xl font-medium tracking-tight text-ink sm:text-3xl"
+                      >
+                        <Link href={categoryHref(primary.path)} className="hover:text-primary-deep">
+                          {primary.name}
+                        </Link>
+                      </h2>
+                      {primary.description ? (
+                        <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">
+                          {primary.description}
+                        </p>
+                      ) : null}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-ink-faint">
+                      {productCountLabel(primary.productCount, locale)}
                     </p>
+                    <Link href={categoryHref(primary.path)} className="link-arrow text-xs">
+                      {translate(locale, "viewAll")}
+                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </Link>
                   </div>
                 </div>
-                <p className="text-xs font-bold uppercase tracking-[0.1em] text-ink-faint">
-                  {productCountLabel(
-                    group.categories.reduce((total, category) => total + category.productCount, 0),
-                    locale,
-                  )}
-                </p>
-              </div>
 
-              <div className="grid grid-cols-2 gap-x-4 gap-y-9 sm:gap-x-6 lg:grid-cols-3 lg:gap-x-7">
-                {group.categories.map((category) => (
-                  <div key={category._id} className="flex flex-col">
-                    <CategoryCard category={category} />
-                    {category.children.length > 0 ? (
-                      <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1 border-t border-line-soft pt-2.5">
-                        {category.children.slice(0, 4).map((child) => (
-                          <li key={child._id}>
-                            <Link
-                              href={categoryHref(child.path)}
-                              className="inline-flex min-h-8 items-center text-[11px] font-medium text-ink-soft transition-colors hover:text-forest"
-                            >
-                              {child.name}
-                            </Link>
-                          </li>
-                        ))}
-                        {category.children.length > 4 ? (
-                          <li>
-                            <Link
-                              href={categoryHref(category.path)}
-                              className="inline-flex min-h-8 items-center gap-1 text-[11px] font-bold text-forest"
-                            >
-                              +{category.children.length - 4}
-                            </Link>
-                          </li>
+                {secondaries.length > 0 ? (
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-9 sm:gap-x-6 lg:grid-cols-3 lg:gap-x-7">
+                    {secondaries.map((secondary) => (
+                      <div key={secondary._id} className="flex flex-col">
+                        <CategoryCard category={secondary} />
+                        {secondary.children.length > 0 ? (
+                          <ul className="mt-3 grid gap-x-3 gap-y-1 border-t border-line-soft pt-2.5">
+                            {secondary.children.map((tertiary) => (
+                              <li key={tertiary._id}>
+                                <Link
+                                  href={categoryHref(tertiary.path)}
+                                  className="inline-flex min-h-8 items-center text-[11px] font-medium text-ink-soft transition-colors hover:text-primary-deep"
+                                >
+                                  {tertiary.name}
+                                  {tertiary.productCount > 0 ? (
+                                    <span className="ml-1.5 font-mono text-[10px] text-ink-faint">
+                                      {tertiary.productCount}
+                                    </span>
+                                  ) : null}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
                         ) : null}
-                      </ul>
-                    ) : null}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </section>
-          ))}
-
-          {other.length > 0 ? (
-            <section className="mt-14 border-t border-line pt-10">
-              <h2 className="font-display text-2xl font-medium tracking-tight text-ink">
-                {translate(locale, "stageOther")}
-              </h2>
-              <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {other.map((category) => (
-                  <li key={category._id}>
-                    <Link
-                      href={categoryHref(category.path)}
-                      className="flex min-h-14 items-center justify-between gap-3 border border-line bg-surface px-4 py-3 transition-colors hover:border-clay/40 hover:bg-sand/40"
-                    >
-                      <span className="text-sm font-semibold text-ink">{category.name}</span>
-                      <span className="flex items-center gap-2 text-[11px] text-ink-soft">
-                        {productCountLabel(category.productCount, locale)}
-                        <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ) : null}
+                ) : (
+                  <Link
+                    href={categoryHref(primary.path)}
+                    className="flex min-h-14 items-center justify-between gap-3 border border-line bg-surface px-4 py-3 transition-colors hover:border-primary/40 hover:bg-sand/40"
+                  >
+                    <span className="text-sm font-semibold text-ink">
+                      {translate(locale, "browseAllProducts")}
+                    </span>
+                    <ArrowUpRight className="h-4 w-4 text-ink-soft" aria-hidden="true" />
+                  </Link>
+                )}
+              </section>
+            );
+          })}
 
           <div className="mt-16 flex flex-col justify-between gap-5 border-t border-line pt-8 sm:flex-row sm:items-center">
             <div>

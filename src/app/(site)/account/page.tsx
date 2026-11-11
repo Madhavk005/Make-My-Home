@@ -27,7 +27,7 @@ export default async function AccountPage() {
         <p className="page-header-desc">{translate(locale, "accountIntro")}</p>
       </header>
 
-      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg border border-line bg-paper-deep text-accent">
+      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg border border-line bg-paper-deep text-link">
         <UserRound className="h-6 w-6" aria-hidden="true" />
       </div>
 

@@ -95,18 +95,18 @@ export default async function BrandsPage() {
                           className="max-h-12 w-auto object-contain"
                         />
                       ) : (
-                        <span className="font-display text-3xl font-medium tracking-tight text-ink-soft/70 transition-colors group-hover:text-forest">
+                        <span className="font-display text-3xl font-medium tracking-tight text-ink-soft/70 transition-colors group-hover:text-primary-deep">
                           {brandMonogram(brand.name)}
                         </span>
                       )}
                     </div>
                     <div className="mt-6">
                       <div className="flex items-start justify-between gap-2">
-                        <h2 className="min-w-0 text-sm font-semibold leading-snug text-ink transition-colors group-hover:text-forest">
+                        <h2 className="min-w-0 text-sm font-semibold leading-snug text-ink transition-colors group-hover:text-primary-deep">
                           {brand.name}
                         </h2>
                         <ArrowUpRight
-                          className="h-4 w-4 shrink-0 text-ink-faint transition-colors group-hover:text-forest"
+                          className="h-4 w-4 shrink-0 text-ink-faint transition-colors group-hover:text-primary-deep"
                           aria-hidden="true"
                         />
                       </div>

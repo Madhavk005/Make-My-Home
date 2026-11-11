@@ -194,7 +194,7 @@ export default async function ProductPage(props: PageParams) {
             {product.category?.name ? (
               <Link
                 href={categoryHref}
-                className="hidden items-center gap-1.5 text-xs font-bold uppercase tracking-[0.1em] text-ink-soft transition-colors hover:text-forest sm:inline-flex"
+                className="hidden items-center gap-1.5 text-xs font-bold uppercase tracking-[0.1em] text-ink-soft transition-colors hover:text-primary-deep sm:inline-flex"
               >
                 {translate(locale, "viewCategory")}
                 <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -241,7 +241,7 @@ export default async function ProductPage(props: PageParams) {
               {product.brand ? (
                 <Link
                   href={`/brands/${encodeURIComponent(product.brand.slug)}`}
-                  className="inline-flex min-h-9 items-center text-xs font-bold uppercase tracking-[0.12em] text-forest transition-colors hover:text-forest-dark"
+                  className="inline-flex min-h-9 items-center text-xs font-bold uppercase tracking-[0.12em] text-primary-deep transition-colors hover:text-primary-deep"
                 >
                   {product.brand.name}
                 </Link>
@@ -251,7 +251,7 @@ export default async function ProductPage(props: PageParams) {
                 </span>
               )}
               {product.isDemo ? (
-                <span className="badge badge-brass">{translate(locale, "demo")}</span>
+                <span className="badge badge-accent">{translate(locale, "demo")}</span>
               ) : null}
             </div>
 
@@ -269,7 +269,7 @@ export default async function ProductPage(props: PageParams) {
                     {translate(locale, "category")}:{" "}
                     <Link
                       href={categoryHref}
-                      className="font-semibold text-ink underline-offset-2 hover:text-forest hover:underline"
+                      className="font-semibold text-ink underline-offset-2 hover:text-primary-deep hover:underline"
                     >
                       {product.category.name}
                     </Link>
@@ -331,7 +331,7 @@ export default async function ProductPage(props: PageParams) {
               </div>
               <div className="bg-surface p-4">
                 <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.12em] text-ink-faint">
-                  <PackageCheck className="h-3.5 w-3.5 text-forest" aria-hidden="true" />
+                  <PackageCheck className="h-3.5 w-3.5 text-primary-deep" aria-hidden="true" />
                   {translate(locale, "productDeliveryTitle")}
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-ink-soft">
@@ -340,7 +340,7 @@ export default async function ProductPage(props: PageParams) {
               </div>
             </div>
 
-            <p className="mt-6 flex items-start gap-2.5 border-l-2 border-brass pl-3 text-sm leading-relaxed text-ink-soft">
+            <p className="mt-6 flex items-start gap-2.5 border-l-2 border-primary pl-3 text-sm leading-relaxed text-ink-soft">
               <span>{translate(locale, "noCheckoutNote")}</span>
             </p>
 
@@ -363,7 +363,7 @@ export default async function ProductPage(props: PageParams) {
                 <div className="space-y-5">
                   {specGroups.map(([group, specs]) => (
                     <div key={group}>
-                      <h3 className="text-[10px] font-bold uppercase tracking-[0.14em] text-forest">
+                      <h3 className="text-[10px] font-bold uppercase tracking-[0.14em] text-primary-deep">
                         {group}
                       </h3>
                       <dl className="mt-2 divide-y divide-line border border-line bg-surface">

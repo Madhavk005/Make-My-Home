@@ -28,6 +28,7 @@ import {
   countProductsByCategory,
   descendantIds,
   findCategoryByPath,
+  findCategoryBySlug,
   flattenCategoryTree,
 } from "./categories";
 import { sanityFetch, isDemoDataEnabled } from "./sanity";
@@ -93,13 +94,14 @@ export const getCatalogue = cache(async () => {
   if (isDemoDataEnabled) {
     const categories = demoAllCategories();
     const tree = buildCategoryTree(categories);
+    const visibleCategories = flattenCategoryTree(tree);
     const counts = countProductsByCategory(
-      categories,
+      visibleCategories,
       demoProducts.map((p) => ({ categoryId: p.category?._id ?? null })),
     );
     attachProductCounts(tree, counts);
     return {
-      categories,
+      categories: visibleCategories,
       tree,
       counts,
       totalProducts: demoProducts.length,
@@ -108,7 +110,7 @@ export const getCatalogue = cache(async () => {
 
   const [categories, productRefs] = await Promise.all([
     getAllCategories(),
-    sanityFetch<Array<{ categoryId?: string | null }>>({
+    sanityFetch<Array<{ _id?: string; categoryId?: string | null }>>({
       query: productCategoryRefsQuery,
       tags: [TAGS.products],
       revalidate: 60,
@@ -116,11 +118,14 @@ export const getCatalogue = cache(async () => {
   ]);
 
   const tree = buildCategoryTree(categories);
-  const counts = countProductsByCategory(categories, productRefs ?? []);
+  // Public pages never see inactive branches. Keep the same filtered list for
+  // counts, search and descendant lookups so dead categories cannot leak in.
+  const visibleCategories = flattenCategoryTree(tree);
+  const counts = countProductsByCategory(visibleCategories, productRefs ?? []);
   attachProductCounts(tree, counts);
 
   return {
-    categories,
+    categories: visibleCategories,
     tree,
     counts,
     totalProducts: (productRefs ?? []).length,
@@ -140,22 +145,23 @@ export async function getCategoryPageData(slugPath: string[]) {
   if (isDemoDataEnabled) {
     const categories = demoAllCategories();
     const tree = buildCategoryTree(categories);
+    const visibleCategories = flattenCategoryTree(tree);
     const counts = countProductsByCategory(
-      categories,
+      visibleCategories,
       demoProducts.map((p) => ({ categoryId: p.category?._id ?? null })),
     );
     attachProductCounts(tree, counts);
     const category = findCategoryByPath(tree, slugPath);
     if (!category) return null;
 
-    const ids = descendantIds(categories, category._id);
+    const ids = descendantIds(visibleCategories, category._id);
     const children: CategoryNode[] = category.children;
-    const breadcrumb = categoryBreadcrumb(categories, category._id);
+    const breadcrumb = categoryBreadcrumb(visibleCategories, category._id);
 
     return {
       category,
       categoryIds: ids,
-      categories,
+      categories: visibleCategories,
       children,
       breadcrumb,
       totalProducts: category.productCount,
@@ -178,6 +184,30 @@ export async function getCategoryPageData(slugPath: string[]) {
     breadcrumb,
     totalProducts: category.productCount,
   };
+}
+
+/**
+ * Resolves an old category URL whose ancestors changed (for example when
+ * `Cement` moved under `Construction`). Slugs are globally unique, so the last
+ * segment is enough to find the category's new canonical path.
+ */
+export async function resolveCategoryLegacyPath(
+  slugPath: string[],
+): Promise<CategoryNode | null> {
+  const slug = slugPath.filter(Boolean).at(-1);
+  if (!slug) return null;
+
+  if (isDemoDataEnabled) {
+    const categories = demoAllCategories();
+    const tree = buildCategoryTree(categories);
+    const record = findCategoryBySlug(flattenCategoryTree(tree), slug);
+    return record ?? null;
+  }
+
+  const { categories, tree } = await getCatalogue();
+  const record = findCategoryBySlug(categories, slug);
+  if (!record) return null;
+  return flattenCategoryTree(tree).find((node) => node._id === record._id) ?? null;
 }
 
 export async function getProductList(input: CatalogQueryInput): Promise<ProductListResult> {

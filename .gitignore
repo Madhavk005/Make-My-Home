@@ -45,3 +45,7 @@ next-env.d.ts
 
 # Prisma Client is generated during install.
 /src/generated/prisma/
+
+# Local migration backups, audit reports and rollback artefacts
+/backups/
+/reports/

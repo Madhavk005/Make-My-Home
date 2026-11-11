@@ -63,13 +63,16 @@ export async function SiteFooter() {
   const companyLinks = [
     { label: hi ? "हमारे बारे में" : "About Us", href: "/about" },
     { label: hi ? "संपर्क" : "Contact Us", href: "/contact" },
+    { label: hi ? "सप्लायर / विक्रेता बनें" : "Supplier & Vendor enquiries", href: "/contact" },
     { label: hi ? "सामान सूची" : "Enquiry List", href: "/enquiry" },
+    { label: hi ? "नियम व शर्तें" : "Terms & Conditions", href: "/terms" },
+    { label: hi ? "गोपनीयता नीति" : "Privacy Policy", href: "/privacy" },
   ];
 
   return (
-    <footer className="no-print mt-auto bg-forest-deep text-surface">
+    <footer className="no-print mt-auto bg-charcoal text-surface">
       {/* Customer care CTA */}
-      <div className="border-b border-surface/10 bg-forest">
+      <div className="border-b border-surface/10 bg-primary">
         <div className="container flex flex-col gap-4 py-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-lg font-bold text-surface sm:text-xl">
@@ -83,7 +86,7 @@ export async function SiteFooter() {
             {phone ? (
               <a
                 href={`tel:${phone.replace(/[^\d+]/g, "")}`}
-                className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-white px-5 text-sm font-bold text-forest transition-colors hover:bg-canvas"
+                className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-white px-5 text-sm font-bold text-primary-deep transition-colors hover:bg-canvas"
               >
                 <Phone className="h-4 w-4" aria-hidden="true" />
                 {hi ? "कस्टमर केयर कॉल करें" : "Call Customer Care"}
@@ -111,19 +114,19 @@ export async function SiteFooter() {
             <Link href="/" className="inline-flex items-center gap-3" aria-label={businessName}>
               <span
                 aria-hidden="true"
-                className="grid h-11 w-11 place-items-center rounded-md bg-surface text-forest shadow-[inset_0_-3px_0_var(--color-brass)]"
+                className="grid h-11 w-11 place-items-center rounded-md bg-surface text-primary-deep shadow-[inset_0_-3px_0_var(--color-accent)]"
               >
                 <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M3 10.5 12 3l9 7.5" />
                   <path d="M5 9.5V21h14V9.5" />
-                  <path d="M9 21v-6h6v6" stroke="var(--color-brass)" />
+                  <path d="M9 21v-6h6v6" stroke="var(--color-accent)" />
                 </svg>
               </span>
               <span className="font-display text-2xl font-medium tracking-[-0.02em] text-surface">
                 {businessName}
               </span>
             </Link>
-            <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.16em] text-brass">
+            <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.16em] text-accent">
               Build Better. Live Better.
             </p>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-surface/70">
@@ -158,7 +161,7 @@ export async function SiteFooter() {
             ) : null}
 
             <div className="mt-6">
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.16em] text-brass">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.16em] text-accent">
                 {hi ? "भाषा" : "Language"}
               </p>
               <LanguageSwitch tone="dark" />
@@ -167,7 +170,7 @@ export async function SiteFooter() {
 
           {/* Shop by category */}
           <details className="group sm:open" open>
-            <summary className="flex cursor-pointer list-none items-center justify-between border-b border-surface/10 pb-3 text-sm font-bold uppercase tracking-[0.12em] text-brass sm:cursor-default sm:border-0 sm:pb-0 [&::-webkit-details-marker]:hidden">
+            <summary className="flex cursor-pointer list-none items-center justify-between border-b border-surface/10 pb-3 text-sm font-bold uppercase tracking-[0.12em] text-accent sm:cursor-default sm:border-0 sm:pb-0 [&::-webkit-details-marker]:hidden">
               {hi ? "श्रेणी से खरीदें" : "Shop by category"}
               <span className="text-surface/60 transition-transform group-open:rotate-180 sm:hidden">▾</span>
             </summary>
@@ -187,7 +190,7 @@ export async function SiteFooter() {
 
           {/* Professional services */}
           <details className="group" open>
-            <summary className="flex cursor-pointer list-none items-center justify-between border-b border-surface/10 pb-3 text-sm font-bold uppercase tracking-[0.12em] text-brass sm:cursor-default sm:border-0 sm:pb-0 [&::-webkit-details-marker]:hidden">
+            <summary className="flex cursor-pointer list-none items-center justify-between border-b border-surface/10 pb-3 text-sm font-bold uppercase tracking-[0.12em] text-accent sm:cursor-default sm:border-0 sm:pb-0 [&::-webkit-details-marker]:hidden">
               {hi ? "पेशेवर सेवाएँ" : "Professional services"}
               <span className="text-surface/60 transition-transform group-open:rotate-180 sm:hidden">▾</span>
             </summary>
@@ -207,7 +210,7 @@ export async function SiteFooter() {
 
           {/* Support and company */}
           <details className="group" open>
-            <summary className="flex cursor-pointer list-none items-center justify-between border-b border-surface/10 pb-3 text-sm font-bold uppercase tracking-[0.12em] text-brass sm:cursor-default sm:border-0 sm:pb-0 [&::-webkit-details-marker]:hidden">
+            <summary className="flex cursor-pointer list-none items-center justify-between border-b border-surface/10 pb-3 text-sm font-bold uppercase tracking-[0.12em] text-accent sm:cursor-default sm:border-0 sm:pb-0 [&::-webkit-details-marker]:hidden">
               {hi ? "सहायता और कंपनी" : "Support and company"}
               <span className="text-surface/60 transition-transform group-open:rotate-180 sm:hidden">▾</span>
             </summary>
@@ -242,19 +245,19 @@ export async function SiteFooter() {
             <div className="grid gap-3 text-sm text-surface/70 sm:grid-cols-2 lg:grid-cols-4">
               {phone ? (
                 <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} className="flex min-h-9 items-center gap-2 transition-colors hover:text-surface">
-                  <Phone className="h-4 w-4 shrink-0 text-brass" aria-hidden="true" />
+                  <Phone className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
                   {phone}
                 </a>
               ) : null}
               {settings?.email ? (
                 <a href={`mailto:${settings.email}`} className="flex min-h-9 items-center gap-2 break-all transition-colors hover:text-surface">
-                  <Mail className="h-4 w-4 shrink-0 text-brass" aria-hidden="true" />
+                  <Mail className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
                   {settings.email}
                 </a>
               ) : null}
               {openingHours ? (
                 <div className="flex items-start gap-2">
-                  <Clock className="mt-1 h-4 w-4 shrink-0 text-brass" aria-hidden="true" />
+                  <Clock className="mt-1 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
                   <span className="leading-relaxed">{openingHours}</span>
                 </div>
               ) : null}
@@ -272,9 +275,17 @@ export async function SiteFooter() {
       <div className="border-t border-surface/10">
         <div className="container flex flex-col gap-2 py-5 text-[11px] text-surface/60 sm:flex-row sm:items-center sm:justify-between">
           <p>© {year} {businessName}. {hi ? "जानकारी बदल सकती है।" : "Information may change."}</p>
-          <p className="max-w-xl sm:text-right">
-            {hi ? "दिखाई गई कीमतें सिर्फ़ अनुमान हैं। पक्की कीमत, स्टॉक और डिलीवरी दुकानदार से पूछें।" : "Prices shown are indicative. Confirm final price, stock and delivery with the shop."}
-          </p>
+          <div className="flex flex-wrap items-center gap-4">
+            <Link href="/terms" className="transition-colors hover:text-surface">
+              {hi ? "नियम व शर्तें" : "Terms"}
+            </Link>
+            <Link href="/privacy" className="transition-colors hover:text-surface">
+              {hi ? "गोपनीयता नीति" : "Privacy"}
+            </Link>
+            <p className="max-w-xl sm:text-right">
+              {hi ? "दिखाई गई कीमतें सिर्फ़ अनुमान हैं। पक्की कीमत, स्टॉक और डिलीवरी दुकानदार से पूछें।" : "Prices shown are indicative. Confirm final price, stock and delivery with the shop."}
+            </p>
+          </div>
         </div>
       </div>
     </footer>

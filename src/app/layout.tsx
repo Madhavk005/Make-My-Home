@@ -1,39 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import {
-  Fraunces,
-  Geist_Mono,
-  Manrope,
-  Mukta,
-  Noto_Serif_Devanagari,
-} from "next/font/google";
+import { Inter, Geist_Mono, Mukta } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Analytics } from "@/components/analytics";
 import { getLocale } from "@/lib/locale";
 import { getSiteOrigin } from "@/lib/site-origin";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  display: "swap",
-  axes: ["SOFT", "WONK", "opsz"],
-});
-
-const manrope = Manrope({
-  variable: "--font-manrope",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
 });
 
 const mukta = Mukta({
   variable: "--font-mukta",
-  subsets: ["devanagari", "latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-const notoSerifDevanagari = Noto_Serif_Devanagari({
-  variable: "--font-devanagari-display",
   subsets: ["devanagari", "latin"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
@@ -69,7 +49,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#F4F0E7",
+  themeColor: "#D92332",
   width: "device-width",
   initialScale: 1,
   minimumScale: 1,
@@ -85,8 +65,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang={locale === "hi" ? "hi-IN" : "en-IN"}
-      data-palette="warm-natural"
-      className={`${fraunces.variable} ${manrope.variable} ${mukta.variable} ${notoSerifDevanagari.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${mukta.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         <Providers>{children}</Providers>

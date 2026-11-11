@@ -70,7 +70,7 @@ export function AccountPanel({ allowPublicSignUp }: { allowPublicSignUp: boolean
         </div>
       </dl>
       {signOutError ? (
-        <p role="alert" className="mt-4 text-sm text-red-700">{signOutError}</p>
+        <p role="alert" className="mt-4 text-sm text-danger">{signOutError}</p>
       ) : null}
       <button
         type="button"

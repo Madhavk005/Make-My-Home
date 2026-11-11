@@ -21,7 +21,6 @@ import type { NavNode } from "@/lib/nav";
 import { ContactActions } from "./contact-actions";
 import { useLocale } from "./locale-provider";
 import { LanguageSwitch } from "./language-switch";
-import { PaletteOptions } from "./palette-switcher";
 
 type NavProps = {
   nodes: NavNode[];
@@ -37,7 +36,7 @@ function MegaMenu({ nodes, onNavigate }: { nodes: NavNode[]; onNavigate: () => v
   return (
     <div
       id="desktop-mega-menu"
-      className="absolute left-0 top-full z-50 mt-1 max-h-[min(78vh,46rem)] w-[min(94vw,72rem)] overflow-y-auto border border-line bg-surface shadow-[0_30px_70px_-25px_rgb(19_37_28_/_0.35)]"
+      className="absolute left-0 top-full z-50 mt-1 max-h-[min(78vh,46rem)] w-[min(94vw,72rem)] overflow-y-auto border border-line bg-surface shadow-[0_30px_70px_-25px_rgb(32_36_44_/_0.45)]"
     >
       <div className="grid gap-x-10 gap-y-8 p-7 sm:grid-cols-2 lg:grid-cols-3">
         {nodes.map((node, index) => (
@@ -48,7 +47,7 @@ function MegaMenu({ nodes, onNavigate }: { nodes: NavNode[]; onNavigate: () => v
             <Link
               href={node.href}
               onClick={onNavigate}
-              className="mt-1 flex min-h-11 items-center justify-between gap-2 border-b border-line pb-2 font-display text-lg font-medium tracking-tight text-ink transition-colors hover:text-forest"
+              className="mt-1 flex min-h-11 items-center justify-between gap-2 border-b border-line pb-2 font-display text-lg font-medium tracking-tight text-ink transition-colors hover:text-primary-deep"
             >
               <span>{node.name}</span>
               <ArrowRight className="h-4 w-4 shrink-0 text-ink-faint" aria-hidden="true" />
@@ -60,13 +59,39 @@ function MegaMenu({ nodes, onNavigate }: { nodes: NavNode[]; onNavigate: () => v
                     <Link
                       href={child.href}
                       onClick={onNavigate}
-                      className="flex min-h-10 items-center justify-between gap-2 py-1 text-sm text-ink-soft transition-colors hover:text-forest"
+                      className="flex min-h-10 items-center justify-between gap-2 py-1 text-sm font-medium text-ink-soft transition-colors hover:text-primary-deep"
                     >
                       <span>{child.name}</span>
                       {child.productCount > 0 ? (
                         <span className="font-mono text-[10px] text-ink-faint">{child.productCount}</span>
                       ) : null}
                     </Link>
+                    {child.children.length > 0 ? (
+                      <ul className="mb-1 ml-2 border-l border-line-soft pl-2">
+                        {child.children.slice(0, 5).map((grandchild) => (
+                          <li key={grandchild.id}>
+                            <Link
+                              href={grandchild.href}
+                              onClick={onNavigate}
+                              className="flex min-h-8 items-center text-[12px] text-ink-faint transition-colors hover:text-primary-deep"
+                            >
+                              {grandchild.name}
+                            </Link>
+                          </li>
+                        ))}
+                        {child.children.length > 5 ? (
+                          <li>
+                            <Link
+                              href={child.href}
+                              onClick={onNavigate}
+                              className="flex min-h-8 items-center text-[11px] font-bold text-primary-deep"
+                            >
+                              {t("viewAll")}
+                            </Link>
+                          </li>
+                        ) : null}
+                      </ul>
+                    ) : null}
                   </li>
                 ))}
                 {node.children.length > 8 ? (
@@ -74,7 +99,7 @@ function MegaMenu({ nodes, onNavigate }: { nodes: NavNode[]; onNavigate: () => v
                     <Link
                       href={node.href}
                       onClick={onNavigate}
-                      className="flex min-h-10 items-center gap-1 text-sm font-bold text-forest"
+                      className="flex min-h-10 items-center gap-1 text-sm font-bold text-primary-deep"
                     >
                       {t("viewAll")}
                       <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -92,7 +117,7 @@ function MegaMenu({ nodes, onNavigate }: { nodes: NavNode[]; onNavigate: () => v
           <Link
             href="/categories"
             onClick={onNavigate}
-            className="inline-flex min-h-11 items-center gap-1.5 text-sm font-bold text-forest hover:text-forest"
+            className="inline-flex min-h-11 items-center gap-1.5 text-sm font-bold text-primary-deep hover:text-charcoal"
           >
             {t("homeAllCategories")}
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -100,7 +125,7 @@ function MegaMenu({ nodes, onNavigate }: { nodes: NavNode[]; onNavigate: () => v
           <Link
             href="/search"
             onClick={onNavigate}
-            className="inline-flex min-h-11 items-center gap-1.5 text-sm font-bold text-forest hover:text-forest-dark"
+            className="inline-flex min-h-11 items-center gap-1.5 text-sm font-bold text-primary-deep hover:text-charcoal"
           >
             <PackageSearch className="h-4 w-4" aria-hidden="true" />
             {t("browseAllProducts")}
@@ -249,7 +274,7 @@ function NavAccordion({
             <Link
               href={node.href}
               onClick={onNavigate}
-              className="flex min-h-11 items-center gap-1.5 border-b border-line/50 py-2 text-sm font-bold text-forest"
+              className="flex min-h-11 items-center gap-1.5 border-b border-line/50 py-2 text-sm font-bold text-primary-deep"
             >
               <PackageSearch className="h-4 w-4" aria-hidden="true" />
               {t("seeProducts")} · {node.name}
@@ -265,7 +290,7 @@ function NavAccordion({
 }
 
 export function MobileNav({ nodes, phone, whatsappNumber, businessName, quickLinks }: NavProps) {
-  const { t, locale } = useLocale();
+  const { t } = useLocale();
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -324,7 +349,7 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName, quickLin
         aria-expanded={open}
         aria-controls="mobile-navigation"
         onClick={() => setOpen(true)}
-        className="inline-flex min-h-11 items-center gap-2 rounded-sm border border-line bg-surface px-3 text-sm font-bold text-ink transition-colors hover:border-ink/30 lg:hidden"
+        className="inline-flex min-h-11 items-center gap-2 rounded-md border border-white/30 bg-white/10 px-3 text-sm font-bold text-white transition-colors hover:bg-white/20 lg:hidden"
       >
         <Menu className="h-4 w-4" aria-hidden="true" />
         <span className="inline">{t("menu")}</span>
@@ -342,7 +367,7 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName, quickLin
                 type="button"
                 aria-label={t("closeMenu")}
                 onClick={close}
-                className="absolute inset-0 h-full w-full bg-forest-deep/55 backdrop-blur-[2px]"
+                className="absolute inset-0 h-full w-full bg-charcoal/60 backdrop-blur-[2px]"
               />
               <div
                 ref={dialogRef}
@@ -378,7 +403,7 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName, quickLin
                   onClick={close}
                   className="flex min-h-12 items-center gap-3 py-3 text-sm font-semibold text-ink"
                 >
-                  <PackageSearch className="h-5 w-5 text-forest" aria-hidden="true" />
+                  <PackageSearch className="h-5 w-5 text-primary-deep" aria-hidden="true" />
                   {t("allProducts")}
                 </Link>
                 <Link
@@ -386,7 +411,7 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName, quickLin
                   onClick={close}
                   className="flex min-h-12 items-center gap-3 py-3 text-sm font-semibold text-ink"
                 >
-                  <Tags className="h-5 w-5 text-forest" aria-hidden="true" />
+                  <Tags className="h-5 w-5 text-primary-deep" aria-hidden="true" />
                   {t("brands")}
                 </Link>
                 <Link
@@ -394,7 +419,7 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName, quickLin
                   onClick={close}
                   className="flex min-h-12 items-center gap-3 py-3 text-sm font-semibold text-ink"
                 >
-                  <Home className="h-5 w-5 text-forest" aria-hidden="true" />
+                  <Home className="h-5 w-5 text-primary-deep" aria-hidden="true" />
                   {t("navAbout")}
                 </Link>
                 <Link
@@ -402,7 +427,7 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName, quickLin
                   onClick={close}
                   className="flex min-h-12 items-center gap-3 py-3 text-sm font-semibold text-ink"
                 >
-                  <Phone className="h-5 w-5 text-forest" aria-hidden="true" />
+                  <Phone className="h-5 w-5 text-primary-deep" aria-hidden="true" />
                   {t("navContact")}
                 </Link>
               </div>
@@ -424,13 +449,6 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName, quickLin
                   </div>
                 </>
               ) : null}
-
-              <div className="mb-5 mt-5 border-b border-line pb-4">
-                <p className="type-eyebrow no-rule mb-2">
-                  {locale === "hi" ? "रंग योजना" : "Color palette"}
-                </p>
-                <PaletteOptions />
-              </div>
 
               <p className="type-eyebrow no-rule mb-2 mt-6">{t("categories")}</p>
               <ul>

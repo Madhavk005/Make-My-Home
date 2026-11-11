@@ -18,7 +18,7 @@ const components: PortableTextComponents = {
       </h4>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="mt-4 border-l-2 border-accent pl-4 text-sm italic leading-relaxed text-ink-soft">
+      <blockquote className="mt-4 border-l-2 border-primary pl-4 text-sm italic leading-relaxed text-ink-soft">
         {children}
       </blockquote>
     ),
@@ -45,7 +45,7 @@ const components: PortableTextComponents = {
       return (
         <a
           href={href}
-          className="font-medium text-accent underline underline-offset-2 hover:text-accent-dark"
+          className="font-medium text-link underline underline-offset-2 hover:text-accent-dark"
           {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
         >
           {children}

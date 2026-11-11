@@ -84,7 +84,7 @@ export default async function ContactPage() {
               </div>
             </div>
             <div className="border border-line bg-surface p-5 sm:p-6">
-              <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.14em] text-forest">
+              <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.14em] text-primary-deep">
                 <ClipboardList className="h-4 w-4" aria-hidden="true" />
                 {translate(locale, "contactAskTitle")}
               </p>
@@ -94,7 +94,7 @@ export default async function ContactPage() {
               <ol className="mt-4 space-y-2.5">
                 {askItems.map((item, index) => (
                   <li key={item} className="flex items-start gap-3 border-t border-line pt-2.5 text-sm text-ink">
-                    <span className="font-mono text-[10px] text-forest">
+                    <span className="font-mono text-[10px] text-primary-deep">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     {item}
@@ -135,7 +135,7 @@ export default async function ContactPage() {
             </div>
 
             <div className="border border-line bg-surface p-5">
-              <span className="grid h-11 w-11 place-items-center border border-line bg-sand text-forest">
+              <span className="grid h-11 w-11 place-items-center border border-line bg-sand text-primary-deep">
                 <Phone className="h-5 w-5" aria-hidden="true" />
               </span>
               <h2 className="mt-5 font-display text-xl font-medium tracking-tight text-ink">
@@ -158,7 +158,7 @@ export default async function ContactPage() {
             </div>
 
             <div className="border border-line bg-surface p-5">
-              <span className="grid h-11 w-11 place-items-center border border-line bg-sand text-brass">
+              <span className="grid h-11 w-11 place-items-center border border-line bg-sand text-primary-deep">
                 <MapPin className="h-5 w-5" aria-hidden="true" />
               </span>
               <h2 className="mt-5 font-display text-xl font-medium tracking-tight text-ink">
@@ -190,7 +190,7 @@ export default async function ContactPage() {
               <dl className="mt-6 max-w-xl divide-y divide-line border-y border-line text-sm">
                 <div className="grid grid-cols-[7rem_1fr] gap-3 py-3">
                   <dt className="flex items-center gap-2 text-ink-soft">
-                    <MapPin className="h-3.5 w-3.5 text-forest" aria-hidden="true" />
+                    <MapPin className="h-3.5 w-3.5 text-primary-deep" aria-hidden="true" />
                     {translate(locale, "footerVisit")}
                   </dt>
                   <dd className="whitespace-pre-line leading-relaxed text-ink">
@@ -199,7 +199,7 @@ export default async function ContactPage() {
                 </div>
                 <div className="grid grid-cols-[7rem_1fr] gap-3 py-3">
                   <dt className="flex items-center gap-2 text-ink-soft">
-                    <Clock className="h-3.5 w-3.5 text-forest" aria-hidden="true" />
+                    <Clock className="h-3.5 w-3.5 text-primary-deep" aria-hidden="true" />
                     {translate(locale, "contactHoursTitle")}
                   </dt>
                   <dd className="leading-relaxed text-ink">
@@ -209,7 +209,7 @@ export default async function ContactPage() {
                 {serviceArea ? (
                   <div className="grid grid-cols-[7rem_1fr] gap-3 py-3">
                     <dt className="flex items-center gap-2 text-ink-soft">
-                      <ShieldCheck className="h-3.5 w-3.5 text-forest" aria-hidden="true" />
+                      <ShieldCheck className="h-3.5 w-3.5 text-primary-deep" aria-hidden="true" />
                       {translate(locale, "homeServiceAreaLabel")}
                     </dt>
                     <dd className="leading-relaxed text-ink">{serviceArea}</dd>
@@ -218,13 +218,13 @@ export default async function ContactPage() {
                 {settings?.email ? (
                   <div className="grid grid-cols-[7rem_1fr] gap-3 py-3">
                     <dt className="flex items-center gap-2 text-ink-soft">
-                      <Mail className="h-3.5 w-3.5 text-forest" aria-hidden="true" />
+                      <Mail className="h-3.5 w-3.5 text-primary-deep" aria-hidden="true" />
                       {translate(locale, "contactEmail")}
                     </dt>
                     <dd className="break-all">
                       <a
                         href={`mailto:${settings.email}`}
-                        className="text-ink underline-offset-2 hover:text-forest hover:underline"
+                        className="text-ink underline-offset-2 hover:text-primary-deep hover:underline"
                       >
                         {settings.email}
                       </a>
@@ -234,8 +234,8 @@ export default async function ContactPage() {
               </dl>
             </div>
 
-            <div className="border border-forest-deep/15 bg-forest p-6 text-surface sm:p-8">
-              <p className="type-eyebrow text-brass">{translate(locale, "enquiryKicker")}</p>
+            <div className="border border-line bg-charcoal p-6 text-surface sm:p-8">
+              <p className="type-eyebrow text-surface">{translate(locale, "enquiryKicker")}</p>
               <h2 className="mt-3 font-display text-2xl font-medium tracking-tight">
                 {translate(locale, "homeCtaTitle")}
               </h2>

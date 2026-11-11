@@ -1,23 +1,18 @@
-import type { StructureResolver } from "sanity/structure";
+import type { ListItemBuilder, StructureResolver } from "sanity/structure";
 
 type CategoryRow = {
   _id: string;
   name: string;
+  slug?: string;
   parentId?: string | null;
-  stage?: string | null;
+  level?: string | null;
+  isActive?: boolean | null;
 };
 
 type BrandRow = {
   _id: string;
   name: string;
 };
-
-const STAGES = [
-  { value: "structure", title: "Foundation & structure" },
-  { value: "finishing", title: "Finishing" },
-  { value: "services", title: "Electrical & plumbing" },
-  { value: "other", title: "Other / unassigned" },
-] as const;
 
 const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION?.trim() || "2025-01-01";
 
@@ -54,6 +49,69 @@ function subtreeIds(categories: CategoryRow[], rootId: string): string[] {
   return ids;
 }
 
+function categoryChildren(categories: CategoryRow[], parentId: string | null): CategoryRow[] {
+  return categories
+    .filter((category) => (category.parentId ?? null) === parentId)
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+/**
+ * Studio tree for primary → secondary → tertiary categories. Each level opens
+ * a list containing the editor for that category, its children, and an "add
+ * child" action that prefills the parent reference and level.
+ */
+function categoryTreeItem(
+  S: Parameters<StructureResolver>[0],
+  category: CategoryRow,
+  categories: CategoryRow[],
+  depth: number,
+): ListItemBuilder {
+  const children = categoryChildren(categories, category._id);
+  const title = `${category.isActive === false ? "○ " : ""}${category.name}`;
+  const levelLabel =
+    depth === 0 ? "primary category" : depth === 1 ? "secondary category" : "tertiary category";
+
+  if (depth >= 2) {
+    return S.listItem()
+      .title(title)
+      .id(`category-node-${category._id}`)
+      .child(
+        S.document()
+          .title(category.name)
+          .schemaType("category")
+          .documentId(category._id),
+      );
+  }
+
+  return S.listItem()
+    .title(title)
+    .id(`category-node-${category._id}`)
+    .child(
+      S.list()
+        .title(`${category.name} · ${levelLabel}`)
+        .items([
+          S.listItem()
+            .title("Edit category")
+            .id(`category-edit-${category._id}`)
+            .child(S.document().title(category.name).schemaType("category").documentId(category._id)),
+          S.divider(),
+          ...children.map((child) => categoryTreeItem(S, child, categories, depth + 1)),
+          S.listItem()
+            .title(depth === 0 ? "Add secondary category" : "Add tertiary category")
+            .id(`category-add-${category._id}`)
+            .child(
+              S.document()
+                .title(depth === 0 ? "New secondary category" : "New tertiary category")
+                .schemaType("category")
+                .initialValueTemplate(
+                  depth === 0 ? "category-secondary" : "category-tertiary",
+                  { parentId: category._id },
+                ),
+            ),
+        ]),
+    );
+}
+
 export const structure: StructureResolver = async (S, context) => {
   let categories: CategoryRow[] = [];
   let brands: BrandRow[] = [];
@@ -65,8 +123,10 @@ export const structure: StructureResolver = async (S, context) => {
         `*[_type == "category" && defined(slug.current)] | order(order asc, name asc){
           _id,
           name,
+          "slug": slug.current,
           "parentId": parent._ref,
-          stage
+          level,
+          isActive
         }`,
       ),
       client.fetch<BrandRow[]>(
@@ -167,33 +227,27 @@ export const structure: StructureResolver = async (S, context) => {
         ]
       : [];
 
-  const categoriesByStage = S.listItem()
-    .title("Categories by build stage")
-    .id("categories-by-stage")
+  const categoriesTree = S.listItem()
+    .title("Category tree")
+    .id("category-tree")
     .child(
       S.list()
-        .title("Categories by build stage")
-        .items(
-          STAGES.map((stage) =>
-            S.listItem()
-              .title(stage.title)
-              .id(`categories-stage-${stage.value}`)
-              .child(
-                S.documentList()
-                  .title(stage.title)
-                  .schemaType("category")
-                  .apiVersion(apiVersion)
-                  .filter(
-                    '_type == "category" && !defined(parent) && (stage == $stage || (!defined(stage) && $stage == "other"))',
-                  )
-                  .params({ stage: stage.value })
-                  .defaultOrdering([
-                    { field: "order", direction: "asc" },
-                    { field: "name", direction: "asc" },
-                  ]),
-              ),
+        .title("Categories (primary → secondary → tertiary)")
+        .items([
+          ...categoryChildren(categories, null).map((category) =>
+            categoryTreeItem(S, category, categories, 0),
           ),
-        ),
+          S.divider(),
+          S.listItem()
+            .title("Add primary category")
+            .id("category-add-root")
+            .child(
+              S.document()
+                .title("New primary category")
+                .schemaType("category")
+                .initialValueTemplate("category-primary"),
+            ),
+        ]),
     );
 
   return S.list()
@@ -262,7 +316,21 @@ export const structure: StructureResolver = async (S, context) => {
               { field: "name", direction: "asc" },
             ]),
         ),
-      categoriesByStage,
+      categoriesTree,
+      S.listItem()
+        .title("Unlevelled categories")
+        .id("unlevelled-categories")
+        .child(
+          S.documentList()
+            .title("Categories missing a level")
+            .schemaType("category")
+            .apiVersion(apiVersion)
+            .filter('_type == "category" && !defined(level)')
+            .defaultOrdering([
+              { field: "order", direction: "asc" },
+              { field: "name", direction: "asc" },
+            ]),
+        ),
       S.listItem()
         .title("Brands")
         .id("brands")

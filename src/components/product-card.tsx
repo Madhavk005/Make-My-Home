@@ -43,13 +43,13 @@ export async function ProductCard({ product }: { product: ProductCardData }) {
                 </span>
               ) : null}
               {product.isDemo ? (
-                <span className="rounded-full border border-brass/40 bg-brass-soft/95 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#6d4f1f] backdrop-blur-sm">
+                <span className="rounded-full border border-primary/40 bg-accent-soft/95 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-[0.12em] text-accent-dark backdrop-blur-sm">
                   {translate(locale, "demo")}
                 </span>
               ) : null}
             </div>
             {product.featured ? (
-              <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-forest/90 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.12em] text-surface backdrop-blur-sm">
+              <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-primary/90 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.12em] text-surface backdrop-blur-sm">
                 {translate(locale, "homeFeaturedKicker")}
               </span>
             ) : null}
@@ -60,12 +60,12 @@ export async function ProductCard({ product }: { product: ProductCardData }) {
       <div className="flex flex-1 flex-col pt-3">
         <div className="flex items-start justify-between gap-2">
           <h3 className="min-w-0 text-[0.95rem] font-semibold leading-snug tracking-[-0.01em] text-ink">
-            <Link href={href} className="line-clamp-2 transition-colors hover:text-forest">
+            <Link href={href} className="line-clamp-2 transition-colors hover:text-primary-deep">
               {product.name}
             </Link>
           </h3>
           <ArrowUpRight
-            className="mt-0.5 h-4 w-4 shrink-0 text-ink-faint transition-colors group-hover:text-forest"
+            className="mt-0.5 h-4 w-4 shrink-0 text-ink-faint transition-colors group-hover:text-primary-deep"
             aria-hidden="true"
           />
         </div>
@@ -108,7 +108,7 @@ export async function ProductCard({ product }: { product: ProductCardData }) {
           <div className="mt-3 flex items-center gap-1.5 border-t border-line-soft pt-3">
             <Link
               href={href}
-              className="inline-flex min-h-10 flex-1 items-center justify-center rounded-xs border border-line bg-surface px-2 text-xs font-bold text-ink transition-colors hover:border-forest hover:bg-forest hover:text-surface"
+              className="inline-flex min-h-10 flex-1 items-center justify-center rounded-xs border border-line bg-surface px-2 text-xs font-bold text-ink transition-colors hover:border-primary hover:bg-primary hover:text-white"
             >
               {translate(locale, "viewDetails")}
             </Link>

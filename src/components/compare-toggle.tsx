@@ -17,8 +17,8 @@ export function CompareToggle({ productId, label }: { productId: string; label?:
       title={disabled ? "Compare list is full (max 4)" : "Add to compare"}
       className={`inline-flex min-h-9 items-center gap-1.5 rounded-xs border px-2.5 text-xs font-bold transition-colors ${
         active
-          ? "border-forest bg-forest text-surface"
-          : "border-line bg-surface text-ink hover:border-forest"
+          ? "border-primary bg-primary text-white"
+          : "border-line bg-surface text-ink hover:border-primary"
       } disabled:cursor-not-allowed disabled:opacity-40`}
     >
       <GitCompareArrows className="h-3.5 w-3.5" aria-hidden="true" />

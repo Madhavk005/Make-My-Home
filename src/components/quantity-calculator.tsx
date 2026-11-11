@@ -76,8 +76,8 @@ export function QuantityCalculator() {
             onClick={() => setTab(item.id)}
             className={`rounded-full border px-3 py-1.5 text-sm font-semibold ${
               tab === item.id
-                ? "border-forest bg-forest text-surface"
-                : "border-line text-ink hover:border-forest"
+                ? "border-primary bg-primary text-white"
+                : "border-line text-ink hover:border-primary"
             }`}
           >
             {item.label}
@@ -90,11 +90,11 @@ export function QuantityCalculator() {
           <>
             <div>
               <label className="mb-1.5 block text-sm font-semibold text-ink">Area (sq m)</label>
-              <input value={area} onChange={(e) => setArea(e.target.value)} type="number" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-accent" />
+              <input value={area} onChange={(e) => setArea(e.target.value)} type="number" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
             </div>
             <div>
               <label className="mb-1.5 block text-sm font-semibold text-ink">Thickness (m)</label>
-              <input value={thickness} onChange={(e) => setThickness(e.target.value)} type="number" step="0.01" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-accent" />
+              <input value={thickness} onChange={(e) => setThickness(e.target.value)} type="number" step="0.01" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
             </div>
             {cementBags !== null ? (
               <p className="rounded-lg bg-green-50 p-3 text-sm text-green-700">
@@ -108,21 +108,21 @@ export function QuantityCalculator() {
           <>
             <div>
               <label className="mb-1.5 block text-sm font-semibold text-ink">Floor area (sq m)</label>
-              <input value={floorArea} onChange={(e) => setFloorArea(e.target.value)} type="number" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-accent" />
+              <input value={floorArea} onChange={(e) => setFloorArea(e.target.value)} type="number" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="mb-1.5 block text-sm font-semibold text-ink">Tile length (m)</label>
-                <input value={tileLength} onChange={(e) => setTileLength(e.target.value)} type="number" step="0.01" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-accent" />
+                <input value={tileLength} onChange={(e) => setTileLength(e.target.value)} type="number" step="0.01" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
               </div>
               <div>
                 <label className="mb-1.5 block text-sm font-semibold text-ink">Tile width (m)</label>
-                <input value={tileWidth} onChange={(e) => setTileWidth(e.target.value)} type="number" step="0.01" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-accent" />
+                <input value={tileWidth} onChange={(e) => setTileWidth(e.target.value)} type="number" step="0.01" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
               </div>
             </div>
             <div>
               <label className="mb-1.5 block text-sm font-semibold text-ink">Waste (%)</label>
-              <input value={waste} onChange={(e) => setWaste(e.target.value)} type="number" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-accent" />
+              <input value={waste} onChange={(e) => setWaste(e.target.value)} type="number" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
             </div>
             {tilesNeeded !== null ? (
               <p className="rounded-lg bg-green-50 p-3 text-sm text-green-700">
@@ -136,11 +136,11 @@ export function QuantityCalculator() {
           <>
             <div>
               <label className="mb-1.5 block text-sm font-semibold text-ink">Required length (m)</label>
-              <input value={pipeLength} onChange={(e) => setPipeLength(e.target.value)} type="number" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-accent" />
+              <input value={pipeLength} onChange={(e) => setPipeLength(e.target.value)} type="number" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
             </div>
             <div>
               <label className="mb-1.5 block text-sm font-semibold text-ink">Standard pipe length (m)</label>
-              <input value={pipeStd} onChange={(e) => setPipeStd(e.target.value)} type="number" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-accent" />
+              <input value={pipeStd} onChange={(e) => setPipeStd(e.target.value)} type="number" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
             </div>
             {pipesNeeded !== null ? (
               <p className="rounded-lg bg-green-50 p-3 text-sm text-green-700">
@@ -154,7 +154,7 @@ export function QuantityCalculator() {
           <>
             <div>
               <label className="mb-1.5 block text-sm font-semibold text-ink">Volume (cubic m)</label>
-              <input value={aggVolume} onChange={(e) => setAggVolume(e.target.value)} type="number" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-accent" />
+              <input value={aggVolume} onChange={(e) => setAggVolume(e.target.value)} type="number" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
             </div>
             {aggregateKg !== null ? (
               <p className="rounded-lg bg-green-50 p-3 text-sm text-green-700">

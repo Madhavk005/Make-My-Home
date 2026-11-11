@@ -46,3 +46,26 @@ export async function requireAdmin() {
 
   return session;
 }
+
+/**
+ * Route-handler variant of `requireAdmin`. Returns a JSON-friendly status
+ * instead of redirecting, so API clients never receive an HTML login page.
+ */
+export async function getAdminApiSession(): Promise<
+  | { session: Awaited<ReturnType<typeof auth.api.getSession>>; status: 200 }
+  | { session: null; status: 401 | 403 }
+> {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user?.email) {
+    return { session: null, status: 401 };
+  }
+
+  if (!isAdminEmail(session.user.email)) {
+    return { session: null, status: 403 };
+  }
+
+  return { session, status: 200 };
+}

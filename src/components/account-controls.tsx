@@ -15,14 +15,14 @@ export function AccountControls() {
       {session ? (
         <Link
           href="/account"
-          className="inline-flex min-h-11 items-center rounded-md px-2.5 text-sm font-semibold text-ink-soft transition-colors hover:text-ink"
+          className="inline-flex min-h-11 items-center rounded-md px-2.5 text-sm font-semibold text-white/90 transition-colors hover:text-white"
         >
           {session.user.name || t("account")}
         </Link>
       ) : (
         <Link
           href="/sign-in"
-          className="inline-flex min-h-11 items-center rounded-md px-2.5 text-sm font-semibold text-ink-soft transition-colors hover:text-ink"
+          className="inline-flex min-h-11 items-center rounded-md px-2.5 text-sm font-semibold text-white/90 transition-colors hover:text-white"
         >
           {t("signIn")}
         </Link>

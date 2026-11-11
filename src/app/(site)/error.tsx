@@ -21,7 +21,7 @@ export default function SiteError({
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center px-4 py-16 sm:px-6">
       <div className="rounded-lg border border-line bg-white p-8 text-center">
-        <span className="mx-auto grid h-14 w-14 place-items-center rounded-full border border-line bg-paper text-accent">
+        <span className="mx-auto grid h-14 w-14 place-items-center rounded-full border border-line bg-paper text-link">
           <AlertTriangle className="h-6 w-6" aria-hidden="true" />
         </span>
         <h1 className="mt-4 text-2xl font-bold tracking-tight text-ink sm:text-3xl">

@@ -96,7 +96,7 @@ export default async function BrandPage(props: PageParams) {
                       href={brand.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex min-h-9 items-center gap-1.5 font-semibold text-ink-soft underline-offset-2 hover:text-forest hover:underline"
+                      className="inline-flex min-h-9 items-center gap-1.5 font-semibold text-ink-soft underline-offset-2 hover:text-primary-deep hover:underline"
                     >
                       <Globe className="h-3.5 w-3.5" aria-hidden="true" />
                       {translate(locale, "viewBrandWebsite")}

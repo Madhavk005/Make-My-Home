@@ -14,6 +14,7 @@ import {
   type CatalogFilters,
 } from "@/lib/filters";
 import type { Availability, Brand, CategoryNode, Facets } from "@/lib/types";
+import { flattenCategoryTree } from "@/lib/categories";
 
 type FilterPanelProps = {
   basePath: string;
@@ -32,11 +33,13 @@ function OptionRow({
   active,
   label,
   count,
+  indent = 0,
 }: {
   href: string;
   active: boolean;
   label: string;
   count?: number;
+  indent?: number;
 }) {
   return (
     <li>
@@ -50,13 +53,16 @@ function OptionRow({
           aria-hidden="true"
           className={`grid h-4 w-4 shrink-0 place-items-center border transition-colors ${
             active
-              ? "border-clay bg-clay text-white"
+              ? "border-primary bg-accent text-charcoal"
               : "border-line bg-surface group-hover:border-ink/40"
           }`}
         >
           {active ? <Check className="h-3 w-3" /> : null}
         </span>
-        <span className={`min-w-0 flex-1 ${active ? "font-semibold text-ink" : ""}`}>
+        <span
+          className={`min-w-0 flex-1 ${active ? "font-semibold text-ink" : ""}`}
+          style={indent > 0 ? { paddingLeft: `${indent * 10}px` } : undefined}
+        >
           {label}
         </span>
         {typeof count === "number" ? (
@@ -122,7 +128,7 @@ async function FilterGroups({
         <Link
           href={clearHref}
           scroll={false}
-          className="inline-flex min-h-10 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.1em] text-forest transition-colors hover:text-forest-dark"
+          className="inline-flex min-h-10 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.1em] text-primary-deep transition-colors hover:text-primary-deep"
         >
           <X className="h-3.5 w-3.5" aria-hidden="true" />
           {translate(locale, "clearFilters")}
@@ -133,7 +139,7 @@ async function FilterGroups({
         <fieldset className={groupClass}>
           <legend className={legendClass}>{translate(locale, "section")}</legend>
           <ul>
-            {categoryOptions.map((category) => {
+            {flattenCategoryTree(categoryOptions).map((category) => {
               const path = category.path.join("/");
               const active = filters.category === path;
               return (
@@ -146,6 +152,7 @@ async function FilterGroups({
                   active={active}
                   label={category.name}
                   count={category.productCount}
+                  indent={category.depth}
                 />
               );
             })}
@@ -228,7 +235,7 @@ async function FilterGroups({
                 inputMode="numeric"
                 placeholder={translate(locale, "minPrice")}
                 defaultValue={typeof filters.min === "number" ? filters.min : ""}
-                className="h-10 w-full min-w-0 border border-line bg-surface px-2.5 text-sm text-ink placeholder:text-ink-faint focus:border-clay focus:outline-none"
+                className="h-10 w-full min-w-0 border border-line bg-surface px-2.5 text-sm text-ink placeholder:text-ink-faint focus:border-primary focus:outline-none"
               />
             </div>
             <div>
@@ -244,7 +251,7 @@ async function FilterGroups({
                 inputMode="numeric"
                 placeholder={translate(locale, "maxPrice")}
                 defaultValue={typeof filters.max === "number" ? filters.max : ""}
-                className="h-10 w-full min-w-0 border border-line bg-surface px-2.5 text-sm text-ink placeholder:text-ink-faint focus:border-clay focus:outline-none"
+                className="h-10 w-full min-w-0 border border-line bg-surface px-2.5 text-sm text-ink placeholder:text-ink-faint focus:border-primary focus:outline-none"
               />
             </div>
           </div>
@@ -307,7 +314,7 @@ export async function FilterPanel(props: FilterPanelProps) {
             <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
             {translate(locale, "filters")}
             {count > 0 ? (
-              <span className="grid h-5 min-w-5 place-items-center rounded-full bg-clay px-1.5 text-[10px] font-bold leading-none text-white">
+              <span className="grid h-5 min-w-5 place-items-center rounded-full bg-accent px-1.5 text-[10px] font-bold leading-none text-charcoal">
                 {count}
               </span>
             ) : null}
@@ -327,7 +334,7 @@ export async function FilterPanel(props: FilterPanelProps) {
             <SlidersHorizontal className="h-4 w-4 text-ink-soft" aria-hidden="true" />
             {translate(locale, "filters")}
             {count > 0 ? (
-              <span className="ml-auto font-sans text-[10px] font-bold uppercase tracking-[0.1em] text-forest">
+              <span className="ml-auto font-sans text-[10px] font-bold uppercase tracking-[0.1em] text-primary-deep">
                 {count}
               </span>
             ) : null}
@@ -407,7 +414,7 @@ export async function ActiveFilterChips({
           <Link
             href={chip.href}
             scroll={false}
-            className="inline-flex min-h-9 items-center gap-1.5 border border-line bg-surface px-2.5 text-xs font-medium text-ink transition-colors hover:border-clay hover:text-forest"
+            className="inline-flex min-h-9 items-center gap-1.5 border border-line bg-surface px-2.5 text-xs font-medium text-ink transition-colors hover:border-primary hover:text-primary-deep"
           >
             {chip.label}
             <X className="h-3.5 w-3.5 text-ink-faint" aria-hidden="true" />

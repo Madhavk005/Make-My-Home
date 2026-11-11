@@ -7,6 +7,7 @@ import {
   useEffect,
   useRef,
   useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 import { Check, Palette } from "lucide-react";
@@ -56,6 +57,8 @@ function isPaletteId(value: string | null): value is PaletteId {
   return paletteOptions.some((option) => option.id === value);
 }
 
+const PALETTE_EVENT = "make-my-home-palette-change";
+
 function applyPalette(palette: PaletteId) {
   document.documentElement.dataset.palette = palette;
   const themeColor = paletteOptions.find((option) => option.id === palette)?.themeColor;
@@ -64,40 +67,53 @@ function applyPalette(palette: PaletteId) {
   }
 }
 
+function readStoredPalette(): PaletteId {
+  try {
+    const savedPalette = localStorage.getItem(STORAGE_KEY);
+    return isPaletteId(savedPalette) ? savedPalette : DEFAULT_PALETTE;
+  } catch {
+    // The default palette remains available if browser storage is disabled.
+    return DEFAULT_PALETTE;
+  }
+}
+
+function getServerPalette(): PaletteId {
+  return DEFAULT_PALETTE;
+}
+
+function subscribeToPalette(callback: () => void) {
+  const onStorage = (event: StorageEvent) => {
+    if (event.key === STORAGE_KEY) callback();
+  };
+
+  window.addEventListener("storage", onStorage);
+  window.addEventListener(PALETTE_EVENT, callback);
+
+  return () => {
+    window.removeEventListener("storage", onStorage);
+    window.removeEventListener(PALETTE_EVENT, callback);
+  };
+}
+
 export function PaletteProvider({ children }: { children: ReactNode }) {
-  const [palette, setPaletteState] = useState<PaletteId>(DEFAULT_PALETTE);
+  const palette = useSyncExternalStore(
+    subscribeToPalette,
+    readStoredPalette,
+    getServerPalette,
+  );
 
   useEffect(() => {
-    let initialPalette = DEFAULT_PALETTE;
-    try {
-      const savedPalette = localStorage.getItem(STORAGE_KEY);
-      if (isPaletteId(savedPalette)) initialPalette = savedPalette;
-    } catch {
-      // The default palette remains available if browser storage is disabled.
-    }
-
-    setPaletteState(initialPalette);
-    applyPalette(initialPalette);
-
-    const onStorage = (event: StorageEvent) => {
-      if (event.key !== STORAGE_KEY) return;
-      const nextPalette = isPaletteId(event.newValue) ? event.newValue : DEFAULT_PALETTE;
-      setPaletteState(nextPalette);
-      applyPalette(nextPalette);
-    };
-
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
-  }, []);
+    applyPalette(palette);
+  }, [palette]);
 
   const setPalette = useCallback((nextPalette: PaletteId) => {
-    setPaletteState(nextPalette);
-    applyPalette(nextPalette);
     try {
       localStorage.setItem(STORAGE_KEY, nextPalette);
     } catch {
       // The selected palette still applies for this visit if storage is disabled.
     }
+    applyPalette(nextPalette);
+    window.dispatchEvent(new Event(PALETTE_EVENT));
   }, []);
 
   return (
@@ -139,7 +155,7 @@ export function PaletteOptions({ onSelect }: { onSelect?: () => void }) {
             }}
             className={`flex min-h-11 items-center gap-2 rounded-md border px-3 text-left text-xs font-semibold transition-colors ${
               active
-                ? "border-forest bg-forest text-surface shadow-sm"
+                ? "border-primary bg-primary text-white shadow-sm"
                 : "border-transparent text-ink-soft hover:border-line hover:bg-sand"
             }`}
           >
@@ -201,7 +217,7 @@ export function PaletteSwitcher() {
         aria-expanded={open}
         aria-controls="palette-picker-options"
         onClick={() => setOpen((value) => !value)}
-        className="inline-flex min-h-9 items-center gap-1.5 rounded-sm border border-line bg-surface px-2.5 text-xs font-semibold text-ink-soft transition-colors hover:border-forest hover:text-forest"
+        className="inline-flex min-h-9 items-center gap-1.5 rounded-sm border border-line bg-surface px-2.5 text-xs font-semibold text-ink-soft transition-colors hover:border-primary hover:text-primary-deep"
       >
         <Palette className="h-4 w-4" aria-hidden="true" />
         <span>{locale === "hi" ? "रंग" : "Palette"}</span>

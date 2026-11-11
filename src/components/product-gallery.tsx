@@ -28,11 +28,11 @@ export function ProductGallery({
       <div className="relative border border-line bg-sand p-2.5 sm:p-3">
         <span
           aria-hidden="true"
-          className="absolute left-0 top-0 z-10 h-8 w-8 border-l-2 border-t-2 border-brass"
+          className="absolute left-0 top-0 z-10 h-8 w-8 border-l-2 border-t-2 border-primary"
         />
         <span
           aria-hidden="true"
-          className="absolute bottom-0 right-0 z-10 h-8 w-8 border-b-2 border-r-2 border-brass"
+          className="absolute bottom-0 right-0 z-10 h-8 w-8 border-b-2 border-r-2 border-primary"
         />
         <ProductImage
           src={current?.url}
@@ -66,7 +66,7 @@ export function ProductGallery({
                 aria-current={index === active ? "true" : undefined}
                 className={`block min-h-11 w-full overflow-hidden border p-0.5 transition-colors ${
                   index === active
-                    ? "border-clay"
+                    ? "border-primary"
                     : "border-line hover:border-ink/40"
                 }`}
               >

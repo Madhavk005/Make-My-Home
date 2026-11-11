@@ -139,7 +139,7 @@ export default async function SearchPage(props: PageProps<"/search">) {
 
       <div className="container section-sm">
         {demo ? (
-          <p className="mb-5 border-l-2 border-brass pl-3 text-[11px] leading-relaxed text-ink-soft">
+          <p className="mb-5 border-l-2 border-primary pl-3 text-[11px] leading-relaxed text-ink-soft">
             {translate(locale, "searchDemoNote")}
           </p>
         ) : null}
@@ -151,7 +151,7 @@ export default async function SearchPage(props: PageProps<"/search">) {
               <Link
                 key={term}
                 href={`/search?q=${encodeURIComponent(term)}`}
-                className="rounded-full border border-line px-3 py-1 text-sm text-ink transition-colors hover:border-accent hover:text-accent"
+                className="rounded-full border border-line px-3 py-1 text-sm text-ink transition-colors hover:border-primary hover:text-link"
               >
                 {term}
               </Link>
@@ -197,7 +197,7 @@ export default async function SearchPage(props: PageProps<"/search">) {
                 <li key={category._id}>
                   <Link
                     href={categoryHref(category.path)}
-                    className="flex min-h-20 flex-col justify-between border border-line bg-surface p-3.5 transition-colors hover:border-clay/40 hover:bg-sand/40"
+                    className="flex min-h-20 flex-col justify-between border border-line bg-surface p-3.5 transition-colors hover:border-primary/40 hover:bg-sand/40"
                   >
                     <span className="text-sm font-semibold leading-snug text-ink">{category.name}</span>
                     <span className="mt-3 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.08em] text-ink-faint">

@@ -39,6 +39,7 @@ type CategoryRow = {
   name: string;
   slug: string;
   parentId: string | null;
+  isActive?: boolean | null;
   specificationTemplate?: string[] | null;
 };
 
@@ -399,7 +400,7 @@ function buildCategoryPaths(categories: CategoryRow[]) {
 async function fetchCatalog(client: SanityClient) {
   const [categories, brands, products] = await Promise.all([
     client.fetch<CategoryRow[]>(
-      `*[_type == "category"]{_id, name, "slug": slug.current, "parentId": parent._ref, specificationTemplate}`,
+      `*[_type == "category"]{_id, name, "slug": slug.current, "parentId": parent._ref, isActive, specificationTemplate}`,
     ),
     client.fetch<BrandRow[]>(`*[_type == "brand"]{_id, name, "slug": slug.current}`),
     client.fetch<ExistingProduct[]>(
@@ -681,13 +682,23 @@ async function main() {
     let categoryId: string | null = null;
     let resolvedCategory: CategoryRow | null = null;
     if (!categoryInput) {
-      errors.push("Category is required (use a path such as 'Cement > OPC').");
+      errors.push(
+        "Category is required (use the full three-level path, e.g. 'Construction > Cement > OPC Cement').",
+      );
     } else {
       const category = categoryIndex.find(categoryInput);
+      const path = category ? categoryIndex.resolve(category._id) : null;
+
       if (!category) {
         errors.push(
-          `Category "${categoryInput}" was not found. Create it in Sanity Studio first, or use the full name path.`,
+          `Category "${categoryInput}" was not found. Create it in Sanity Studio first, or use the full three-level path.`,
         );
+      } else if (!path || path.names.length !== 3) {
+        errors.push(
+          `Category "${categoryInput}" is not a tertiary category. Products must be assigned to primary → secondary → tertiary.`,
+        );
+      } else if (category.isActive === false) {
+        errors.push(`Category "${categoryInput}" is inactive. Reactivate it before importing products.`);
       } else {
         categoryId = category._id;
         resolvedCategory = category;
