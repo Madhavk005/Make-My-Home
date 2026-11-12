@@ -71,7 +71,10 @@ export async function CatalogResults({
 
         {products.length > 0 ? (
           <>
-            <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-5 md:grid-cols-3 xl:grid-cols-4">
+            <h2 id="catalog-results-heading" className="sr-only">
+              {translate(locale, "resultsHeading")}
+            </h2>
+            <ul aria-labelledby="catalog-results-heading" className="mt-5 grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-5 md:grid-cols-3 xl:grid-cols-4">
               {products.map((product) => (
                 <li key={product._id}>
                   <ProductCard product={product} />

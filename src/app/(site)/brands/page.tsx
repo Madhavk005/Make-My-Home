@@ -52,13 +52,13 @@ export default async function BrandsPage() {
             <div className="grid grid-cols-2 divide-x divide-line border-y border-line py-3">
               <div className="pr-3">
                 <p className="font-display text-2xl leading-none text-ink">{withProducts.length}</p>
-                <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.1em] text-ink-soft">
+                <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.1em] text-ink-soft">
                   {translate(locale, "homeStatsBrands")}
                 </p>
               </div>
               <div className="pl-3">
                 <p className="font-display text-2xl leading-none text-ink">{totalProducts}</p>
-                <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.1em] text-ink-soft">
+                <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.1em] text-ink-soft">
                   {translate(locale, "homeStatsProducts")}
                 </p>
               </div>
@@ -110,7 +110,7 @@ export default async function BrandsPage() {
                           aria-hidden="true"
                         />
                       </div>
-                      <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.08em] text-ink-faint">
+                      <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.08em] text-ink-faint">
                         {productCountLabel(count, locale)}
                       </p>
                       {brand.description ? (

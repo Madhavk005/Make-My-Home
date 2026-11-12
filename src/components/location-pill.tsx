@@ -51,7 +51,7 @@ export function LocationPill({
       >
         <MapPin className="h-4 w-4 shrink-0 text-white" aria-hidden="true" />
         <span className="leading-tight">
-          <span className="block text-[10px] font-medium uppercase tracking-[0.08em] text-white/70">
+          <span className="block text-[11px] font-medium uppercase tracking-[0.08em] text-white/70">
             {hi ? "डिलीवरी क्षेत्र" : "Deliver to"}
           </span>
           <span className="block max-w-40 truncate text-xs font-bold text-white">

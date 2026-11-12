@@ -17,7 +17,7 @@ export function EnquiryLink({ className = "" }: { className?: string }) {
       <ClipboardList className="h-4 w-4 text-white" aria-hidden="true" />
       <span className="hidden md:inline">{t("enquiryList")}</span>
       {hydrated && totalQuantity > 0 ? (
-        <span className="inline-flex min-w-5 items-center justify-center rounded-full bg-accent px-1.5 py-0.5 text-[10px] font-bold leading-none text-charcoal">
+        <span className="inline-flex min-w-5 items-center justify-center rounded-full bg-accent px-1.5 py-0.5 text-[11px] font-bold leading-none text-charcoal">
           {totalQuantity > 99 ? "99+" : totalQuantity}
         </span>
       ) : null}

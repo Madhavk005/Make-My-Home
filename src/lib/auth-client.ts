@@ -1,5 +1,4 @@
 import { createAuthClient } from "better-auth/react";
-import { dashClient } from "@better-auth/infra/client";
 
 /**
  * Use the current browser origin by default. Hard-coding localhost here breaks
@@ -15,7 +14,6 @@ const baseURL =
 
 export const authClient = createAuthClient({
   baseURL,
-  plugins: [dashClient()],
 });
 
-export const { signIn, signUp, signOut, useSession } = authClient;
+export const { signIn, signOut, useSession } = authClient;

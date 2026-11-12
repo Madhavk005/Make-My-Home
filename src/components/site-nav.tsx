@@ -36,12 +36,12 @@ function MegaMenu({ nodes, onNavigate }: { nodes: NavNode[]; onNavigate: () => v
   return (
     <div
       id="desktop-mega-menu"
-      className="absolute left-0 top-full z-50 mt-1 max-h-[min(78vh,46rem)] w-[min(94vw,72rem)] overflow-y-auto border border-line bg-surface shadow-[0_30px_70px_-25px_rgb(32_36_44_/_0.45)]"
+      className="mega-scroll absolute left-0 top-full z-50 mt-1 w-[min(94vw,72rem)] overflow-y-auto overscroll-contain border border-line bg-surface shadow-[0_30px_70px_-25px_rgb(32_36_44_/_0.45)]"
     >
       <div className="grid gap-x-10 gap-y-8 p-7 sm:grid-cols-2 lg:grid-cols-3">
         {nodes.map((node, index) => (
           <div key={node.id}>
-            <p className="font-mono text-[10px] tracking-[0.14em] text-ink-faint">
+            <p className="font-mono text-[11px] tracking-[0.14em] text-ink-faint">
               {String(index + 1).padStart(2, "0")}
             </p>
             <Link
@@ -63,7 +63,7 @@ function MegaMenu({ nodes, onNavigate }: { nodes: NavNode[]; onNavigate: () => v
                     >
                       <span>{child.name}</span>
                       {child.productCount > 0 ? (
-                        <span className="font-mono text-[10px] text-ink-faint">{child.productCount}</span>
+                        <span className="font-mono text-[11px] text-ink-faint">{child.productCount}</span>
                       ) : null}
                     </Link>
                     {child.children.length > 0 ? (
@@ -164,7 +164,7 @@ export function DesktopNav({ nodes, phone, whatsappNumber, businessName }: NavPr
       <button
         type="button"
         aria-expanded={open}
-        aria-controls="desktop-mega-menu"
+        {...(open ? { "aria-controls": "desktop-mega-menu" } : {})}
         onClick={() => setOpen((value) => !value)}
         className="nav-link"
       >
@@ -196,17 +196,17 @@ export function DesktopNav({ nodes, phone, whatsappNumber, businessName }: NavPr
         {t("navContact")}
       </Link>
 
-      <Link href="/calculator" className="nav-link">
+      <Link href="/calculator" className="nav-link nav-link-extra">
         <Calculator className="h-4 w-4" aria-hidden="true" />
         Calculator
       </Link>
 
-      <Link href="/delivery" className="nav-link">
+      <Link href="/delivery" className="nav-link nav-link-extra">
         <Truck className="h-4 w-4" aria-hidden="true" />
         Delivery
       </Link>
 
-      <Link href="/quote" className="nav-link">
+      <Link href="/quote" className="nav-link nav-link-extra">
         <FileText className="h-4 w-4" aria-hidden="true" />
         Quotation
       </Link>
@@ -394,7 +394,7 @@ export function MobileNav({ nodes, phone, whatsappNumber, businessName, quickLin
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-4 pb-6 pt-5">
+            <div className="drawer-scroll flex-1 overflow-y-auto px-4 pb-6 pt-5">
               <p className="type-eyebrow no-rule mb-3">{t("mobileNavigation")}</p>
 
               <div className="grid gap-0.5 border-y border-line py-1">

@@ -126,7 +126,7 @@ export async function SiteFooter() {
                 {businessName}
               </span>
             </Link>
-            <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.16em] text-accent">
+            <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.16em] text-accent">
               Build Better. Live Better.
             </p>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-surface/70">
@@ -161,7 +161,7 @@ export async function SiteFooter() {
             ) : null}
 
             <div className="mt-6">
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.16em] text-accent">
+              <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.16em] text-accent">
                 {hi ? "भाषा" : "Language"}
               </p>
               <LanguageSwitch tone="dark" />

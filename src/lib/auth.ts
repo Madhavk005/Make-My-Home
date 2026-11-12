@@ -4,7 +4,8 @@ import { dash } from "@better-auth/infra";
 import { pool } from "@/lib/db";
 import { getSiteOrigin } from "@/lib/site-origin";
 
-const publicSignUpEnabled = process.env.ALLOW_PUBLIC_SIGNUP === "true";
+const publicSignUpEnabled = true;
+const dashApiKey = process.env.BETTER_AUTH_API_KEY?.trim();
 
 const siteOrigin = getSiteOrigin();
 const baseURL =
@@ -49,5 +50,5 @@ export const auth = betterAuth({
     // admin panel, so leaving open registration on by default is unsafe.
     disableSignUp: !publicSignUpEnabled,
   },
-  plugins: [dash({ apiKey: process.env.BETTER_AUTH_API_KEY }), nextCookies()],
+  plugins: [...(dashApiKey ? [dash({ apiKey: dashApiKey })] : []), nextCookies()],
 });

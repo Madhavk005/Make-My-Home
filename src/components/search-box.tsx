@@ -359,7 +359,7 @@ export function SearchBox({
                   return (
                     <li key={item.key}>
                       {showHeading ? (
-                        <p className="flex items-center gap-2 px-4 pb-1 pt-3 text-[10px] font-extrabold uppercase tracking-[0.16em] text-ink-faint">
+                        <p className="flex items-center gap-2 px-4 pb-1 pt-3 text-[11px] font-extrabold uppercase tracking-[0.16em] text-ink-faint">
                           {item.group === "recent" ? (
                             <Clock3 className="h-3 w-3" aria-hidden="true" />
                           ) : item.group === "product" ? (

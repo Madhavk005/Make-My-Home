@@ -49,7 +49,7 @@ export async function PriceTag({
         ) : null}
       </p>
       {display.note && (showNote || !display.isNumeric) ? (
-        <p className={`${isDetail ? "mt-1.5 text-sm" : "mt-0.5 text-[10px]"} text-ink-soft`}>
+        <p className={`${isDetail ? "mt-1.5 text-sm" : "mt-0.5 text-[11px]"} text-ink-soft`}>
           {display.note}
         </p>
       ) : null}

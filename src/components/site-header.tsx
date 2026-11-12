@@ -53,7 +53,7 @@ function BrandMark({
         <span className="block truncate text-[1.05rem] font-extrabold leading-none tracking-[-0.01em] text-white sm:text-[1.3rem]">
           {name}
         </span>
-        <span className="mt-0.5 block truncate text-[9px] font-bold uppercase tracking-[0.14em] text-white/75 sm:text-[10px]">
+        <span className="mt-0.5 block truncate text-[11px] font-bold uppercase tracking-[0.14em] text-white/75 sm:text-[11px]">
           {tagline}
         </span>
       </span>
@@ -105,7 +105,7 @@ export async function SiteHeader() {
             {phone ? (
               <a
                 href={`tel:${phone.replace(/[^\d+]/g, "")}`}
-                className="inline-flex min-h-7 items-center gap-1.5 whitespace-nowrap font-bold text-white transition-colors hover:text-accent"
+                className="inline-flex min-h-8 items-center gap-1.5 whitespace-nowrap font-bold text-white transition-colors hover:text-accent"
               >
                 <Phone className="h-3.5 w-3.5" aria-hidden="true" />
                 {phone}

@@ -82,7 +82,7 @@ export default async function CategoriesPage() {
               <div className="mt-5 grid grid-cols-3 divide-x divide-line border-y border-line py-3">
                 <div className="pr-3">
                   <p className="font-display text-2xl leading-none text-ink">{totalProducts}</p>
-                  <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.1em] text-ink-soft">
+                  <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.1em] text-ink-soft">
                     {translate(locale, "homeStatsProducts")}
                   </p>
                 </div>
@@ -90,7 +90,7 @@ export default async function CategoriesPage() {
                   <p className="font-display text-2xl leading-none text-ink">
                     {allCategories.length}
                   </p>
-                  <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.1em] text-ink-soft">
+                  <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.1em] text-ink-soft">
                     {translate(locale, "homeStatsCategories")}
                   </p>
                 </div>
@@ -98,7 +98,7 @@ export default async function CategoriesPage() {
                   <p className="font-display text-2xl leading-none text-ink">
                     {brands.filter((brand) => (brand.count ?? 0) > 0).length}
                   </p>
-                  <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.1em] text-ink-soft">
+                  <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.1em] text-ink-soft">
                     {translate(locale, "homeStatsBrands")}
                   </p>
                 </div>
@@ -177,7 +177,7 @@ export default async function CategoriesPage() {
                                 >
                                   {tertiary.name}
                                   {tertiary.productCount > 0 ? (
-                                    <span className="ml-1.5 font-mono text-[10px] text-ink-faint">
+                                    <span className="ml-1.5 font-mono text-[11px] text-ink-faint">
                                       {tertiary.productCount}
                                     </span>
                                   ) : null}

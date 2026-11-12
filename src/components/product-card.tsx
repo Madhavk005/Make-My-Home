@@ -38,18 +38,18 @@ export async function ProductCard({ product }: { product: ProductCardData }) {
             />
             <div className="absolute left-3 top-3 flex flex-col items-start gap-1.5">
               {product.brand?.name ? (
-                <span className="rounded-full border border-surface/50 bg-canvas/90 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.1em] text-ink backdrop-blur-sm">
+                <span className="rounded-full border border-surface/50 bg-canvas/90 px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.1em] text-ink backdrop-blur-sm">
                   {product.brand.name}
                 </span>
               ) : null}
               {product.isDemo ? (
-                <span className="rounded-full border border-primary/40 bg-accent-soft/95 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-[0.12em] text-accent-dark backdrop-blur-sm">
+                <span className="rounded-full border border-primary/40 bg-accent-soft/95 px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-[0.12em] text-accent-dark backdrop-blur-sm">
                   {translate(locale, "demo")}
                 </span>
               ) : null}
             </div>
             {product.featured ? (
-              <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-primary/90 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.12em] text-surface backdrop-blur-sm">
+              <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-primary/90 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-surface backdrop-blur-sm">
                 {translate(locale, "homeFeaturedKicker")}
               </span>
             ) : null}
@@ -75,7 +75,7 @@ export async function ProductCard({ product }: { product: ProductCardData }) {
             {specs.map((spec) => (
               <li
                 key={`${spec.name}-${spec.value}`}
-                className="rounded-full border border-line-soft bg-surface px-2 py-0.5 text-[10px] font-medium text-ink-soft"
+                className="rounded-full border border-line-soft bg-surface px-2 py-0.5 text-[11px] font-medium text-ink-soft"
               >
                 {spec.name}: {spec.value}
               </li>
@@ -105,7 +105,7 @@ export async function ProductCard({ product }: { product: ProductCardData }) {
             </span>
           </div>
 
-          <div className="mt-3 flex items-center gap-1.5 border-t border-line-soft pt-3">
+          <div className="mt-3 flex flex-wrap items-center gap-1.5 border-t border-line-soft pt-3">
             <Link
               href={href}
               className="inline-flex min-h-10 flex-1 items-center justify-center rounded-xs border border-line bg-surface px-2 text-xs font-bold text-ink transition-colors hover:border-primary hover:bg-primary hover:text-white"

@@ -15,7 +15,7 @@ export function CompareToggle({ productId, label }: { productId: string; label?:
       disabled={disabled}
       aria-pressed={active}
       title={disabled ? "Compare list is full (max 4)" : "Add to compare"}
-      className={`inline-flex min-h-9 items-center gap-1.5 rounded-xs border px-2.5 text-xs font-bold transition-colors ${
+      className={`inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-xs border px-2.5 text-xs font-bold transition-colors ${
         active
           ? "border-primary bg-primary text-white"
           : "border-line bg-surface text-ink hover:border-primary"

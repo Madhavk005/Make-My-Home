@@ -14,7 +14,7 @@ export function CompareLink() {
       <GitCompareArrows className="h-4 w-4" aria-hidden="true" />
       <span className="hidden sm:inline">Compare</span>
       {count > 0 ? (
-        <span className="ml-1 rounded-full bg-accent px-1.5 text-[10px] font-bold text-charcoal">
+        <span className="ml-1 rounded-full bg-accent px-1.5 text-[11px] font-bold text-charcoal">
           {count}
         </span>
       ) : null}

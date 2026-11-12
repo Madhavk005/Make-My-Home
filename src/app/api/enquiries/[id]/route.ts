@@ -60,7 +60,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   }
 
   const { id } = await params;
-  let body: { status?: string; notes?: string };
+  let body: { status?: string; notes?: string; quoteAmount?: number; quoteReply?: string };
   try {
     body = await request.json();
   } catch {
@@ -74,6 +74,15 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   if (body.notes !== undefined && typeof body.notes !== "string") {
     return NextResponse.json({ error: "Invalid notes" }, { status: 400 });
   }
+  if (body.quoteAmount !== undefined && (!Number.isFinite(body.quoteAmount) || body.quoteAmount <= 0)) {
+    return NextResponse.json({ error: "Quote amount must be positive." }, { status: 400 });
+  }
+  if (body.quoteReply !== undefined && typeof body.quoteReply !== "string") {
+    return NextResponse.json({ error: "Invalid quote reply." }, { status: 400 });
+  }
+  if (body.status === "quoted" && (body.quoteAmount === undefined || !body.quoteReply?.trim())) {
+    return NextResponse.json({ error: "A quoted enquiry needs an approved amount and customer reply." }, { status: 400 });
+  }
 
   const notes = typeof body.notes === "string" ? body.notes.slice(0, 5000) : null;
 
@@ -85,10 +94,14 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       `UPDATE enquiries
        SET status = COALESCE($1, status),
            admin_notes = COALESCE($2, admin_notes),
+           quote_amount = CASE WHEN $1 = 'quoted' THEN $3 ELSE quote_amount END,
+           quote_reply = CASE WHEN $1 = 'quoted' THEN $4 ELSE quote_reply END,
+           quote_token = CASE WHEN $1 = 'quoted' THEN COALESCE(quote_token, gen_random_uuid()) ELSE quote_token END,
+           quote_approved_at = CASE WHEN $1 = 'quoted' THEN NOW() ELSE quote_approved_at END,
            updated_at = NOW()
-       WHERE id = $3
-       RETURNING id, status, customer_note, admin_notes`,
-      [body.status ?? null, notes, id],
+       WHERE id = $5
+       RETURNING id, status, customer_note, admin_notes, quote_token`,
+      [body.status ?? null, notes, body.quoteAmount ?? null, body.quoteReply?.trim().slice(0, 5000) ?? null, id],
     );
 
     if (result.rowCount === 0) {

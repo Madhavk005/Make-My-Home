@@ -68,6 +68,9 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 6rem;
   background: var(--color-canvas);
+  /* Stop mobile browsers from auto-inflating text and breaking fixed layouts. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -521,6 +524,13 @@ img, svg { display: block; }
 }
 .nav-link:focus-visible { outline-color: #ffffff; }
 
+/* Secondary desktop nav entries: hidden below lg where the row is tight.
+   (Unlayered so it wins over the display set by .nav-link itself.) */
+.nav-link-extra { display: none; }
+@media (min-width: 1024px) {
+  .nav-link-extra { display: inline-flex; }
+}
+
 .mobile-bottom-nav {
   padding-bottom: env(safe-area-inset-bottom);
 }
@@ -575,6 +585,59 @@ img, svg { display: block; }
 }
 .animate-marquee { animation: marquee 38s linear infinite; }
 @media (prefers-reduced-motion: reduce) { .animate-marquee { animation: none; } }
+
+/* ── Dynamic-viewport helpers (mobile browser chrome, keyboard visibility) ─ */
+
+/* Full-height surfaces that must follow the visual viewport, not layout vh. */
+.min-h-screen-dvh {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Sticky filter rail on category/search pages. */
+.filters-scroll {
+  max-height: calc(100vh - 8rem);
+  max-height: calc(100dvh - 8rem);
+}
+
+/* Desktop mega-menu panel. */
+.mega-scroll {
+  max-height: min(78vh, 46rem);
+  max-height: min(78dvh, 46rem);
+}
+
+/* Mobile drawer / overlay scroll areas: contain scroll chaining so the page
+   behind never scrolls and iOS rubber-banding stays inside the drawer. */
+.drawer-scroll {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Forced colors (Windows High Contrast / user stylesheets) ────────────── */
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 3px;
+  }
+  .btn,
+  .chip,
+  .input,
+  .select {
+    border-color: ButtonBorder;
+  }
+  .card,
+  .surface,
+  .surface-flat,
+  .badge {
+    border-color: CanvasText;
+  }
+  /* Separators and hatches stay visible without colour. */
+  .hairline,
+  .section-rule {
+    border-color: CanvasText;
+  }
+}
 
 /* ── Skip link ──────────────────────────────────────────────────────────── */
 

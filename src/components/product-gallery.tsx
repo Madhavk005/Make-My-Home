@@ -43,11 +43,11 @@ export function ProductGallery({
           className="aspect-square w-full"
         />
         <div className="flex items-center justify-between gap-3 px-1 pb-0.5 pt-3">
-          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-ink-faint">
+          <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink-faint">
             {t("productKicker")} / {String(active + 1).padStart(2, "0")}
           </span>
           <span className="h-px flex-1 bg-line" aria-hidden="true" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-ink-faint">
+          <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-faint">
             {images.length > 1
               ? `${active + 1} / ${images.length}`
               : t("imageNotSupplied")}

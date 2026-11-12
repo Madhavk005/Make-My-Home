@@ -202,7 +202,7 @@ export default async function HomePage() {
                 {hi ? "ज़रूरत के हिसाब से श्रेणी चुनें" : "Choose a category by your need"}
               </h2>
             </div>
-            <Link href="/categories" className="text-sm font-bold text-link hover:text-link-hover hover:underline">
+            <Link href="/categories" className="inline-flex min-h-8 items-center text-sm font-bold text-link hover:text-link-hover hover:underline">
               {hi ? "सभी श्रेणियाँ" : "All categories"} →
             </Link>
           </div>
@@ -329,7 +329,7 @@ export default async function HomePage() {
         <div className="container">
           <div className="overflow-hidden rounded-2xl border border-accent/50 bg-accent-soft p-6 sm:p-8 lg:flex lg:items-center lg:justify-between lg:gap-10">
             <div className="max-w-2xl">
-              <p className="inline-flex items-center gap-2 rounded-full bg-accent px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-charcoal">
+              <p className="inline-flex items-center gap-2 rounded-full bg-accent px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.14em] text-charcoal">
                 <Tag className="h-3.5 w-3.5" aria-hidden="true" />
                 {hi ? "ऑफ़र · प्रोजेक्ट रेट" : "Offers · Project rates"}
               </p>
@@ -361,7 +361,7 @@ export default async function HomePage() {
                 <p className="type-eyebrow no-rule">{hi ? "लोकप्रिय ब्रांड" : "Popular brands"}</p>
                 <h2 className="type-h2 mt-2 text-ink">{hi ? "भरोसेमंद ब्रांड" : "Trusted brands"}</h2>
               </div>
-              <Link href="/brands" className="text-sm font-bold text-link hover:text-link-hover hover:underline">
+              <Link href="/brands" className="inline-flex min-h-8 items-center text-sm font-bold text-link hover:text-link-hover hover:underline">
                 {hi ? "सभी ब्रांड" : "All brands"} →
               </Link>
             </div>
@@ -461,7 +461,7 @@ export default async function HomePage() {
         <div className="container">
           <div className="grid overflow-hidden rounded-2xl bg-charcoal text-white sm:grid-cols-[1fr_auto]">
             <div className="p-6 sm:p-8">
-              <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-accent">
+              <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.14em] text-accent">
                 <Drill className="h-3.5 w-3.5" aria-hidden="true" />
                 {hi ? "उपकरण किराये पर" : "Equipment on rent"}
               </p>

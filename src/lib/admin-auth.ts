@@ -15,10 +15,18 @@ const adminEmails = new Set(
     .filter(Boolean),
 );
 
+const mainAdminEmail = process.env.MAIN_ADMIN_EMAIL?.trim().toLowerCase() || null;
+
 export function isAdminEmail(email: string | null | undefined): boolean {
   if (!email) return false;
   if (adminEmails.size === 0) return false;
   return adminEmails.has(email.trim().toLowerCase());
+}
+
+/** Main-admin operations (payment changes, user access and destructive CRM actions)
+ * require this explicit owner identity in addition to a valid signed-in session. */
+export function isMainAdminEmail(email: string | null | undefined): boolean {
+  return Boolean(mainAdminEmail && email && mainAdminEmail === email.trim().toLowerCase());
 }
 
 export async function getAdminSession() {
@@ -30,7 +38,7 @@ export async function getAdminSession() {
     return null;
   }
 
-  if (!isAdminEmail(session.user.email)) {
+  if (!isAdminEmail(session.user.email) && !isMainAdminEmail(session.user.email)) {
     return null;
   }
 
@@ -63,7 +71,7 @@ export async function getAdminApiSession(): Promise<
     return { session: null, status: 401 };
   }
 
-  if (!isAdminEmail(session.user.email)) {
+  if (!isAdminEmail(session.user.email) && !isMainAdminEmail(session.user.email)) {
     return { session: null, status: 403 };
   }
 

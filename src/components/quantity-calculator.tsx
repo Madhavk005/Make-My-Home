@@ -89,12 +89,12 @@ export function QuantityCalculator() {
         {tab === "cement" ? (
           <>
             <div>
-              <label className="mb-1.5 block text-sm font-semibold text-ink">Area (sq m)</label>
-              <input value={area} onChange={(e) => setArea(e.target.value)} type="number" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
+              <label htmlFor="calc-area" className="mb-1.5 block text-sm font-semibold text-ink">Area (sq m)</label>
+              <input id="calc-area" value={area} onChange={(e) => setArea(e.target.value)} type="number" inputMode="decimal" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
             </div>
             <div>
-              <label className="mb-1.5 block text-sm font-semibold text-ink">Thickness (m)</label>
-              <input value={thickness} onChange={(e) => setThickness(e.target.value)} type="number" step="0.01" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
+              <label htmlFor="calc-thickness" className="mb-1.5 block text-sm font-semibold text-ink">Thickness (m)</label>
+              <input id="calc-thickness" value={thickness} onChange={(e) => setThickness(e.target.value)} type="number" inputMode="decimal" step="0.01" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
             </div>
             {cementBags !== null ? (
               <p className="rounded-lg bg-green-50 p-3 text-sm text-green-700">
@@ -107,22 +107,22 @@ export function QuantityCalculator() {
         {tab === "tiles" ? (
           <>
             <div>
-              <label className="mb-1.5 block text-sm font-semibold text-ink">Floor area (sq m)</label>
-              <input value={floorArea} onChange={(e) => setFloorArea(e.target.value)} type="number" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
+              <label htmlFor="calc-floor-area" className="mb-1.5 block text-sm font-semibold text-ink">Floor area (sq m)</label>
+              <input id="calc-floor-area" value={floorArea} onChange={(e) => setFloorArea(e.target.value)} type="number" inputMode="decimal" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="mb-1.5 block text-sm font-semibold text-ink">Tile length (m)</label>
-                <input value={tileLength} onChange={(e) => setTileLength(e.target.value)} type="number" step="0.01" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
+                <label htmlFor="calc-tile-length" className="mb-1.5 block text-sm font-semibold text-ink">Tile length (m)</label>
+                <input id="calc-tile-length" value={tileLength} onChange={(e) => setTileLength(e.target.value)} type="number" inputMode="decimal" step="0.01" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
               </div>
               <div>
-                <label className="mb-1.5 block text-sm font-semibold text-ink">Tile width (m)</label>
-                <input value={tileWidth} onChange={(e) => setTileWidth(e.target.value)} type="number" step="0.01" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
+                <label htmlFor="calc-tile-width" className="mb-1.5 block text-sm font-semibold text-ink">Tile width (m)</label>
+                <input id="calc-tile-width" value={tileWidth} onChange={(e) => setTileWidth(e.target.value)} type="number" inputMode="decimal" step="0.01" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
               </div>
             </div>
             <div>
-              <label className="mb-1.5 block text-sm font-semibold text-ink">Waste (%)</label>
-              <input value={waste} onChange={(e) => setWaste(e.target.value)} type="number" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
+              <label htmlFor="calc-waste" className="mb-1.5 block text-sm font-semibold text-ink">Waste (%)</label>
+              <input id="calc-waste" value={waste} onChange={(e) => setWaste(e.target.value)} type="number" inputMode="numeric" min="0" max="100" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
             </div>
             {tilesNeeded !== null ? (
               <p className="rounded-lg bg-green-50 p-3 text-sm text-green-700">
@@ -135,12 +135,12 @@ export function QuantityCalculator() {
         {tab === "pipe" ? (
           <>
             <div>
-              <label className="mb-1.5 block text-sm font-semibold text-ink">Required length (m)</label>
-              <input value={pipeLength} onChange={(e) => setPipeLength(e.target.value)} type="number" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
+              <label htmlFor="calc-pipe-length" className="mb-1.5 block text-sm font-semibold text-ink">Required length (m)</label>
+              <input id="calc-pipe-length" value={pipeLength} onChange={(e) => setPipeLength(e.target.value)} type="number" inputMode="decimal" min="0" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
             </div>
             <div>
-              <label className="mb-1.5 block text-sm font-semibold text-ink">Standard pipe length (m)</label>
-              <input value={pipeStd} onChange={(e) => setPipeStd(e.target.value)} type="number" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
+              <label htmlFor="calc-pipe-std" className="mb-1.5 block text-sm font-semibold text-ink">Standard pipe length (m)</label>
+              <input id="calc-pipe-std" value={pipeStd} onChange={(e) => setPipeStd(e.target.value)} type="number" inputMode="decimal" step="0.01" min="0" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
             </div>
             {pipesNeeded !== null ? (
               <p className="rounded-lg bg-green-50 p-3 text-sm text-green-700">
@@ -153,8 +153,8 @@ export function QuantityCalculator() {
         {tab === "aggregate" ? (
           <>
             <div>
-              <label className="mb-1.5 block text-sm font-semibold text-ink">Volume (cubic m)</label>
-              <input value={aggVolume} onChange={(e) => setAggVolume(e.target.value)} type="number" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
+              <label htmlFor="calc-agg-volume" className="mb-1.5 block text-sm font-semibold text-ink">Volume (cubic m)</label>
+              <input id="calc-agg-volume" value={aggVolume} onChange={(e) => setAggVolume(e.target.value)} type="number" inputMode="decimal" min="0" className="min-h-12 w-full rounded-lg border border-line px-3 text-base text-ink outline-none focus:border-primary" />
             </div>
             {aggregateKg !== null ? (
               <p className="rounded-lg bg-green-50 p-3 text-sm text-green-700">

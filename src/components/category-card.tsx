@@ -41,7 +41,7 @@ export async function CategoryCard({
           className={featured ? "aspect-[4/5] w-full" : "aspect-[4/5] w-full"}
           priority={featured}
         />
-        <span className="absolute left-3 top-3 rounded-full border border-surface/40 bg-canvas/90 px-2.5 py-1 font-mono text-[10px] font-semibold tracking-[0.08em] text-ink backdrop-blur-sm">
+        <span className="absolute left-3 top-3 rounded-full border border-surface/40 bg-canvas/90 px-2.5 py-1 font-mono text-[11px] font-semibold tracking-[0.08em] text-ink backdrop-blur-sm">
           {productCountLabel(category.productCount, locale)}
         </span>
         <span

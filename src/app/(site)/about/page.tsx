@@ -82,7 +82,7 @@ export default async function AboutPage() {
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-primary-deep/55 to-transparent" />
-              <p className="absolute bottom-4 left-4 font-mono text-[10px] uppercase tracking-[0.16em] text-surface/85">
+              <p className="absolute bottom-4 left-4 font-mono text-[11px] uppercase tracking-[0.16em] text-surface/85">
                 {businessName} / Material House
               </p>
             </div>
@@ -112,7 +112,7 @@ export default async function AboutPage() {
               <p className="font-display text-4xl leading-none text-ink">
                 {catalogue.totalProducts.toLocaleString("en-IN")}
               </p>
-              <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.12em] text-ink-soft">
+              <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.12em] text-ink-soft">
                 {translate(locale, "homeStatsProducts")}
               </p>
             </div>
@@ -120,7 +120,7 @@ export default async function AboutPage() {
               <p className="font-display text-4xl leading-none text-ink">
                 {catalogue.tree.length.toLocaleString("en-IN")}
               </p>
-              <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.12em] text-ink-soft">
+              <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.12em] text-ink-soft">
                 {translate(locale, "homeStatsCategories")}
               </p>
             </div>
@@ -128,7 +128,7 @@ export default async function AboutPage() {
               <p className="font-display text-4xl leading-none text-ink">
                 {brandCount.toLocaleString("en-IN")}
               </p>
-              <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.12em] text-ink-soft">
+              <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.12em] text-ink-soft">
                 {translate(locale, "homeStatsBrands")}
               </p>
             </div>

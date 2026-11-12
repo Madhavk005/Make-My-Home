@@ -119,7 +119,7 @@ export default async function SearchPage(props: PageProps<"/search">) {
             <div>
               <SearchBox variant="page" initialQuery={filters.q} autoSubmit />
               <div className="mt-4 flex flex-wrap items-center gap-1.5">
-                <span className="mr-1 text-[10px] font-bold uppercase tracking-[0.12em] text-ink-faint">
+                <span className="mr-1 text-[11px] font-bold uppercase tracking-[0.12em] text-ink-faint">
                   {translate(locale, "searchPopular")}
                 </span>
                 {quickCategories.map((category) => (
@@ -200,7 +200,7 @@ export default async function SearchPage(props: PageProps<"/search">) {
                     className="flex min-h-20 flex-col justify-between border border-line bg-surface p-3.5 transition-colors hover:border-primary/40 hover:bg-sand/40"
                   >
                     <span className="text-sm font-semibold leading-snug text-ink">{category.name}</span>
-                    <span className="mt-3 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.08em] text-ink-faint">
+                    <span className="mt-3 flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.08em] text-ink-faint">
                       {category.productCount}
                       <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
                     </span>

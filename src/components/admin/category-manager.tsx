@@ -261,7 +261,7 @@ export function CategoryManager({ initialCategories }: { initialCategories: Cate
           {node.children.length > 0 ? <ChevronRight className="h-3.5 w-3.5" /> : null}
         </span>
         <span
-          className={`shrink-0 rounded px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.08em] ${LEVEL_BADGE[node.level]}`}
+          className={`shrink-0 rounded px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] ${LEVEL_BADGE[node.level]}`}
         >
           {node.level}
         </span>
@@ -272,10 +272,10 @@ export function CategoryManager({ initialCategories }: { initialCategories: Cate
         >
           {node.name}
         </span>
-        <span className="hidden shrink-0 font-mono text-[10px] text-ink-faint sm:inline">
+        <span className="hidden shrink-0 font-mono text-[11px] text-ink-faint sm:inline">
           /{node.slug}
         </span>
-        <span className="shrink-0 text-[10px] text-ink-faint">
+        <span className="shrink-0 text-[11px] text-ink-faint">
           {node.children.length} {node.children.length === 1 ? "child" : "children"}
         </span>
 

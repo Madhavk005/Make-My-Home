@@ -196,7 +196,7 @@ export default async function CategoryPage(props: PageProps<"/category/[...slug]
               />
               <div className="absolute inset-0 bg-gradient-to-t from-primary-deep/60 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4 text-surface">
-                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-surface/80">
+                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-surface/80">
                   {businessName}
                 </p>
                 <p className="font-display text-lg">{translate(locale, "categoryProductsTitle")}</p>
@@ -235,7 +235,7 @@ export default async function CategoryPage(props: PageProps<"/category/[...slug]
                           >
                             {tertiary.name}
                             {tertiary.productCount > 0 ? (
-                              <span className="ml-1.5 font-mono text-[10px] text-ink-faint">
+                              <span className="ml-1.5 font-mono text-[11px] text-ink-faint">
                                 {tertiary.productCount}
                               </span>
                             ) : null}
@@ -262,7 +262,7 @@ export default async function CategoryPage(props: PageProps<"/category/[...slug]
               </h2>
             </div>
             {demo ? (
-              <span className="rounded-full border border-primary/30 bg-accent-soft px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-accent-dark">
+              <span className="rounded-full border border-primary/30 bg-accent-soft px-3 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-accent-dark">
                 {translate(locale, "categoryDemoNote")}
               </span>
             ) : null}

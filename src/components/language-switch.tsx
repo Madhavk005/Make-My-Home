@@ -25,7 +25,7 @@ export function LanguageSwitch({
         onClick={() => setLocale("hi")}
         aria-pressed={locale === "hi"}
         disabled={pending}
-        className={`min-h-8 rounded-full px-2.5 text-[10px] font-bold transition-colors sm:min-h-7 sm:px-3 ${
+        className={`min-h-8 rounded-full px-3 text-[11px] font-bold transition-colors ${
           locale === "hi"
             ? dark
               ? "bg-surface text-primary-deep"
@@ -42,7 +42,7 @@ export function LanguageSwitch({
         onClick={() => setLocale("en")}
         aria-pressed={locale === "en"}
         disabled={pending}
-        className={`min-h-8 rounded-full px-2.5 text-[10px] font-bold transition-colors sm:min-h-7 sm:px-3 ${
+        className={`min-h-8 rounded-full px-3 text-[11px] font-bold transition-colors ${
           locale === "en"
             ? dark
               ? "bg-surface text-primary-deep"

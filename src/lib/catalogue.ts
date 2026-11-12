@@ -204,10 +204,30 @@ export async function resolveCategoryLegacyPath(
     return record ?? null;
   }
 
-  const { categories, tree } = await getCatalogue();
-  const record = findCategoryBySlug(categories, slug);
+  // Retired categories are inactive, so they are absent from the public tree.
+  // Use the full set to find them, then walk up to the nearest active ancestor
+  // so old links keep working after a reorganisation.
+  const allCategories = await getAllCategories();
+  const record = findCategoryBySlug(allCategories, slug);
   if (!record) return null;
-  return flattenCategoryTree(tree).find((node) => node._id === record._id) ?? null;
+
+  const activeNodes = flattenCategoryTree(buildCategoryTree(allCategories));
+  const activeById = new Map(activeNodes.map((node) => [node._id, node]));
+
+  const direct = activeById.get(record._id);
+  if (direct) return direct;
+
+  const byId = new Map(allCategories.map((category) => [category._id, category]));
+  let parent = record.parentId ? byId.get(record.parentId) : undefined;
+  const seen = new Set<string>([record._id]);
+  while (parent && !seen.has(parent._id)) {
+    seen.add(parent._id);
+    const activeParent = activeById.get(parent._id);
+    if (activeParent) return activeParent;
+    parent = parent.parentId ? byId.get(parent.parentId) : undefined;
+  }
+
+  return null;
 }
 
 export async function getProductList(input: CatalogQueryInput): Promise<ProductListResult> {

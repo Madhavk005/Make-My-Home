@@ -25,18 +25,22 @@ export function ProductEnquiryForm({ whatsappNumber, businessName, categories }:
   const [requirements, setRequirements] = useState("");
   const [status, setStatus] = useState<"idle" | "error" | "opening" | "opened">("idle");
   const [error, setError] = useState("");
+  const [errorField, setErrorField] = useState<"product" | "quantity" | null>(null);
 
   function submit(event: React.FormEvent) {
     event.preventDefault();
     setError("");
+    setErrorField(null);
     if (!productName.trim()) {
       setStatus("error");
+      setErrorField("product");
       setError(hi ? "कृपया सामान का नाम लिखें।" : "Please enter the product name.");
       return;
     }
     const qty = Number(quantity);
     if (!Number.isFinite(qty) || qty <= 0) {
       setStatus("error");
+      setErrorField("quantity");
       setError(hi ? "कृपया सही मात्रा लिखें।" : "Please enter a valid quantity.");
       return;
     }
@@ -69,6 +73,7 @@ export function ProductEnquiryForm({ whatsappNumber, businessName, categories }:
     const url = buildWhatsAppUrl(whatsappNumber, lines.join("\n"));
     if (!url) {
       setStatus("error");
+      setErrorField(null);
       setError(
         hi
           ? "WhatsApp नंबर अभी नहीं जोड़ा गया है। कृपया फोन करें।"
@@ -97,6 +102,8 @@ export function ProductEnquiryForm({ whatsappNumber, businessName, categories }:
             value={productName}
             onChange={(event) => setProductName(event.target.value)}
             placeholder={hi ? "जैसे: सीमेंट, PVC पाइप" : "e.g. Cement, PVC pipe"}
+            aria-invalid={errorField === "product" || undefined}
+            aria-describedby={status === "error" && error ? "enquiry-form-error" : undefined}
             className={inputClass}
           />
         </div>
@@ -153,6 +160,8 @@ export function ProductEnquiryForm({ whatsappNumber, businessName, categories }:
             min="1"
             value={quantity}
             onChange={(event) => setQuantity(event.target.value)}
+            aria-invalid={errorField === "quantity" || undefined}
+            aria-describedby={status === "error" && error ? "enquiry-form-error" : undefined}
             className={inputClass}
           />
         </div>
@@ -185,10 +194,19 @@ export function ProductEnquiryForm({ whatsappNumber, businessName, categories }:
       </div>
 
       {status === "error" && error ? (
-        <p className="rounded-lg bg-danger-soft px-3 py-2 text-sm text-danger">{error}</p>
+        <p
+          id="enquiry-form-error"
+          role="alert"
+          className="rounded-lg bg-danger-soft px-3 py-2 text-sm text-danger"
+        >
+          {error}
+        </p>
       ) : null}
       {status === "opened" ? (
-        <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">
+        <p
+          role="status"
+          className="rounded-lg bg-moss-soft px-3 py-2 text-sm text-success-text"
+        >
           {hi
             ? "WhatsApp खुल गया है। संदेश भेजकर पूछताछ पूरी करें।"
             : "WhatsApp opened. Send the message to complete your enquiry."}

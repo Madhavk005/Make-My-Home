@@ -66,7 +66,7 @@ function OptionRow({
           {label}
         </span>
         {typeof count === "number" ? (
-          <span className="shrink-0 font-mono text-[10px] tabular-nums text-ink-faint">{count}</span>
+          <span className="shrink-0 font-mono text-[11px] tabular-nums text-ink-faint">{count}</span>
         ) : null}
       </Link>
     </li>
@@ -120,7 +120,7 @@ async function FilterGroups({
   const clearHref = buildCatalogHref(basePath, clearFilters(filters));
   const groupClass = "border-t border-line pt-4";
   const legendClass =
-    "mb-1 text-[10px] font-bold uppercase tracking-[0.14em] text-ink-faint";
+    "mb-1 text-[11px] font-bold uppercase tracking-[0.14em] text-ink-faint";
 
   return (
     <div className="space-y-5">
@@ -223,7 +223,7 @@ async function FilterGroups({
           ) : null}
           <div className="grid grid-cols-2 gap-1.5">
             <div>
-              <label className="sr-only" htmlFor={minPriceId}>
+              <label className="mb-1 block text-[11px] font-bold text-ink-soft" htmlFor={minPriceId}>
                 {translate(locale, "minPrice")}
               </label>
               <input
@@ -239,7 +239,7 @@ async function FilterGroups({
               />
             </div>
             <div>
-              <label className="sr-only" htmlFor={maxPriceId}>
+              <label className="mb-1 block text-[11px] font-bold text-ink-soft" htmlFor={maxPriceId}>
                 {translate(locale, "maxPrice")}
               </label>
               <input
@@ -314,7 +314,7 @@ export async function FilterPanel(props: FilterPanelProps) {
             <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
             {translate(locale, "filters")}
             {count > 0 ? (
-              <span className="grid h-5 min-w-5 place-items-center rounded-full bg-accent px-1.5 text-[10px] font-bold leading-none text-charcoal">
+              <span className="grid h-5 min-w-5 place-items-center rounded-full bg-accent px-1.5 text-[11px] font-bold leading-none text-charcoal">
                 {count}
               </span>
             ) : null}
@@ -329,12 +329,12 @@ export async function FilterPanel(props: FilterPanelProps) {
       </details>
 
       <aside className="hidden lg:block" aria-label={translate(locale, "productFilters")}>
-        <div className="sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto pr-2 no-scrollbar">
+        <div className="filters-scroll sticky top-28 overflow-y-auto overscroll-contain pr-2 no-scrollbar">
           <p className="mb-3 flex items-center gap-2 font-display text-lg font-medium tracking-tight text-ink">
             <SlidersHorizontal className="h-4 w-4 text-ink-soft" aria-hidden="true" />
             {translate(locale, "filters")}
             {count > 0 ? (
-              <span className="ml-auto font-sans text-[10px] font-bold uppercase tracking-[0.1em] text-primary-deep">
+              <span className="ml-auto font-sans text-[11px] font-bold uppercase tracking-[0.1em] text-primary-deep">
                 {count}
               </span>
             ) : null}

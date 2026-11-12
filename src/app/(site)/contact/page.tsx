@@ -84,7 +84,7 @@ export default async function ContactPage() {
               </div>
             </div>
             <div className="border border-line bg-surface p-5 sm:p-6">
-              <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.14em] text-primary-deep">
+              <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-primary-deep">
                 <ClipboardList className="h-4 w-4" aria-hidden="true" />
                 {translate(locale, "contactAskTitle")}
               </p>
@@ -94,7 +94,7 @@ export default async function ContactPage() {
               <ol className="mt-4 space-y-2.5">
                 {askItems.map((item, index) => (
                   <li key={item} className="flex items-start gap-3 border-t border-line pt-2.5 text-sm text-ink">
-                    <span className="font-mono text-[10px] text-primary-deep">
+                    <span className="font-mono text-[11px] text-primary-deep">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     {item}

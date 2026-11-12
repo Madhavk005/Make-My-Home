@@ -113,7 +113,7 @@ export function ProductPurchasePanel({
       >
         <div className="flex flex-wrap items-start justify-between gap-4 p-5 sm:p-6">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ink-faint">
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-ink-faint">
               {t("price")}
             </p>
             <p className="mt-1.5 flex flex-wrap items-baseline gap-x-2">
@@ -141,7 +141,7 @@ export function ProductPurchasePanel({
       {variants.length > 0 ? (
         <section className="mt-4 border border-line bg-surface p-5 sm:p-6">
           <fieldset>
-            <legend className="text-[10px] font-bold uppercase tracking-[0.14em] text-ink-faint">
+            <legend className="text-[11px] font-bold uppercase tracking-[0.14em] text-ink-faint">
               {t("chooseVariant")}
             </legend>
             <div className="mt-3 space-y-2" role="radiogroup" aria-label={t("variant")}>
@@ -215,7 +215,7 @@ export function ProductPurchasePanel({
       ) : null}
 
       <section className="mt-4 border border-line bg-surface p-5 sm:p-6">
-        <label htmlFor="enquiry-quantity" className="text-[10px] font-bold uppercase tracking-[0.14em] text-ink-faint">
+        <label htmlFor="enquiry-quantity" className="text-[11px] font-bold uppercase tracking-[0.14em] text-ink-faint">
           {t("quantity")} · {unitText}
         </label>
         <div className="mt-2.5 flex flex-wrap items-center gap-2">

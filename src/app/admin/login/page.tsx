@@ -31,7 +31,7 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-canvas px-4 py-10">
+    <div className="flex min-h-screen-dvh items-center justify-center bg-canvas px-4 py-10">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-sm rounded-2xl border border-line bg-surface p-6 shadow-[var(--shadow-card)]"

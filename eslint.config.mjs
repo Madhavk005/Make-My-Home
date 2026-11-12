@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Separate untracked project living inside this repository.
+    "youpi-pg/**",
   ]),
 ]);
 

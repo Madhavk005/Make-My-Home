@@ -214,7 +214,7 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
                         {item.brand ? (
-                          <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-primary-deep">
+                          <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-primary-deep">
                             {item.brand}
                           </p>
                         ) : null}
@@ -242,7 +242,7 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
                           </p>
                         ) : null}
                         {item.sku ? (
-                          <p className="mt-1 font-mono text-[10px] text-ink-faint">
+                          <p className="mt-1 font-mono text-[11px] text-ink-faint">
                             {t("sku")} {item.sku}
                           </p>
                         ) : null}
@@ -391,7 +391,7 @@ export function EnquiryList({ whatsappNumber, phone, businessName, priceNote }: 
 
       <aside className="border border-line bg-surface lg:sticky lg:top-28">
         <div className="border-b border-line bg-primary px-5 py-5 text-surface">
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-surface">
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-surface">
             {t("enquiryKicker")}
           </p>
           <h2 className="mt-2 font-display text-2xl font-medium tracking-tight">

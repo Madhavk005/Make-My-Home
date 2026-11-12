@@ -219,7 +219,7 @@ export default async function ProductPage(props: PageParams) {
                     ? product.variants.length
                     : unitLabel(product.unit, locale)}
                 </p>
-                <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.12em] text-ink-faint">
+                <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.12em] text-ink-faint">
                   {product.variants?.length
                     ? translate(locale, "variants")
                     : translate(locale, "unit")}
@@ -229,7 +229,7 @@ export default async function ProductPage(props: PageParams) {
                 <p className="font-display text-lg leading-none text-ink">
                   {specGroups.reduce((total, [, specs]) => total + specs.length, 0)}
                 </p>
-                <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.12em] text-ink-faint">
+                <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.12em] text-ink-faint">
                   {translate(locale, "specifications")}
                 </p>
               </div>
@@ -321,7 +321,7 @@ export default async function ProductPage(props: PageParams) {
 
             <div className="mt-8 grid gap-px border border-line bg-line sm:grid-cols-2">
               <div className="bg-surface p-4">
-                <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.12em] text-ink-faint">
+                <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.12em] text-ink-faint">
                   <ShieldCheck className="h-3.5 w-3.5 text-whatsapp" aria-hidden="true" />
                   {translate(locale, "productAskTitle")}
                 </p>
@@ -330,7 +330,7 @@ export default async function ProductPage(props: PageParams) {
                 </p>
               </div>
               <div className="bg-surface p-4">
-                <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.12em] text-ink-faint">
+                <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.12em] text-ink-faint">
                   <PackageCheck className="h-3.5 w-3.5 text-primary-deep" aria-hidden="true" />
                   {translate(locale, "productDeliveryTitle")}
                 </p>
@@ -356,14 +356,14 @@ export default async function ProductPage(props: PageParams) {
                       {translate(locale, "specifications")}
                     </h2>
                   </div>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-faint">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-faint">
                     {String(specGroups.length).padStart(2, "0")}
                   </span>
                 </div>
                 <div className="space-y-5">
                   {specGroups.map(([group, specs]) => (
                     <div key={group}>
-                      <h3 className="text-[10px] font-bold uppercase tracking-[0.14em] text-primary-deep">
+                      <h3 className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary-deep">
                         {group}
                       </h3>
                       <dl className="mt-2 divide-y divide-line border border-line bg-surface">
@@ -385,7 +385,7 @@ export default async function ProductPage(props: PageParams) {
 
             {product.keywords && product.keywords.length > 0 ? (
               <div className="mt-8">
-                <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-ink-faint">
+                <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-faint">
                   {translate(locale, "searchTerms")}
                 </p>
                 <ul className="mt-2 flex flex-wrap gap-1.5">
