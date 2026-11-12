@@ -5,7 +5,12 @@ const globalForPg = globalThis as unknown as {
   pgPool?: Pool;
 };
 
-if (!process.env.DATABASE_URL) {
+// Next.js evaluates every route module while building the app. Runtime
+// credentials such as DATABASE_URL are supplied to the running container, not
+// to the build, so only fail fast once the app is actually serving requests.
+const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+if (!process.env.DATABASE_URL && !isProductionBuild) {
   throw new Error("DATABASE_URL is not configured");
 }
 
