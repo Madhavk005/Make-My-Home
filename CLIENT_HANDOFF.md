@@ -42,6 +42,12 @@ Create `.env.local` (never commit this file):
 | `BETTER_AUTH_SECRET` | Unique server-side auth secret | Generate a new production secret | ✅ Production |
 | `ADMIN_EMAILS` | Comma-separated admin email allowlist | — | ✅ Production |
 | `ALLOW_PUBLIC_SIGNUP` | Public registration flag | `false` | ✅ Keep disabled |
+| `PAYMENTS_ENABLED` | Offer online payment on approved quotations | `true` | ⚠️ Optional |
+| `YOUPI_API_URL` | YOUPI checkout portal origin | `https://pay.example.com` | ✅ When payments on |
+| `YOUPI_MERCHANT_ID` | Merchant UUID from the YOUPI admin | — | ✅ When payments on |
+| `YOUPI_MERCHANT_API_KEY` | Server-only merchant API key | — | ✅ When payments on |
+| `YOUPI_WEBHOOK_SECRET` | Webhook signing secret | — | ✅ When payments on |
+| `YOUPI_METHOD` | Payment method used for quotations | `MANUAL_UPI` | ⚠️ Keep default |
 
 The WhatsApp number is **not** an environment variable. It is read only from
 Sanity Studio → Site settings. There is no fallback; if it is missing or
@@ -259,7 +265,46 @@ in production.
 
 ---
 
-## 8. Production Deployment
+## 8. Online Payments (YOUPI-PG)
+
+Online payment is available **only for an approved quotation**. There is no cart
+checkout: a customer builds an enquiry list, the shop replies with an approved
+amount, and only then can that amount be paid online by UPI.
+
+### How the flow works
+
+1. The customer sends an enquiry list from the site (WhatsApp or the enquiry form).
+2. In `/admin/enquiries`, the shop sets the status to **quoted**, enters the
+   approved amount and a reply, and saves. This creates a private quote link.
+3. The shop sends that link to the customer. The customer opens
+   `/quote/<token>`, sees the approved amount, and presses **Pay**.
+4. The customer pays from their own UPI app in the YOUPI checkout and submits
+   the UPI reference (UTR).
+5. YOUPI sends a signed webhook. The quote page shows *"payment is being
+   verified"* and the payment appears in `/admin` with its UTR.
+6. The shop checks the receiving bank account and presses **Confirm money
+   received**. Only then is the quotation marked paid and the enquiry converted.
+
+A UTR, QR scan, browser redirect or signed webhook is **not** proof of
+settlement. The bank account check in step 6 is the final authority, which is why
+the confirmation button lives in the admin console and not in the gateway.
+
+### Gateway setup (one-time)
+
+1. Deploy YOUPI-PG. It is a separate service, not part of this Next.js app.
+2. In the YOUPI merchant admin, create the merchant and register the receiving
+   UPI account. Copy the merchant UUID and API key.
+3. Set the environment variables in the table above.
+4. Register `https://<storefront>/api/webhooks/youpi` as the merchant webhook.
+5. Add the exact storefront origin to `YOUPI_ALLOWED_RETURN_ORIGINS` on the
+   gateway. Wildcards are not supported.
+6. Approve one small real quotation end to end before launch.
+
+If the gateway is not configured, the quote page hides the Pay button and shows
+the call/WhatsApp fallback instead of failing silently. Setting
+`PAYMENTS_ENABLED=false` does the same deliberately.
+
+## 9. Production Deployment
 
 ### Build
 
@@ -282,7 +327,7 @@ All variables from `.env.local` must be set in your production environment
 
 ---
 
-## 9. Pre-Launch Checklist
+## 10. Pre-Launch Checklist
 
 - [ ] Sanity project configured with Project ID and Dataset
 - [ ] `.env.local` created with Sanity credentials
@@ -304,6 +349,12 @@ All variables from `.env.local` must be set in your production environment
 - [ ] Production deployment tested
 - [ ] WhatsApp message tested on a real phone, including a variant and quantity
 - [ ] Both Hindi and English tested on a small Android phone
+- [ ] YOUPI merchant created with the real receiving UPI account
+- [ ] `YOUPI_API_URL`, merchant ID, API key and webhook secret set in production
+- [ ] Webhook URL registered and `YOUPI_ALLOWED_RETURN_ORIGINS` set on the gateway
+- [ ] One approved quotation paid end to end and confirmed in `/admin`
+- [ ] Shop staff trained to check the bank account before pressing Confirm
+- [ ] A rejected payment keeps the quotation open so the customer can retry
 
 ---
 

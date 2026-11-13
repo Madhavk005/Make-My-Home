@@ -58,9 +58,9 @@ export const demoSiteSettings: SiteSettings = {
   announcementEn:
     "Ask today's rates for cement, steel and stone — the shop replies directly on WhatsApp.",
   footerNote:
-    "Make My Home एक निर्माण सामग्री कैटलॉग है। यहाँ से ऑनलाइन भुगतान नहीं होता — सामान चुनें, सूची बनाएँ और दुकानदार से सीधे बात करें।",
+    "Make My Home एक निर्माण सामग्री कैटलॉग है। सामान चुनें, सूची बनाएँ और दुकानदार से सीधे बात करें। स्वीकृत कोटेशन का भुगतान UPI से ऑनलाइन किया जा सकता है।",
   footerNoteEn:
-    "Make My Home is a building-materials catalogue. There is no online payment — choose products, build a list and talk to the shop directly.",
+    "Make My Home is a building-materials catalogue. Choose products, build a list and talk to the shop directly. An approved quotation can be paid online by UPI.",
 };
 
 type DemoCategoryInput = {

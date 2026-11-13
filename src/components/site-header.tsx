@@ -99,7 +99,7 @@ export async function SiteHeader() {
                 {hi ? "साइट पर डिलीवरी" : "Site delivery available"}
               </span>
               <span className="hidden whitespace-nowrap text-white/60 lg:inline">
-                {hi ? "सीधे दुकान से · कोई ऑनलाइन भुगतान नहीं" : "Direct from the shop · No online payment"}
+                {hi ? "सीधे दुकान से · UPI भुगतान उपलब्ध" : "Direct from the shop · UPI payment available"}
               </span>
             </div>
             {phone ? (

@@ -53,6 +53,7 @@ export async function POST(request: NextRequest) {
     const phone = String(rawCustomer?.phone ?? body?.customerMobile ?? "")
       .replace(/\D/g, "");
     const location = String(rawCustomer?.location ?? body?.deliveryLocation ?? "").trim();
+    const email = String(rawCustomer?.email ?? body?.customerEmail ?? "").trim();
 
     if (name.length < 2 || name.length > 120) {
       return NextResponse.json(
@@ -64,6 +65,13 @@ export async function POST(request: NextRequest) {
     if (phone.length < 10 || phone.length > 15) {
       return NextResponse.json(
         { error: "Please enter a valid mobile number." },
+        { status: 400 },
+      );
+    }
+
+    if (email && (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 200)) {
+      return NextResponse.json(
+        { error: "Please enter a valid email address." },
         { status: 400 },
       );
     }
@@ -111,16 +119,18 @@ export async function POST(request: NextRequest) {
         customer_id,
         customer_name,
         customer_phone,
+        customer_email,
         customer_location,
         customer_note,
         language
       )
-      VALUES ($1, $2, $3, $4, $5, $6)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING id, reference`,
       [
         customerId,
         name,
         phone,
+        email || null,
         location || null,
         String(body.customerNote ?? "").slice(0, 2000) || null,
         body.language === "en" ? "en" : "hi",

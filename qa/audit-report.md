@@ -30,7 +30,7 @@ _None._
 
 ## Sub-11px computed text
 
-- `10.88px badge badge-accent` "डेमो" — e.g. demo:/product/ultratech-opc-53-cement @ 320px (touch); demo:/product/ultratech-opc-53-cement @ 390px (touch)
+_None._
 
 ## Interactive elements smaller than 24px
 
@@ -41,17 +41,10 @@ _None._
 - A JCB (min 21.6) — e.g. /categories @ 320px (touch); /categories @ 390px (touch)
 - A संपर्क पेज (min 17) — e.g. /terms @ 320px (touch); /privacy @ 320px (touch)
 - A makemyhome2311@gmail.com (min 17) — e.g. /contact @ 390px (touch); /contact @ 768px (touch)
+- A Create account (min 17) — e.g. /sign-in @ 390px (touch); /sign-in @ 768px (touch)
 - SUMMARY श्रेणी से खरीदें▾ (min 20) — e.g. / @ 768px (touch); /categories @ 768px (touch)
 - SUMMARY पेशेवर सेवाएँ▾ (min 20) — e.g. / @ 768px (touch); /categories @ 768px (touch)
 - SUMMARY सहायता और कंपनी▾ (min 20) — e.g. / @ 768px (touch); /categories @ 768px (touch)
-- A OPC 53 ग्रेड (min 15) — e.g. demo:/product/ultratech-opc-53-cement @ 320px (touch); demo:/product/ultratech-opc-53-cement @ 390px (touch)
-- A श्रेणी देखें (min 16) — e.g. demo:/product/ultratech-opc-53-cement @ 1024px; demo:/product/ultratech-opc-53-cement @ 1366px
-- A ACC PPC Cement 50kg (min 20.9) — e.g. demo:/product/ultratech-opc-53-cement @ 1024px; demo:/product/ultratech-opc-53-cement @ 1366px
-- A Birla White Cement 40kg (min 20.9) — e.g. demo:/product/ultratech-opc-53-cement @ 1024px; demo:/product/ultratech-opc-53-cement @ 1366px
-- A Red Clay Brick 9x4x3 inch (min 20.9) — e.g. demo:/product/ultratech-opc-53-cement @ 1024px; demo:/product/ultratech-opc-53-cement @ 1366px
-- A Ambuja OPC 43 Grade Cement (min 20.9) — e.g. demo:/product/ultratech-opc-53-cement @ 1366px
-- A TMT सरिया (min 15) — e.g. demo:/product/tmt-fe-500d-steel-bar @ 320px (touch); demo:/product/tmt-fe-500d-steel-bar @ 390px (touch)
-- A TATA Mild Steel Angle 50x50x6m (min 20.9) — e.g. demo:/product/tmt-fe-500d-steel-bar @ 1366px
 
 ## Unlabelled form controls
 
@@ -62,13 +55,13 @@ _None._
 
 ## LCP / CLS on load (localhost, warm cache)
 
-- / @ 320px (touch): LCP 160ms, CLS 0
-- / @ 768px (touch): LCP 100ms, CLS 0
-- / @ 1366px: LCP 116ms, CLS 0.001
-- / @ 1366px: LCP 120ms, CLS 0.001
-- / @ 1366px: LCP 120ms, CLS 0.001
+- / @ 320px (touch): LCP 112ms, CLS 0
+- / @ 768px (touch): LCP 144ms, CLS 0
+- / @ 1366px: LCP 272ms, CLS 0.001
+- / @ 1366px: LCP 100ms, CLS 0.001
 - / @ 1366px: LCP 92ms, CLS 0.001
-- Worst CLS observed anywhere: 0.139
+- / @ 1366px: LCP 108ms, CLS 0.001
+- Worst CLS observed anywhere: 0.141
 
 ## Increased text size (24px root font) reflow
 

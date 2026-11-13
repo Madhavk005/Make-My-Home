@@ -69,6 +69,48 @@ if (production) {
   }
 }
 
+const paymentsEnabled =
+  (process.env.PAYMENTS_ENABLED ?? "true").trim().toLowerCase() !== "false";
+
+if (paymentsEnabled) {
+  const youpiRequired = [
+    ["YOUPI_MERCHANT_ID", process.env.YOUPI_MERCHANT_ID],
+    ["YOUPI_MERCHANT_API_KEY", process.env.YOUPI_MERCHANT_API_KEY],
+    ["YOUPI_WEBHOOK_SECRET", process.env.YOUPI_WEBHOOK_SECRET],
+  ] as const;
+
+  for (const [name, value] of youpiRequired) {
+    if (!value?.trim()) {
+      const message = `${name} is required while PAYMENTS_ENABLED is true. Set PAYMENTS_ENABLED=false to hide the online checkout.`;
+      if (production) errors.push(message);
+      else warnings.push(message);
+    }
+  }
+
+  const youpiUrl = process.env.YOUPI_API_URL?.trim() || "http://localhost:7000";
+  try {
+    const parsed = new URL(youpiUrl);
+    if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+      errors.push("YOUPI_API_URL must be an HTTP or HTTPS URL.");
+    }
+    if (production && parsed.protocol !== "https:") {
+      errors.push("Production YOUPI_API_URL must use HTTPS.");
+    }
+  } catch {
+    errors.push("YOUPI_API_URL must be a valid absolute URL.");
+  }
+
+  if (production && !process.env.NEXT_PUBLIC_SITE_URL?.trim() && !process.env.VERCEL_URL?.trim()) {
+    errors.push(
+      "The payment return URL needs a public site origin: set NEXT_PUBLIC_SITE_URL.",
+    );
+  }
+} else {
+  warnings.push(
+    "PAYMENTS_ENABLED is false. Approved quotations cannot be paid online.",
+  );
+}
+
 const adminEmails = (process.env.ADMIN_EMAILS ?? "")
   .split(",")
   .map((email) => email.trim())

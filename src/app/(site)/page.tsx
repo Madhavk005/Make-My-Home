@@ -151,7 +151,7 @@ export default async function HomePage() {
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <BadgeCheck className="h-4 w-4 text-accent" aria-hidden="true" />
-                  {hi ? "कोई ऑनलाइन भुगतान नहीं" : "No online payment"}
+                  {hi ? "स्वीकृत कोटेशन पर UPI भुगतान" : "UPI payment on approved quotes"}
                 </span>
               </p>
             </div>

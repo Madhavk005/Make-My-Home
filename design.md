@@ -12,8 +12,11 @@ prefer Hindi. The design therefore assumes:
 
 - A small Android phone on a slow or intermittent connection.
 - A shopper who may not know technical terms or how filters work.
-- A journey of **श्रेणी चुनें → सामान चुनें → मात्रा भरें → WhatsApp / Call करें**.
-- No account, no online payment and no checkout.
+- A journey of **श्रेणी चुनें → सामान चुनें → मात्रा भरें → WhatsApp / Call करें → स्वीकृत कोटेशन का UPI भुगतान**.
+- No customer account is needed to browse or enquire. Online payment exists only
+  for an **approved quotation**, never for a catalogue item or an enquiry list:
+  the shop sets the amount, the customer pays by UPI, and the shop confirms the
+  money in its bank account before the quotation is marked paid.
 
 ## Design concept: “Make My Home” red-first marketplace
 

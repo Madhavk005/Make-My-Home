@@ -4,9 +4,11 @@ A mobile-first construction and home-building catalogue. Customers browse a
 nested product taxonomy, search and filter the catalogue, pick variants and
 quantities, then send one prepared enquiry to the business on WhatsApp.
 
-The storefront is deliberately a catalogue, not a shop: there is no checkout,
-payment, live stock count, loyalty scheme or ERP integration. Prices,
+The storefront is deliberately a catalogue, not a shop: there is no cart
+checkout, live stock count, loyalty scheme or ERP integration. Prices,
 availability and images are only shown when the business has supplied them.
+The one exception is an **approved quotation**, which the customer can pay online
+by UPI; the shop confirms the money in its bank account before marking it paid.
 
 The interface is Hindi-first with an English switch. The visual language is a
 warm “Material House” showroom: ivory canvas, forest green, clay and brass,
@@ -41,10 +43,11 @@ editorial serif headlines and large, rural-friendly controls.
 
 ## Not included
 
-Online checkout or payments, WhatsApp Business API automation, live inventory,
+Cart checkout or card payments, WhatsApp Business API automation, live inventory,
 credit ledgers, loyalty programmes, ERP integration and a separate product
 admin. Sanity Studio is the catalogue and website CMS; the small `/admin`
-console is limited to enquiry follow-up and admin access.
+console is limited to enquiry follow-up, quotation approval, payment
+confirmation and admin access.
 
 ## Tech stack
 

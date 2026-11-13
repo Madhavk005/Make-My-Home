@@ -1,0 +1,95 @@
+[
+  {
+    "name": "Skip link: focus → visible, Enter → focus moves to main",
+    "url": "http://127.0.0.1:3100/",
+    "width": 1366,
+    "pass": [],
+    "fail": [
+      "EXCEPTION: Error: Invalid parameters"
+    ]
+  },
+  {
+    "name": "Mobile drawer: button opens, Escape closes, focus returns",
+    "url": "http://127.0.0.1:3100/",
+    "width": 390,
+    "pass": [
+      "menu button found"
+    ],
+    "fail": [
+      "EXCEPTION: Error: Invalid parameters"
+    ]
+  },
+  {
+    "name": "Mega menu: click opens, Escape closes, focus stays",
+    "url": "http://127.0.0.1:3100/",
+    "width": 1366,
+    "pass": [
+      "nav trigger found",
+      "mega panel visible",
+      "aria-expanded=true",
+      "panel within viewport"
+    ],
+    "fail": [
+      "EXCEPTION: Error: Invalid parameters"
+    ]
+  },
+  {
+    "name": "Search: type → suggestions; Escape closes; input labelled",
+    "url": "http://127.0.0.1:3100/",
+    "width": 1366,
+    "pass": [
+      "search input found",
+      "search input labelled",
+      "suggestion listbox appears"
+    ],
+    "fail": [
+      "EXCEPTION: Error: Invalid parameters"
+    ]
+  },
+  {
+    "name": "Enquiry form: empty submit → role=alert, aria-invalid, focusable error",
+    "url": "http://127.0.0.1:3100/product/ultratech-opc-53-cement",
+    "width": 1366,
+    "pass": [],
+    "fail": [
+      "enquiry product input found (got: false)",
+      "role=alert error shown (got: false)",
+      "aria-invalid set on field (got: false)",
+      "aria-describedby links error (got: false)"
+    ]
+  },
+  {
+    "name": "Quantity stepper: buttons adjust input, min clamp",
+    "url": "http://127.0.0.1:3100/product/ultratech-opc-53-cement",
+    "width": 1366,
+    "pass": [],
+    "fail": [
+      "stepper found (got: false)",
+      "value increased to 3 (got: false)",
+      "EXCEPTION: Error: TypeError: Cannot read properties of undefined (reading 'click')\n    at <anonymous>:3:43\n    at <anonymous>:5:9"
+    ]
+  },
+  {
+    "name": "Location pill: Escape closes, no focus loss",
+    "url": "http://127.0.0.1:3100/",
+    "width": 1366,
+    "pass": [
+      "location pill found",
+      "pill expands"
+    ],
+    "fail": [
+      "EXCEPTION: Error: Invalid parameters"
+    ]
+  },
+  {
+    "name": "Footer details/summary: keyboard toggle works",
+    "url": "http://127.0.0.1:3100/",
+    "width": 390,
+    "pass": [
+      "footer details found"
+    ],
+    "fail": [
+      "EXCEPTION: Error: Invalid parameters"
+    ]
+  }
+]

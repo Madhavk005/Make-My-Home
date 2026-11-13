@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { StatusBadge } from "./admin/status-badge";
 
@@ -24,48 +24,108 @@ type Enquiry = {
   admin_notes?: string | null;
   status: string;
   created_at: string;
+  quote_token?: string | null;
+  quote_amount?: string | number | null;
+  quote_reply?: string | null;
   items: Item[];
+};
+
+type Payment = {
+  id: string;
+  amount: number;
+  status: "pending" | "review" | "paid" | "failed" | "refunded";
+  method: string | null;
+  utr: string | null;
+  createdAt: string;
+  confirmedAt: string | null;
 };
 
 const STATUSES = ["new", "contacted", "quoted", "converted", "cancelled"];
 
+const PAYMENT_LABEL: Record<Payment["status"], string> = {
+  pending: "Checkout opened",
+  review: "Awaiting bank check",
+  paid: "Paid",
+  failed: "Not completed",
+  refunded: "Refunded",
+};
+
+type LoadedData = {
+  enquiryData: Enquiry | null;
+  paymentData: Payment | null;
+};
+
+async function fetchEnquiry(id: string): Promise<LoadedData> {
+  const [enquiryResponse, paymentResponse] = await Promise.all([
+    fetch(`/api/enquiries/${id}`),
+    fetch(`/api/admin/payments?enquiryId=${encodeURIComponent(id)}`),
+  ]);
+
+  const enquiryData = enquiryResponse.ok ? ((await enquiryResponse.json()) as Enquiry) : null;
+  const payments = paymentResponse.ok
+    ? ((await paymentResponse.json()) as { payments: Payment[] }).payments
+    : [];
+
+  return { enquiryData, paymentData: payments?.[0] ?? null };
+}
+
 export function AdminEnquiryDetail({ id }: { id: string }) {
   const [enquiry, setEnquiry] = useState<Enquiry | null>(null);
+  const [payment, setPayment] = useState<Payment | null>(null);
   const [status, setStatus] = useState("");
   const [notes, setNotes] = useState("");
+  const [quoteAmount, setQuoteAmount] = useState("");
+  const [quoteReply, setQuoteReply] = useState("");
   const [saving, setSaving] = useState(false);
+  const [deciding, setDeciding] = useState(false);
+  const [rejectNote, setRejectNote] = useState("");
   const [error, setError] = useState("");
 
+  const applyData = useCallback(({ enquiryData, paymentData }: LoadedData) => {
+    if (enquiryData) {
+      setEnquiry(enquiryData);
+      setStatus(enquiryData.status);
+      setNotes(enquiryData.admin_notes ?? "");
+      setQuoteAmount(enquiryData.quote_amount ? String(enquiryData.quote_amount) : "");
+      setQuoteReply(enquiryData.quote_reply ?? "");
+    }
+    setPayment(paymentData);
+  }, []);
+
   useEffect(() => {
-    fetch(`/api/enquiries/${id}`)
-      .then((response) => (response.ok ? response.json() : null))
-      .then((data) => {
-        if (data) {
-          setEnquiry(data);
-          setStatus(data.status);
-          setNotes(data.admin_notes ?? "");
-        }
-      })
+    fetchEnquiry(id)
+      .then(applyData)
       .catch(() => setError("Could not load this enquiry."));
-  }, [id]);
+  }, [id, applyData]);
 
   async function save() {
     setSaving(true);
     setError("");
     try {
+      const payload: Record<string, unknown> = { status, notes };
+
+      if (status === "quoted") {
+        const amount = Number(quoteAmount);
+        if (!Number.isFinite(amount) || amount <= 0) {
+          throw new Error("Enter a positive approved amount before saving a quote.");
+        }
+        if (!quoteReply.trim()) {
+          throw new Error("Add a reply for the customer before saving a quote.");
+        }
+        payload.quoteAmount = amount;
+        payload.quoteReply = quoteReply.trim();
+      }
+
       const response = await fetch(`/api/enquiries/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status, notes }),
+        body: JSON.stringify(payload),
       });
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
         throw new Error(data.error || "Failed to save changes.");
       }
-      const refreshed = await fetch(`/api/enquiries/${id}`);
-      if (refreshed.ok) {
-        setEnquiry(await refreshed.json());
-      }
+      applyData(await fetchEnquiry(id));
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Failed to save changes.");
     } finally {
@@ -73,7 +133,45 @@ export function AdminEnquiryDetail({ id }: { id: string }) {
     }
   }
 
+  async function decide(decision: "verified" | "rejected") {
+    if (!payment) return;
+    if (decision === "rejected" && !rejectNote.trim()) {
+      setError("Add a reason before rejecting a payment.");
+      return;
+    }
+
+    setDeciding(true);
+    setError("");
+    try {
+      const response = await fetch(`/api/admin/payments/${payment.id}/confirm`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          decision,
+          notes: decision === "rejected" ? rejectNote.trim() : undefined,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to record the decision.");
+      }
+
+      setRejectNote("");
+      applyData(await fetchEnquiry(id));
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Failed to record the decision.");
+    } finally {
+      setDeciding(false);
+    }
+  }
+
   if (!enquiry) return <p className="text-secondary">Loading...</p>;
+
+  const quoteLink =
+    enquiry.quote_token && typeof window !== "undefined"
+      ? `${window.location.origin}/quote/${enquiry.quote_token}`
+      : null;
 
   return (
     <div>
@@ -113,6 +211,65 @@ export function AdminEnquiryDetail({ id }: { id: string }) {
         </div>
       </div>
 
+      {payment ? (
+        <div className="card mb-3">
+          <div className="card-body">
+            <h3 className="card-title">Online payment</h3>
+            <p className="mt-1">
+              <strong>₹{payment.amount.toFixed(2)}</strong> · {PAYMENT_LABEL[payment.status]}
+              {payment.method ? ` · ${payment.method}` : ""}
+            </p>
+            <p className="text-secondary">
+              Started {new Date(payment.createdAt).toLocaleString()}
+              {payment.confirmedAt
+                ? ` · Confirmed ${new Date(payment.confirmedAt).toLocaleString()}`
+                : ""}
+            </p>
+            {payment.utr ? (
+              <p className="mt-2">
+                <strong>UPI reference:</strong> <span className="font-mono">{payment.utr}</span>
+              </p>
+            ) : null}
+
+            {payment.status === "review" || payment.status === "pending" ? (
+              <div className="mt-3">
+                <p className="text-secondary">
+                  Check the receiving bank account for this amount and UPI reference before confirming.
+                </p>
+                <label htmlFor="payment-reject-note" className="form-label mt-3">
+                  Rejection reason (only needed if rejecting)
+                </label>
+                <input
+                  id="payment-reject-note"
+                  className="form-control mb-2"
+                  value={rejectNote}
+                  onChange={(event) => setRejectNote(event.target.value)}
+                  placeholder="Amount not received / wrong reference"
+                />
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => decide("verified")}
+                    disabled={deciding}
+                    className="btn btn-primary"
+                  >
+                    {deciding ? "Saving…" : "Confirm money received"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => decide("rejected")}
+                    disabled={deciding}
+                    className="btn btn-danger"
+                  >
+                    Reject
+                  </button>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
+
       <div className="card">
         <div className="card-body">
           <h3 className="card-title">Follow-up</h3>
@@ -129,6 +286,45 @@ export function AdminEnquiryDetail({ id }: { id: string }) {
               </option>
             ))}
           </select>
+
+          {status === "quoted" ? (
+            <>
+              <label htmlFor="quote-amount" className="form-label">
+                Approved amount (₹)
+              </label>
+              <input
+                id="quote-amount"
+                type="number"
+                min="1"
+                step="0.01"
+                inputMode="decimal"
+                className="form-control mb-2"
+                value={quoteAmount}
+                onChange={(event) => setQuoteAmount(event.target.value)}
+                placeholder="12500"
+              />
+              <label htmlFor="quote-reply" className="form-label">
+                Reply shown to the customer
+              </label>
+              <textarea
+                id="quote-reply"
+                rows={3}
+                className="form-control mb-2"
+                value={quoteReply}
+                onChange={(event) => setQuoteReply(event.target.value)}
+                placeholder="Cement 50 bags, delivery included. Price valid for 7 days."
+              />
+              {quoteLink ? (
+                <p className="mb-2 text-secondary">
+                  Customer link:{" "}
+                  <a href={quoteLink} target="_blank" rel="noopener noreferrer">
+                    {quoteLink}
+                  </a>
+                </p>
+              ) : null}
+            </>
+          ) : null}
+
           <label htmlFor="enquiry-notes" className="form-label">Internal notes</label>
           <textarea
             id="enquiry-notes"
