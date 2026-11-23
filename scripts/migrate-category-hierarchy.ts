@@ -426,53 +426,6 @@ const TAXONOMY: TaxonomyNode[] = [
     ],
   },
   {
-    name: "Furniture",
-    slug: "furniture",
-    description: "Living room, bedroom, kitchen and office furniture.",
-    children: [
-      {
-        name: "Living Room",
-        slug: "living-room",
-        description: "Sofas, coffee tables and TV units.",
-        children: [
-          { name: "Sofas", slug: "sofas" },
-          { name: "Coffee Tables", slug: "coffee-tables" },
-          { name: "TV Units", slug: "tv-units" },
-        ],
-      },
-      {
-        name: "Bedroom",
-        slug: "bedroom",
-        description: "Beds, wardrobes and bedside tables.",
-        children: [
-          { name: "Beds", slug: "beds" },
-          { name: "Wardrobes", slug: "wardrobes" },
-          { name: "Bedside Tables", slug: "bedside-tables" },
-        ],
-      },
-      {
-        name: "Kitchen",
-        slug: "kitchen",
-        description: "Modular kitchens, kitchen cabinets and storage units.",
-        children: [
-          { name: "Modular Kitchens", slug: "modular-kitchens" },
-          { name: "Kitchen Cabinets", slug: "kitchen-cabinets" },
-          { name: "Storage Units", slug: "storage-units" },
-        ],
-      },
-      {
-        name: "Office",
-        slug: "office",
-        description: "Office chairs, desks and storage cabinets.",
-        children: [
-          { name: "Office Chairs", slug: "office-chairs" },
-          { name: "Office Desks", slug: "office-desks" },
-          { name: "Storage Cabinets", slug: "storage-cabinets" },
-        ],
-      },
-    ],
-  },
-  {
     name: "Hiring / Equipment Rental",
     slug: "hiring-equipment-rental",
     description: "Construction machinery, tools, scaffolding and transport on hire.",
@@ -576,6 +529,24 @@ const RETIRED_SLUGS = new Set([
   "mason-services",
   "electrician-services",
   "plumber-services",
+  // Furniture branch removed from the requested taxonomy.
+  "furniture",
+  "living-room",
+  "sofas",
+  "coffee-tables",
+  "tv-units",
+  "bedroom",
+  "beds",
+  "wardrobes",
+  "bedside-tables",
+  "kitchen",
+  "modular-kitchens",
+  "kitchen-cabinets",
+  "storage-units",
+  "office",
+  "office-chairs",
+  "office-desks",
+  "storage-cabinets",
 ]);
 
 function slugKey(slug: string | null | undefined): string {
