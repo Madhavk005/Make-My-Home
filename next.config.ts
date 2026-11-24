@@ -49,6 +49,8 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
+    // 72 is what ProductImage requests; 75 stays for anything using the default.
+    qualities: [72, 75],
     remotePatterns: [
       {
         protocol: "https",
